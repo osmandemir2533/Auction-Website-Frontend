@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [bids, setBids] = useState({
+    item1: 100,
+    item2: 200,
+  });
+
+  const handleBid = (item) => {
+    setBids((prevBids) => ({
+      ...prevBids,
+      [item]: prevBids[item] + 10, // Her teklif +10 artırılıyor
+    }));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="auction-container">
+      <h1>🛒 Açık Artırma Sitesi</h1>
 
-export default App
+      <div className="auction-item">
+        <h2>📱 iPhone 15</h2>
+        <p>Mevcut Teklif: <strong>${bids.item1}</strong></p>
+        <button onClick={() => handleBid("item1")}>Teklif Ver</button>
+      </div>
+
+      <div className="auction-item">
+        <h2>💻 MacBook Pro</h2>
+        <p>Mevcut Teklif: <strong>${bids.item2}</strong></p>
+        <button onClick={() => handleBid("item2")}>Teklif Ver</button>
+      </div>
+    </div>
+  );
+};
+
+export default App;
