@@ -1,0 +1,28 @@
+src/
+  ├── components/
+  │   ├── Header/
+  │   │   ├── Header.js
+  │   │   └── Header.css
+  │   ├── VehicleList/
+  │   │   ├── VehicleList.js
+  │   │   └── VehicleList.css
+  │   ├── VehicleCard/
+  │   │   ├── VehicleCard.js
+  │   │   └── VehicleCard.css
+  │   ├── VehicleDetail/
+  │   │   ├── VehicleDetail.js
+  │   │   └── VehicleDetail.css
+  │   ├── BidForm/
+  │   │   ├── BidForm.js
+  │   │   └── BidForm.css
+  │   └── Auth/
+  │       ├── Login.js
+  │       └── Register.js
+  ├── services/
+  │   └── api.js
+  ├── context/
+  │   └── AuthContext.js
+  ├── hooks/
+  │   └── useVehicles.js
+  └── utils/
+      └── helpers.js 

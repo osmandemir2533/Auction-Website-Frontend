@@ -1,0 +1,139 @@
+.footer {
+  background: #1a237e;
+  color: white;
+  width: 100%;
+  padding: 4rem 0 1rem;
+  margin-top: 4rem;
+}
+
+.footer-content {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 4rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.footer-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.footer-section p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 0.8rem;
+}
+
+.footer-section ul li a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.footer-section ul li a:hover {
+  color: #fff;
+  padding-left: 5px;
+}
+
+.footer-section .contact-info li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-links a {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.social-links a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.footer-bottom {
+  max-width: 1920px;
+  margin: 3rem auto 0;
+  padding: 1.5rem 4rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1200px) {
+  .footer-content,
+  .footer-bottom {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 3rem 0 1rem;
+  }
+
+  .footer-content,
+  .footer-bottom {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-section {
+    text-align: center;
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+
+  .footer-section ul li a:hover {
+    padding-left: 0;
+  }
+
+  .footer-section .contact-info {
+    justify-content: center;
+  }
+} 

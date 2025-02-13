@@ -1,0 +1,275 @@
+{
+  "vehicles": [
+    {
+      "id": "1",
+      "brand": "Mercedes",
+      "model": "E250 AMG",
+      "year": 2023,
+      "startingPrice": 2500000,
+      "currentPrice": 2500000,
+      "description": "AMG Line | Dizel | Otomatik | 0 KM | Gece Paketi | Premium Paket",
+      "imageUrl": "https://images.pexels.com/photos/193999/pexels-photo-193999.jpeg",
+      "endDate": "2024-04-20T15:00:00",
+      "status": "active",
+      "features": [
+        "360° Kamera",
+        "Isıtmalı Koltuklar",
+        "Panoramik Tavan",
+        "Head-up Display",
+        "Kablosuz Şarj"
+      ]
+    },
+    {
+      "id": "2",
+      "brand": "BMW",
+      "model": "520i M Sport",
+      "year": 2023,
+      "startingPrice": 2800000,
+      "currentPrice": 2850000,
+      "description": "M Sport | Benzin | Otomatik | 5.000 KM | Executive Paket",
+      "imageUrl": "https://images.pexels.com/photos/892522/pexels-photo-892522.jpeg",
+      "endDate": "2024-04-21T18:00:00",
+      "status": "active",
+      "features": [
+        "Harman Kardon Ses Sistemi",
+        "Adaptif Cruise Control",
+        "Lazer Far",
+        "Elektrikli Bagaj",
+        "Şerit Takip Asistanı"
+      ]
+    },
+    {
+      "id": "3",
+      "brand": "Audi",
+      "model": "A6 40 TDI Quattro",
+      "year": 2023,
+      "startingPrice": 2600000,
+      "currentPrice": 2725000,
+      "description": "S-Line | Dizel | Quattro | Otomatik | 3.000 KM | Premium Plus",
+      "imageUrl": "https://images.pexels.com/photos/1035108/pexels-photo-1035108.jpeg",
+      "endDate": "2024-04-19T20:00:00",
+      "status": "active",
+      "features": [
+        "Matrix LED Farlar",
+        "Bang & Olufsen Ses Sistemi",
+        "Sanal Kokpit",
+        "Masaj Fonksiyonlu Koltuklar",
+        "Hava Süspansiyon"
+      ]
+    },
+    {
+      "id": "4",
+      "brand": "Porsche",
+      "model": "Cayenne E-Hybrid",
+      "year": 2023,
+      "startingPrice": 3500000,
+      "currentPrice": 3500000,
+      "description": "E-Hybrid | Sport Design Paket | 0 KM | Panoramik Tavan",
+      "imageUrl": "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg",
+      "endDate": "2024-04-22T16:00:00",
+      "status": "active",
+      "features": [
+        "Sport Chrono Paketi",
+        "Burmester Ses Sistemi",
+        "4 Bölgeli Klima",
+        "Gece Görüş Asistanı",
+        "PDCC Aktif Viraj Denge Sistemi"
+      ]
+    },
+    {
+      "id": "5",
+      "brand": "Mercedes",
+      "model": "S400d Long",
+      "year": 2023,
+      "startingPrice": 4200000,
+      "currentPrice": 4200000,
+      "description": "AMG Line | Dizel | 4MATIC | First Class | 0 KM",
+      "imageUrl": "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg",
+      "endDate": "2024-04-23T14:00:00",
+      "status": "active",
+      "features": [
+        "3D Dijital Gösterge",
+        "Burmester 4D Surround",
+        "Executive Arka Koltuk",
+        "Magic Body Control",
+        "Sürüş Asistanı Plus"
+      ]
+    },
+    {
+      "id": "6",
+      "brand": "BMW",
+      "model": "X7 M50i",
+      "year": 2023,
+      "startingPrice": 4500000,
+      "currentPrice": 4600000,
+      "description": "M Performance | V8 | xDrive | Sky Lounge | 1.000 KM",
+      "imageUrl": "https://images.pexels.com/photos/892522/pexels-photo-892522.jpeg",
+      "endDate": "2024-04-24T17:00:00",
+      "status": "active",
+      "features": [
+        "Bowers & Wilkins Ses Sistemi",
+        "Executive Drive Pro",
+        "Panoramik Cam Tavan",
+        "M Sport Fren Sistemi",
+        "Comfort Access"
+      ]
+    },
+    {
+      "id": "7",
+      "brand": "Audi",
+      "model": "RS e-tron GT",
+      "year": 2023,
+      "startingPrice": 5100000,
+      "currentPrice": 51000000,
+      "description": "Performance | Elektrikli | Quattro | 0 KM | Black Optic",
+      "imageUrl": "https://images.pexels.com/photos/6894429/pexels-photo-6894429.jpeg",
+      "endDate": "2024-04-25T16:00:00",
+      "status": "active",
+      "features": [
+        "Bang & Olufsen Advanced Sound",
+        "Carbon Fiber Paket",
+        "Adaptif Hava Süspansiyon",
+        "Matrix LED Far",
+        "Dinamik Dört Tekerlekten Yönlendirme"
+      ]
+    },
+    {
+      "id": "8",
+      "brand": "Porsche",
+      "model": "911 GT3",
+      "year": 2023,
+      "startingPrice": 6800000,
+      "currentPrice": 6800000,
+      "description": "GT3 | Manuel | Club Sport Paket | 0 KM",
+      "imageUrl": "https://images.pexels.com/photos/3752169/pexels-photo-3752169.jpeg",
+      "endDate": "2024-04-26T15:00:00",
+      "status": "active",
+      "features": [
+        "Karbon Seramik Fren",
+        "Sport Chrono",
+        "Porsche Track Precision",
+        "LED Matrix Far",
+        "Spor Egzoz Sistemi"
+      ]
+    },
+    {
+      "id": "9",
+      "brand": "Mercedes",
+      "model": "AMG GT 63 S",
+      "year": 2023,
+      "startingPrice": 5800000,
+      "currentPrice": 5900000,
+      "description": "4MATIC+ | V8 BiTurbo | First Class | 1.500 KM",
+      "imageUrl": "https://images.pexels.com/photos/2365572/pexels-photo-2365572.jpeg",
+      "endDate": "2024-04-27T14:00:00",
+      "status": "active",
+      "features": [
+        "AMG DYNAMIC PLUS",
+        "Burmester High-End 3D",
+        "AMG Karbon Paket",
+        "Sürüş Asistanı Plus",
+        "MBUX Artırılmış Gerçeklik"
+      ]
+    },
+    {
+      "id": "10",
+      "brand": "BMW",
+      "model": "M8 Competition",
+      "year": 2023,
+      "startingPrice": 5500000,
+      "currentPrice": 5500000,
+      "description": "Gran Coupé | Competition | M xDrive | 0 KM",
+      "imageUrl": "https://images.pexels.com/photos/892522/pexels-photo-892522.jpeg",
+      "endDate": "2024-04-28T17:00:00",
+      "status": "active",
+      "features": [
+        "M Carbon Paket",
+        "Bowers & Wilkins Diamond",
+        "M Driver's Package",
+        "Sky Lounge",
+        "Executive Paket"
+      ]
+    },
+    {
+      "id": "11",
+      "brand": "Audi",
+      "model": "RS Q8",
+      "year": 2023,
+      "startingPrice": 4800000,
+      "currentPrice": 4900000,
+      "description": "V8 TFSI | quattro | RS Dynamic Plus | 2.000 KM",
+      "imageUrl": "https://images.pexels.com/photos/1035108/pexels-photo-1035108.jpeg",
+      "endDate": "2024-04-29T15:00:00",
+      "status": "active",
+      "features": [
+        "Bang & Olufsen Advanced",
+        "RS Seramik Fren",
+        "HD Matrix LED",
+        "Karbon Optik Paket",
+        "Dinamik Viraj Denge"
+      ]
+    },
+    {
+      "id": "12",
+      "brand": "Porsche",
+      "model": "Taycan Turbo S",
+      "year": 2023,
+      "startingPrice": 5200000,
+      "currentPrice": 5200000,
+      "description": "Performance Battery Plus | 0 KM | Sport Design",
+      "imageUrl": "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg",
+      "endDate": "2024-04-30T16:00:00",
+      "status": "active",
+      "features": [
+        "Performance Plus Batarya",
+        "Porsche Electric Sport Sound",
+        "Burmester 3D Ses",
+        "Akıllı Range Manager",
+        "Sport Chrono"
+      ]
+    },
+    {
+      "id": "13",
+      "brand": "Mercedes",
+      "model": "G63 AMG",
+      "year": 2023,
+      "startingPrice": 6500000,
+      "currentPrice": 6500000,
+      "description": "Edition 1 | V8 BiTurbo | Stronger Than Time | 0 KM",
+      "imageUrl": "https://images.pexels.com/photos/193999/pexels-photo-193999.jpeg",
+      "endDate": "2024-05-01T14:00:00",
+      "status": "active",
+      "features": [
+        "AMG Night Paket",
+        "Exclusive Interior Plus",
+        "Burmester Surround",
+        "360° Kamera",
+        "Adaptif Süspansiyon"
+      ]
+    }
+  ],
+  "bids": [
+    {
+      "id": "1",
+      "vehicleId": 2,
+      "userId": 1,
+      "bidAmount": 2850000,
+      "bidDate": "2024-03-15T10:30:00"
+    },
+    {
+      "id": "0c9b",
+      "vehicleId": "7",
+      "userId": 1,
+      "bidAmount": 51000000,
+      "bidDate": "2025-02-13T22:20:29.272Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "ahmet123",
+      "email": "ahmet@example.com",
+      "name": "Ahmet Yılmaz"
+    }
+  ]
+}

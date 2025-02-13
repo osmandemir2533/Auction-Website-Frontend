@@ -1,0 +1,40 @@
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.container-fluid {
+  max-width: none;
+}
+
+@media (max-width: 1400px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .container {
+    max-width: 992px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+} 

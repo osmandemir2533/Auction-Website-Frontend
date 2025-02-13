@@ -1,0 +1,172 @@
+.banner {
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg') center/cover;
+  opacity: 0.1;
+}
+
+.banner-content {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 5rem 4rem;
+  position: relative;
+  text-align: center;
+}
+
+.banner-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.banner h1 {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  line-height: 1.2;
+}
+
+.banner p {
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-container {
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+
+.search-container form {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+
+.search-container input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.search-container input::placeholder {
+  color: #94a3b8;
+}
+
+.search-container input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+.search-container button {
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.search-container button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.search-container button i {
+  margin-right: 0.5rem;
+}
+
+.quick-filters {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.quick-filters button {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: transparent;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.quick-filters button:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: white;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1200px) {
+  .banner-content {
+    padding: 4rem 2rem;
+  }
+
+  .banner h1 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-content {
+    padding: 3rem 1.5rem;
+  }
+
+  .banner h1 {
+    font-size: 2rem;
+  }
+
+  .banner p {
+    font-size: 1rem;
+  }
+
+  .search-container form {
+    flex-direction: column;
+    background: none;
+    padding: 0;
+  }
+
+  .search-container input,
+  .search-container button {
+    width: 100%;
+  }
+
+  .quick-filters {
+    gap: 0.75rem;
+  }
+
+  .quick-filters button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+} 

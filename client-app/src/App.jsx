@@ -1,36 +1,34 @@
-import React, { useState } from "react";
-import "./App.css";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header/Header';
+import Banner from './components/Banner/Banner';
+import Footer from './components/Footer/Footer';
+import VehicleList from './components/VehicleList/VehicleList';
+import VehicleDetail from './components/VehicleDetail/VehicleDetail';
+import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
+import './App.css';
 
-const App = () => {
-  const [bids, setBids] = useState({
-    item1: 100,
-    item2: 200,
-  });
-
-  const handleBid = (item) => {
-    setBids((prevBids) => ({
-      ...prevBids,
-      [item]: prevBids[item] + 10, // Her teklif +10 artırılıyor
-    }));
-  };
-
+function App() {
   return (
-    <div className="auction-container">
-      <h1>🛒 Açık Artırma Sitesi</h1>
-
-      <div className="auction-item">
-        <h2>📱 iPhone 15</h2>
-        <p>Mevcut Teklif: <strong>${bids.item1}</strong></p>
-        <button onClick={() => handleBid("item1")}>Teklif Ver</button>
+    <Router>
+      <div className="App">
+        <Header />
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Banner onSearch={(term) => console.log(term)} />
+              <VehicleList />
+            </>
+          } />
+          <Route path="/vehicle/:id" element={<VehicleDetail />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+        <Footer />
       </div>
-
-      <div className="auction-item">
-        <h2>💻 MacBook Pro</h2>
-        <p>Mevcut Teklif: <strong>${bids.item2}</strong></p>
-        <button onClick={() => handleBid("item2")}>Teklif Ver</button>
-      </div>
-    </div>
+    </Router>
   );
-};
+}
 
 export default App;

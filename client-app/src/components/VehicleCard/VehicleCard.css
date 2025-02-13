@@ -1,0 +1,117 @@
+.vehicle-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.vehicle-image {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.vehicle-card:hover .vehicle-image {
+  transform: scale(1.05);
+}
+
+.vehicle-info {
+  padding: 1.5rem;
+}
+
+.vehicle-info h3 {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.vehicle-year {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.vehicle-description {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.price-info {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.price-info p {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+.time-remaining {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.bid-button {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  background: #3498db;
+  color: white;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.bid-button:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.features-list {
+  margin: 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.feature-tag {
+  background: #f0f2f5;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .vehicle-image {
+    height: 220px;
+  }
+
+  .vehicle-info {
+    padding: 1rem;
+  }
+
+  .vehicle-info h3 {
+    font-size: 1.4rem;
+  }
+
+  .price-info p {
+    font-size: 1.1rem;
+  }
+} 
