@@ -5,8 +5,8 @@
       "brand": "Mercedes",
       "model": "E250 AMG",
       "year": 2023,
-      "startingPrice": 2500000,
-      "currentPrice": 2500000,
+      "startingPrice": 100000,
+      "currentPrice": 100000,
       "description": "AMG Line | Dizel | Otomatik | 0 KM | Gece Paketi | Premium Paket",
       "imageUrl": "https://images.pexels.com/photos/193999/pexels-photo-193999.jpeg",
       "endDate": "2024-04-20T15:00:00",
@@ -245,6 +245,101 @@
         "Burmester Surround",
         "360° Kamera",
         "Adaptif Süspansiyon"
+      ]
+    },
+    {
+      "id": "14",
+      "brand": "Bentley",
+      "model": "Continental GT Speed",
+      "year": 2024,
+      "startingPrice": 7200000,
+      "currentPrice": 7200000,
+      "description": "W12 | Mulliner | First Edition | 0 KM | Blackline Specification",
+      "imageUrl": "https://images.pexels.com/photos/3752169/pexels-photo-3752169.jpeg",
+      "endDate": "2024-05-02T16:00:00",
+      "status": "active",
+      "features": [
+        "Naim Ses Sistemi",
+        "Döner Gösterge Paneli",
+        "Mulliner Driving Specification",
+        "City Specification",
+        "Touring Specification"
+      ]
+    },
+    {
+      "id": "15",
+      "brand": "Rolls-Royce",
+      "model": "Ghost Black Badge",
+      "year": 2024,
+      "startingPrice": 8500000,
+      "currentPrice": 8500000,
+      "description": "Black Badge | Bespoke | Extended Wheelbase | 0 KM",
+      "imageUrl": "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg",
+      "endDate": "2024-05-03T15:00:00",
+      "status": "active",
+      "features": [
+        "Starlight Headliner",
+        "Bespoke Audio",
+        "Illuminated Fascia",
+        "Rear Theatre Configuration",
+        "Champagne Cooler"
+      ]
+    },
+    {
+      "id": "16",
+      "brand": "Lamborghini",
+      "model": "Urus Performante",
+      "year": 2024,
+      "startingPrice": 6900000,
+      "currentPrice": 6900000,
+      "description": "Performante | Ad Personam | Carbon Fiber | 0 KM",
+      "imageUrl": "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg",
+      "endDate": "2024-05-04T17:00:00",
+      "status": "active",
+      "features": [
+        "Akrapovic Egzoz",
+        "Bang & Olufsen 3D Sound",
+        "Karbon Seramik Fren",
+        "Panoramik Tavan",
+        "Off-Road Paket"
+      ]
+    },
+    {
+      "id": "17",
+      "brand": "Ferrari",
+      "model": "SF90 Stradale",
+      "year": 2024,
+      "startingPrice": 9100000,
+      "currentPrice": 9100000,
+      "description": "Assetto Fiorano | Plug-in Hybrid | 0 KM",
+      "imageUrl": "https://images.pexels.com/photos/337909/pexels-photo-337909.jpeg",
+      "endDate": "2024-05-05T14:00:00",
+      "status": "active",
+      "features": [
+        "JBL Professional Ses Sistemi",
+        "Karbon Fiber Yarış Koltuğu",
+        "Telemetri Sistemi",
+        "Titanyum Egzoz",
+        "Karbon Seramik Fren"
+      ]
+    },
+    {
+      "id": "18",
+      "brand": "Aston Martin",
+      "model": "DBS Superleggera",
+      "year": 2024,
+      "startingPrice": 7800000,
+      "currentPrice": 7800000,
+      "description": "Carbon Edition | V12 | 0 KM | Q by Aston Martin",
+      "imageUrl": "https://images.pexels.com/photos/892522/pexels-photo-892522.jpeg",
+      "endDate": "2024-05-06T16:00:00",
+      "status": "active",
+      "features": [
+        "Bang & Olufsen BeoSound",
+        "Carbon Fiber Paket",
+        "360° Kamera",
+        "Sport Plus Koltuklar",
+        "Karbon Seramik Fren"
       ]
     }
   ],
