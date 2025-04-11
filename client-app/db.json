@@ -371,6 +371,7 @@
       "id": "1",
       "username": "ahmet123",
       "email": "ahmet@example.com",
+      "password": "hashedpassword123",
       "name": "Ahmet Yılmaz"
     }
   ]

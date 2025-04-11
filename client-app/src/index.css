@@ -11,6 +11,7 @@ html, body {
 }
 
 body {
+<<<<<<< Updated upstream
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -20,6 +21,13 @@ body {
   flex-direction: column;
   justify-content: space-between; /* İçeriği dikeyde yaymak */
   height: 100%;
+=======
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+>>>>>>> Stashed changes
   width: 100%;
 }
 
@@ -82,4 +90,8 @@ main {
   .social-links {
     justify-content: center;
   }
+}
+
+#root {
+  width: 100%;
 }
