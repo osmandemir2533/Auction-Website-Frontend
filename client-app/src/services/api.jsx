@@ -8,6 +8,11 @@ export const api = {
     return response.data;
   },
   
+  loginUser: async (loginData) => {
+    const response = await axios.post(`${BASE_URL}/User/Login`, loginData);
+    return response.data;
+  },
+
   // Diğer API fonksiyonları
   getVehicles: async () => {
     const response = await axios.get(`${BASE_URL}/Vehicle/GetVehicles`);

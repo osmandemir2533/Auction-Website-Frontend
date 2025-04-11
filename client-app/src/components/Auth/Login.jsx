@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
+import { api } from "../../services/api";  // API fonksiyonlarını import ettik
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,25 +30,18 @@ const Login = () => {
     try {
       console.log('Login isteği gönderiliyor:', formData);
 
-      const response = await fetch('http://localhost:7282/api/User/Login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
+      // Axios ile login isteği gönderme
+      const response = await api.loginUser(formData);
+      console.log('Login cevabı:', response);
 
-      const data = await response.json();
-      console.log('Login cevabı:', data);
-
-      if (response.ok && data.isSuccess) {
-        localStorage.setItem('token', data.result.token);
-        localStorage.setItem('user', JSON.stringify(data.result.user));
+      if (response.isSuccess) {
+        localStorage.setItem('token', response.result.token);
+        localStorage.setItem('user', JSON.stringify(response.result.user));
         console.log('Login başarılı, anasayfaya yönlendiriliyor');
         navigate('/');
       } else {
-        setError(data.errorMessages ? data.errorMessages[0] : 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
-        console.log('Login hatası:', data.errorMessages);
+        setError(response.errorMessages ? response.errorMessages[0] : 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
+        console.log('Login hatası:', response.errorMessages);
       }
     } catch (err) {
       setError('Bir hata oluştu. Lütfen tekrar deneyin.');
@@ -60,7 +54,7 @@ const Login = () => {
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Giriş Yap</h2>
         {error && <div className="error-message">{error}</div>}
-        
+
         <div className="form-group">
           <label>Email:</label>
           <input
@@ -86,7 +80,7 @@ const Login = () => {
         </div>
 
         <button type="submit">Giriş Yap</button>
-        
+
         <p>
           Hesabınız yok mu?{' '}
           <span onClick={() => navigate('/register')} className="auth-link">
@@ -98,4 +92,4 @@ const Login = () => {
   );
 };
 
-export default Login; 
+export default Login;
