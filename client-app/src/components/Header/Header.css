@@ -119,3 +119,36 @@
     top: 60px;
   }
 }
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #333;
+}
+
+.logout {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.logout:hover {
+  color: #ff4444;
+}
+
+.nav-link i {
+  margin-right: 5px;
+}

@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import './Auth.css';
-import { api } from "../../services/api";  // API fonksiyonlarını import ettik
+import { api } from "../../services/api";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     userName: '',
     password: ''
   });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -20,32 +23,36 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.userName)) {
       setError('Lütfen geçerli bir email adresi giriniz!');
+      setIsLoading(false);
       return;
     }
 
     try {
       console.log('Login isteği gönderiliyor:', formData);
-
-      // Axios ile login isteği gönderme
       const response = await api.loginUser(formData);
       console.log('Login cevabı:', response);
 
       if (response.isSuccess) {
-        localStorage.setItem('token', response.result.token);
+        login(response.result.token);
         localStorage.setItem('user', JSON.stringify(response.result.user));
         console.log('Login başarılı, anasayfaya yönlendiriliyor');
-        navigate('/');
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
       } else {
         setError(response.errorMessages ? response.errorMessages[0] : 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
         console.log('Login hatası:', response.errorMessages);
+        setIsLoading(false);
       }
     } catch (err) {
       setError('Bir hata oluştu. Lütfen tekrar deneyin.');
       console.error('Login işlemi sırasında hata:', err);
+      setIsLoading(false);
     }
   };
 
@@ -64,6 +71,7 @@ const Login = () => {
             onChange={handleChange}
             required
             placeholder="ornek@email.com"
+            disabled={isLoading}
           />
         </div>
 
@@ -76,10 +84,20 @@ const Login = () => {
             onChange={handleChange}
             required
             placeholder="Şifreniz"
+            disabled={isLoading}
           />
         </div>
 
-        <button type="submit">Giriş Yap</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <div className="loader">
+              <div className="spinner"></div>
+              Giriş Yapılıyor...
+            </div>
+          ) : (
+            'Giriş Yap'
+          )}
+        </button>
 
         <p>
           Hesabınız yok mu?{' '}
