@@ -29,7 +29,7 @@ const Login = () => {
     try {
       console.log('Login isteği gönderiliyor:', formData);
 
-      const response = await fetch('http://localhost:5119/api/User/Login', {
+      const response = await fetch('http://localhost:7282/api/User/Login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

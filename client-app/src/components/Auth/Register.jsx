@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Auth.css';
+import { api } from "../../services/api";  // 2 seviye yukarı çık ve services klasörüne git
+
 
 const Register = () => {
   const navigate = useNavigate();
@@ -42,21 +44,14 @@ const Register = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:5119/api/User/Register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(registerData)
-      });
-
-      if (response.ok) {
-        navigate('/login');
+      const response = await api.registerUser(registerData); // API'den gelen yanıt
+      if (response) {
+        navigate('/login');  // Başarılı kayıt sonrası login sayfasına yönlendir
       } else {
-        const data = await response.json();
-        setError(data.errorMessages ? data.errorMessages[0] : 'Kayıt başarısız. Lütfen tekrar deneyin.');
+        setError('Kayıt başarısız. Lütfen tekrar deneyin.');
       }
     } catch (err) {
+      console.log(err);
       setError('Bir hata oluştu. Lütfen tekrar deneyin.');
     }
   };
@@ -66,7 +61,7 @@ const Register = () => {
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Kayıt Ol</h2>
         {error && <div className="error-message">{error}</div>}
-        
+
         <div className="form-group">
           <label>Email:</label>
           <input
@@ -130,7 +125,7 @@ const Register = () => {
         </div>
 
         <button type="submit">Kayıt Ol</button>
-        
+
         <p>
           Zaten hesabınız var mı?{' '}
           <span onClick={() => navigate('/login')} className="auth-link">
@@ -142,4 +137,4 @@ const Register = () => {
   );
 };
 
-export default Register; 
+export default Register;
