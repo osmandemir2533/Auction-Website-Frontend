@@ -27,7 +27,7 @@ const Header = () => {
       <div className="header-content">
         <div className="logo">
           <Link to="/">
-            <span className="logo-text">Premium<span className="highlight">Auto</span></span>
+            <span className="logo-text">Açık<span className="highlight">Artırma</span></span>
           </Link>
         </div>
         <nav className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>

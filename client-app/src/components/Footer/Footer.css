@@ -3,13 +3,13 @@
   color: white;
   width: 100%;
   padding: 4rem 0 1rem;
-  margin-top: 4rem;
+  margin-top: 0;
 }
 
 .footer-content {
-  max-width: 1920px;
+  width: 100%; /* Genişlik %100 olacak şekilde ayarlandı */
   margin: 0 auto;
-  padding: 0 4rem;
+  padding: 0 2rem; /* Sol ve sağ padding'i 2rem yaptık */
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
@@ -80,9 +80,9 @@
 }
 
 .footer-bottom {
-  max-width: 1920px;
+  width: 100%; /* Footer alt kısmının genişliğini %100 yapıyoruz */
   margin: 3rem auto 0;
-  padding: 1.5rem 4rem;
+  padding: 1.5rem 2rem;
   text-align: center;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -95,8 +95,8 @@
 @media (max-width: 1200px) {
   .footer-content,
   .footer-bottom {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
   
   .footer-content {
@@ -136,4 +136,4 @@
   .footer-section .contact-info {
     justify-content: center;
   }
-} 
+}

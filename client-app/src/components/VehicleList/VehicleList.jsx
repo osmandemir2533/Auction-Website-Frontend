@@ -3,6 +3,7 @@ import VehicleCard from '../VehicleCard/VehicleCard';
 import api from '../../services/api';
 import './VehicleList.css';
 import Container from '../Container/Container';
+import Banner from '../Banner/Banner';
 
 const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -15,8 +16,15 @@ const VehicleList = () => {
     const fetchVehicles = async () => {
       try {
         const data = await api.getVehicles();
-        setVehicles(data);
-        setFilteredVehicles(data);
+        console.log("API'den Gelen Veri:", data); // Debug amaçlı log
+
+        if (data.isSuccess && Array.isArray(data.result)) {
+          setVehicles(data.result);
+          setFilteredVehicles(data.result);
+        } else {
+          console.error("Beklenmeyen veri formatı:", data);
+        }
+
         setLoading(false);
       } catch (error) {
         console.error('Araçlar yüklenirken hata oluştu:', error);
@@ -34,13 +42,13 @@ const VehicleList = () => {
 
     switch (value) {
       case 'price-asc':
-        sorted.sort((a, b) => a.currentPrice - b.currentPrice);
+        sorted.sort((a, b) => a.price - b.price);
         break;
       case 'price-desc':
-        sorted.sort((a, b) => b.currentPrice - a.currentPrice);
+        sorted.sort((a, b) => b.price - a.price);
         break;
       case 'year-desc':
-        sorted.sort((a, b) => b.year - a.year);
+        sorted.sort((a, b) => b.manufacturingYear - a.manufacturingYear);
         break;
       default:
         break;
@@ -55,7 +63,7 @@ const VehicleList = () => {
       setFilteredVehicles(vehicles);
     } else {
       const filtered = vehicles.filter(vehicle => 
-        vehicle.brand.toLowerCase() === brand.toLowerCase()
+        vehicle.brandAndModel.toLowerCase().includes(brand.toLowerCase())
       );
       setFilteredVehicles(filtered);
     }
@@ -68,6 +76,14 @@ const VehicleList = () => {
   return (
     <Container>
       <div className="vehicle-list">
+        <Banner 
+          onSearch={(term) => console.log(term)} 
+          title="Açık Artırmalar Başladı!"
+          description="Hayalinizdeki ürünü en iyi fiyatla yakalayın."
+          backgroundImage="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg"
+          overlayOpacity={0.5}
+        />
+        
         <div className="filters">
           <div className="filter-header">
             <h2>Araçlar ({filteredVehicles.length})</h2>
@@ -83,6 +99,12 @@ const VehicleList = () => {
               onClick={() => handleFilter('all')}
             >
               Tümü
+            </button>
+            <button 
+              className={`filter-button ${activeFilter === 'toyota' ? 'active' : ''}`}
+              onClick={() => handleFilter('toyota')}
+            >
+              Toyota
             </button>
             <button 
               className={`filter-button ${activeFilter === 'mercedes' ? 'active' : ''}`}
@@ -110,10 +132,11 @@ const VehicleList = () => {
             </button>
           </div>
         </div>
+        
         {filteredVehicles.length > 0 ? (
           <div className="vehicles-grid">
             {filteredVehicles.map(vehicle => (
-              <VehicleCard key={vehicle.id} vehicle={vehicle} />
+              <VehicleCard key={vehicle.vehicleId} vehicle={vehicle} />
             ))}
           </div>
         ) : (
@@ -126,4 +149,4 @@ const VehicleList = () => {
   );
 };
 
-export default VehicleList; 
+export default VehicleList;

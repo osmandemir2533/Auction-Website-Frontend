@@ -139,7 +139,7 @@
       "model": "911 GT3",
       "year": 2023,
       "startingPrice": 6800000,
-      "currentPrice": 6800000,
+      "currentPrice": 7e+24,
       "description": "GT3 | Manuel | Club Sport Paket | 0 KM",
       "imageUrl": "https://images.pexels.com/photos/3752169/pexels-photo-3752169.jpeg",
       "endDate": "2024-04-26T15:00:00",
@@ -357,6 +357,13 @@
       "userId": 1,
       "bidAmount": 51000000,
       "bidDate": "2025-02-13T22:20:29.272Z"
+    },
+    {
+      "id": "2f29",
+      "vehicleId": "8",
+      "userId": 1,
+      "bidAmount": 7e+24,
+      "bidDate": "2025-03-16T12:11:30.474Z"
     }
   ],
   "users": [

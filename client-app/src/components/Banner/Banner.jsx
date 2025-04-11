@@ -1,45 +1,52 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Container from '../Container/Container';
 import './Banner.css';
 
-const Banner = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSearch(searchTerm);
-  };
-
+const Banner = ({
+  title = 'Premium Araç Açık Artırması',
+  description = "Türkiye'nin en prestijli araçları, güvenilir açık artırma platformunda",
+  backgroundImage = 'https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg',
+  overlayOpacity = 0.5,
+  overlayColor = 'rgba(38, 66, 137, 0.8)',  // Overlay rengi dinamik
+  onSearch
+}) => {
   return (
-    <div className="banner">
+    <div 
+      className="banner" 
+      style={{
+        backgroundImage: `url(${backgroundImage})`, 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center', 
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div className="banner-overlay" style={{ background: overlayColor, opacity: overlayOpacity }}></div>
       <Container>
         <div className="banner-content">
-          <h1>Premium Araç Açık Artırması</h1>
-          <p>Türkiye'nin en prestijli araçları, güvenilir açık artırma platformunda</p>
-          <div className="search-container">
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                placeholder="Marka, model veya yıl ile arama yapın..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button type="submit">
-                <i className="fas fa-search"></i>
-                Ara
-              </button>
-            </form>
-          </div>
-          <div className="quick-filters">
-            <button>Mercedes-Benz</button>
-            <button>BMW</button>
-            <button>Audi</button>
-            <button>Porsche</button>
-          </div>
+          <h1>{title}</h1>
+          <p>{description}</p>
+          {onSearch && (
+            <div className="search-container">
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                onSearch(e.target.search.value);
+              }}>
+                <input
+                  type="text"
+                  name="search"
+                  placeholder="Marka, model veya yıl ile arama yapın..."
+                />
+                <button type="submit">
+                  <i className="fas fa-search"></i> Ara
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </Container>
     </div>
   );
 };
 
-export default Banner; 
+
+export default Banner;

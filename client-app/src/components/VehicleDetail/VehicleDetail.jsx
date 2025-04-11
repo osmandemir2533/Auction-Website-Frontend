@@ -14,10 +14,10 @@ const VehicleDetail = () => {
     const fetchVehicle = async () => {
       try {
         const data = await api.getVehicleById(id);
-        setVehicle(data);
-        setLoading(false);
+        setVehicle(data.result);
       } catch (error) {
         console.error('Araç detayları yüklenirken hata oluştu:', error);
+      } finally {
         setLoading(false);
       }
     };
@@ -33,22 +33,57 @@ const VehicleDetail = () => {
     return <div className="error">Araç bulunamadı</div>;
   }
 
+  const {
+    brandAndModel = "Bilinmeyen Araç",
+    manufacturingYear,
+    color = "Renk Bilinmiyor",
+    engineCapacity,
+    millage,
+    plateNumber = "Plaka Yok",
+    price = 0,
+    auctionPrice = 0,
+    additionalInformation = "Ek bilgi bulunmuyor",
+    endTime,
+    startTime,
+    image,
+  } = vehicle;
+
+  // Kalan süre hesaplama
+  let daysRemaining = null;
+  if (endTime) {
+    const timeRemaining = new Date(endTime) - new Date();
+    daysRemaining = timeRemaining > 0 ? Math.floor(timeRemaining / (1000 * 60 * 60 * 24)) : 0;
+  }
+
   return (
     <Container>
       <div className="vehicle-detail">
         <div className="vehicle-detail-content">
           <div className="vehicle-images">
-            <img src={vehicle.imageUrl} alt={`${vehicle.brand} ${vehicle.model}`} />
+            <img 
+              src={image || "https://via.placeholder.com/600x400?text=Resim+Yok"} 
+              alt={brandAndModel} 
+            />
           </div>
           <div className="vehicle-info-detail">
-            <h1>{vehicle.brand} {vehicle.model}</h1>
-            <p className="year">{vehicle.year}</p>
-            <p className="description">{vehicle.description}</p>
+            <h1>{brandAndModel}</h1>
+            <p className="year">Model Yılı: {manufacturingYear || "Bilinmiyor"}</p>
+            <p className="color">Renk: {color}</p>
+            <p className="engine">Motor Hacmi: {engineCapacity} L</p>
+            <p className="millage">Kilometre: {millage.toLocaleString()} km</p>
+            <p className="plate">Plaka: {plateNumber}</p>
+            <p className="description">{additionalInformation}</p>
+
             <div className="price-details">
-              <p>Başlangıç Fiyatı: {vehicle.startingPrice.toLocaleString()} TL</p>
-              <p>Güncel Fiyat: {vehicle.currentPrice.toLocaleString()} TL</p>
+              <p>Satış Fiyatı: {price.toLocaleString()} TL</p>
+              <p>Müzayede Başlangıç: {auctionPrice.toLocaleString()} TL</p>
             </div>
-            <BidForm vehicleId={vehicle.id} currentPrice={vehicle.currentPrice} />
+
+            {daysRemaining !== null && (
+              <p className="time-remaining">Kalan Süre: {daysRemaining} gün</p>
+            )}
+
+            <BidForm vehicleId={id} currentPrice={price} />
           </div>
         </div>
       </div>
@@ -56,4 +91,4 @@ const VehicleDetail = () => {
   );
 };
 
-export default VehicleDetail; 
+export default VehicleDetail;
