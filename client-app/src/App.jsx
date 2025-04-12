@@ -10,6 +10,10 @@ import Register from './components/Auth/Register';
 import Profile from './components/Profile/Profile';
 import './App.css';
 import HomePage from './components/HomePage/HomePage';
+import DashboardRouter from './components/Dashboard/DashboardRouter';
+import AdminPanel from './components/Dashboard/AdminPanel'; // veya doğru yola göre
+import SellerPanel from './components/Dashboard/SellerPanel'; // veya doğru yola göre
+import UserPanel from './components/Dashboard/UserPanel'; // veya doğru yola göre
 
 const App = () => {
   return (
@@ -27,7 +31,11 @@ const App = () => {
             <Route path="/vehicle/:id" element={<VehicleDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
+           
+            <Route path="/dashboard" element={<DashboardRouter />} />
+            <Route path="/dashboard/admin" element={<AdminPanel />} />
+            <Route path="/dashboard/seller" element={<SellerPanel />} />
+            <Route path="/dashboard/user" element={<UserPanel />} />
           </Routes>
           <Footer />
         </div>

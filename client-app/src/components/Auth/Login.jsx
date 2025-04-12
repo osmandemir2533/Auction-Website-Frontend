@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Auth.css';
 import { api } from "../../services/api";
+import { jwtDecode } from 'jwt-decode'; // ✅ Eksikti, eklendi
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.userName)) {
@@ -33,20 +35,30 @@ const Login = () => {
     }
 
     try {
-      console.log('Login isteği gönderiliyor:', formData);
       const response = await api.loginUser(formData);
-      console.log('Login cevabı:', response);
-
       if (response.isSuccess) {
-        login(response.result.token);
+        const token = response.result.token;
+        login(token);
+
+        const decoded = jwtDecode(token);
+        const role = decoded.role;
+
+        // Rol bazlı yönlendirme
+        let redirectPath = '/';
+        if (role === 'admin') redirectPath = '/dashboard/admin';
+        else if (role === 'seller') redirectPath = '/dashboard/seller';
+        else if (role === 'user') redirectPath = '/dashboard/user';
+
         localStorage.setItem('user', JSON.stringify(response.result.user));
-        console.log('Login başarılı, anasayfaya yönlendiriliyor');
+        
+        // ✅ Başarı durumunda hata mesajı temizle
+        setError('');
+
         setTimeout(() => {
-          navigate('/');
+          navigate(redirectPath);
         }, 1000);
       } else {
-        setError(response.errorMessages ? response.errorMessages[0] : 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
-        console.log('Login hatası:', response.errorMessages);
+        setError(response.errorMessages ? response.errorMessages[0] : 'Giriş başarısız.');
         setIsLoading(false);
       }
     } catch (err) {

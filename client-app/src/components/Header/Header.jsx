@@ -29,6 +29,18 @@ const Header = () => {
     window.location.href = '/';
   };
 
+  // Kullanıcı rolüne göre yönlendirme
+  const getDashboardLink = () => {
+    if (user?.role === 'Administrator') {
+      return '/dashboard/admin';
+    } else if (user?.role === 'Seller') {
+      return '/dashboard/seller';
+    } else if (user?.role === 'User') {
+      return '/dashboard/user';
+    }
+    return '/';
+  };
+
   return (
     <header className={`header ${!isVisible ? 'header-hidden' : ''}`}>
       <div className="header-content">
@@ -41,22 +53,10 @@ const Header = () => {
           <Link to="/" className="nav-link">Ana Sayfa</Link>
           <Link to="/auctions" className="nav-link">Açık Artırmalar</Link>
           <Link to="/how-it-works" className="nav-link">Nasıl Çalışır?</Link>
-          {user?.role === 'Administrator' ? (
+          {user ? (
             <div className="user-profile">
-              <Link to="/admin" className="nav-link">
-                <i className="fas fa-user-shield"></i> Admin Panel
-              </Link>
-              <Link to="/profile" className="nav-link user-name">
-                <i className="fas fa-user"></i> {user.fullName}
-              </Link>
-              <button onClick={handleLogout} className="nav-link logout">
-                <i className="fas fa-sign-out-alt"></i> Çıkış Yap
-              </button>
-            </div>
-          ) : user ? (
-            <div className="user-profile">
-              <Link to="/profile" className="nav-link user-name">
-                <i className="fas fa-user"></i> {user.fullName}
+              <Link to={getDashboardLink()} className="nav-link">
+                <i className="fas fa-tachometer-alt"></i> {user.fullName}'in Paneli
               </Link>
               <button onClick={handleLogout} className="nav-link logout">
                 <i className="fas fa-sign-out-alt"></i> Çıkış Yap
@@ -77,4 +77,4 @@ const Header = () => {
   );
 };
 
-export default Header; 
+export default Header;

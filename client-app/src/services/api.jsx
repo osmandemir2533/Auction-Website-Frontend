@@ -34,7 +34,17 @@ export const api = {
       currentPrice: newPrice
     });
     return response.data;
-  }
+  },
+
+  getVehiclesBySellerId: async (sellerId) => {
+    const res = await axios.get(`${BASE_URL}/Vehicle/GetBySeller/${sellerId}`);
+    return res.data;
+  },
+  
+  getVehiclesUserBidOn: async (userId) => {
+    const res = await axios.get(`${BASE_URL}/Vehicle/GetByBidder/${userId}`);
+    return res.data;
+  }  
 };
 
 export default api;

@@ -1,0 +1,162 @@
+/* Genel stil ayarları */
+.admin-panel {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+  }
+  
+  h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  /* Hata mesajları */
+  .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Araç listesi */
+  .car-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .car-list .vehicle-card {
+    width: 300px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .car-list .vehicle-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .vehicle-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .vehicle-card .vehicle-info {
+    padding: 15px;
+  }
+  
+  .vehicle-card .vehicle-info h3 {
+    font-size: 1.25rem;
+    color: #333;
+  }
+  
+  .vehicle-card .vehicle-info p {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 5px 0;
+  }
+  
+  .vehicle-card .price-info {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .price-info p {
+    font-weight: bold;
+  }
+  
+  .vehicle-card .vehicle-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .vehicle-card .vehicle-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+  
+  .vehicle-card .vehicle-actions button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Araç ekleme formu */
+  .add-car {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+    width: 100%;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .add-car h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .add-car input,
+  .add-car textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .add-car textarea {
+    resize: vertical;
+    height: 100px;
+  }
+  
+  .add-car button {
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-car button:hover {
+    background-color: #218838;
+  }
+  
+  /* Mobil uyumlu tasarım */
+  @media (max-width: 768px) {
+    .car-list {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .add-car {
+      width: 90%;
+    }
+  }
+  
