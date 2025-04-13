@@ -13,6 +13,7 @@ import HomePage from './components/HomePage/HomePage';
 import DashboardRouter from './components/Dashboard/DashboardRouter';
 import AdminPanel from './Admin/AdminPanel';
 import SellerPanel from './components/Dashboard/SellerPanel/SellerPanel';
+import HowItWorks from './emptypage/howitworks';
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/vehicle/:id" element={<VehicleDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
 
             <Route path="/dashboard" element={<DashboardRouter />} />
             <Route path="/dashboard/admin" element={<AdminPanel />} />
