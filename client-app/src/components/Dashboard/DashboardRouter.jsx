@@ -1,7 +1,7 @@
 // src/components/Dashboard/DashboardRouter.jsx
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import AdminPanel from './AdminPanel';
+import AdminPanel from '../../Admin/AdminPanel';
 import SellerPanel from './SellerPanel';
 import UserPanel from './UserPanel';
 

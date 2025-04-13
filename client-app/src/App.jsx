@@ -11,9 +11,10 @@ import Profile from './components/Profile/Profile';
 import './App.css';
 import HomePage from './components/HomePage/HomePage';
 import DashboardRouter from './components/Dashboard/DashboardRouter';
-import AdminPanel from './components/Dashboard/AdminPanel'; // veya doğru yola göre
-import SellerPanel from './components/Dashboard/SellerPanel'; // veya doğru yola göre
-import UserPanel from './components/Dashboard/UserPanel'; // veya doğru yola göre
+import AdminPanel from './Admin/AdminPanel';
+import SellerPanel from './components/Dashboard/SellerPanel';
+import UserPanel from './components/Dashboard/UserPanel';
+import MusicalInstrument from './Admin/MusicalInstrument/MusicalInstrument';
 
 const App = () => {
   return (
@@ -22,16 +23,12 @@ const App = () => {
         <div className="App">
           <Header />
           <Routes>
-            <Route path="/" element={
-              <>
-                <HomePage />
-              </>
-            } />
+            <Route path="/" element={<HomePage />} />
             <Route path="/vehicles" element={<VehicleList />} />
             <Route path="/vehicle/:id" element={<VehicleDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-           
+            <Route path="/profile" element={<Profile />} />
             <Route path="/dashboard" element={<DashboardRouter />} />
             <Route path="/dashboard/admin" element={<AdminPanel />} />
             <Route path="/dashboard/seller" element={<SellerPanel />} />
