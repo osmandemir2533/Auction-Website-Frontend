@@ -19,8 +19,18 @@ export const api = {
     return response.data;
   },
 
-  getVehicleById: async (id) => {
-    const response = await axios.get(`${BASE_URL}/Vehicle/${id}`);
+  getVehicleById: async (vehicleId) => {
+    const response = await axios.get(`${BASE_URL}/Vehicle/${vehicleId}`);
+    return response.data;
+  },
+
+  deleteVehicle: async (vehicleId) => {
+    const response = await axios.delete(`${BASE_URL}/Vehicle/Remove/Vehicle/${vehicleId}`);
+    return response.data;
+  },
+
+  updateVehicle: async (vehicleId, vehicleData) => {
+    const response = await axios.put(`${BASE_URL}/Vehicle/${vehicleId}`, vehicleData);
     return response.data;
   },
 
@@ -34,6 +44,7 @@ export const api = {
       currentPrice: newPrice
     });
     return response.data;
+
   },
 
   getVehiclesBySellerId: async (sellerId) => {
@@ -214,6 +225,6 @@ export const api = {
       return { isSuccess: false, error: error.message };
     }
   },
-};
+  };
 
 export default api;

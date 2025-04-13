@@ -15,7 +15,8 @@ export const AuthProvider = ({ children }) => {
         setUser({
           role: decodedToken.role,
           name: decodedToken.name,
-          fullName: decodedToken.fullName
+          fullName: decodedToken.fullName,
+          nameid: decodedToken.nameid
         });
       } catch (error) {
         console.error('Token decode hatası:', error);
@@ -31,7 +32,8 @@ export const AuthProvider = ({ children }) => {
       setUser({
         role: decodedToken.role,
         name: decodedToken.name,
-        fullName: decodedToken.fullName
+        fullName: decodedToken.fullName,
+        nameid: decodedToken.nameid
       });
       localStorage.setItem('token', token);
     } catch (error) {

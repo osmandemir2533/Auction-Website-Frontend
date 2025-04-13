@@ -2,8 +2,7 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import AdminPanel from '../../Admin/AdminPanel';
-import SellerPanel from './SellerPanel';
-import UserPanel from './UserPanel';
+import SellerPanel from './SellerPanel/SellerPanel';
 
 const DashboardRouter = () => {
   const { user, isLoading } = useAuth();
@@ -16,8 +15,6 @@ const DashboardRouter = () => {
       return <AdminPanel />;
     case 'seller':
       return <SellerPanel />;
-    case 'user':
-      return <UserPanel />;
     default:
       return <div>Yetkisiz erişim.</div>;
   }
