@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import VehicleCard from '../VehicleCard/VehicleCard';
 import api from '../../services/api';
 import './VehicleList.css';
-import Container from '../Container/Container';
 import Banner from '../Banner/Banner';
 
 const VehicleList = () => {
@@ -16,7 +15,7 @@ const VehicleList = () => {
     const fetchVehicles = async () => {
       try {
         const data = await api.getVehicles();
-        console.log("API'den Gelen Veri:", data); // Debug amaçlı log
+        console.log("API'den Gelen Veri:", data);
 
         if (data.isSuccess && Array.isArray(data.result)) {
           setVehicles(data.result);
@@ -74,16 +73,16 @@ const VehicleList = () => {
   }
 
   return (
-    <Container>
-      <div className="vehicle-list">
-        <Banner 
-          onSearch={(term) => console.log(term)} 
-          title="Açık Artırmalar Başladı!"
-          description="Hayalinizdeki ürünü en iyi fiyatla yakalayın."
-          backgroundImage="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg"
-          overlayOpacity={0.5}
-        />
-        
+    <div className="page-wrapper">
+      <Banner 
+        onSearch={(term) => console.log(term)} 
+        title="Açık Artırmalar Başladı!"
+        description="Hayalinizdeki ürünü en iyi fiyatla yakalayın."
+        backgroundImage="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg"
+        overlayOpacity={0.5}
+      />
+      
+      <div className="content-wrapper">
         <div className="filters">
           <div className="filter-header">
             <h2>Araçlar ({filteredVehicles.length})</h2>
@@ -145,7 +144,7 @@ const VehicleList = () => {
           </div>
         )}
       </div>
-    </Container>
+    </div>
   );
 };
 

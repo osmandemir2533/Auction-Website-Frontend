@@ -1,15 +1,15 @@
 .banner {
   position: relative;
   width: 100%;
-  height: 300px;  /* Banner yüksekliği */
+  height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   color: white;
-  background-size: cover;  /* Resmi banner boyutuna tam sığdır */
-  background-position: center; /* Resmi ortala */
-  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .banner-overlay {
@@ -18,28 +18,29 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(38, 66, 137, 0.8); /* Mavi overlay */
+  background: rgba(38, 66, 137, 0.8);
+  z-index: 1;
 }
 
 .banner-content {
   position: relative;
+  z-index: 2;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 5rem 4rem;
-  text-align: center;
+  padding: 0 20px;
 }
 
 .banner h1 {
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin-bottom: 1.5rem;
   font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Yazılar için daha belirgin gölge */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .banner p {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin-bottom: 2rem;
-  opacity: 1;  /* Opaklık 1, yani tamamen opak */
+  opacity: 0.9;
 }
 
 .search-container {
@@ -63,7 +64,6 @@
   font-size: 1rem;
   background: white;
   color: #2c3e50;
-  font-weight: 500;
 }
 
 .search-container input::placeholder {
@@ -78,7 +78,7 @@
 .search-container button {
   padding: 1rem 2rem;
   border-radius: 8px;
-  background: #2563eb;
+  background: #1a73e8;
   color: white;
   border: none;
   font-size: 1rem;
@@ -88,8 +88,7 @@
 }
 
 .search-container button:hover {
-  background: #1d4ed8;
-  transform: translateY(-1px);
+  background: #1557b0;
 }
 
 .search-container button i {
@@ -97,26 +96,30 @@
 }
 
 @media (max-width: 1200px) {
-  .banner-content {
-    padding: 4rem 2rem;
+  .banner {
+    height: 350px;
+  }
+
+  .banner h1 {
+    font-size: 3rem;
+  }
+
+  .banner p {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner {
+    height: 300px;
   }
 
   .banner h1 {
     font-size: 2.5rem;
   }
-}
-
-@media (max-width: 768px) {
-  .banner-content {
-    padding: 3rem 1.5rem;
-  }
-
-  .banner h1 {
-    font-size: 2rem;
-  }
 
   .banner p {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .search-container form {
@@ -126,5 +129,19 @@
   .search-container input,
   .search-container button {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner {
+    height: 250px;
+  }
+
+  .banner h1 {
+    font-size: 2rem;
+  }
+
+  .banner p {
+    font-size: 1rem;
   }
 }

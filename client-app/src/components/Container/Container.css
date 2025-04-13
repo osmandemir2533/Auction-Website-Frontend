@@ -2,11 +2,13 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0;
+  position: relative;
 }
 
 .container-fluid {
   max-width: none;
+  padding: 0;
 }
 
 @media (max-width: 1400px) {
@@ -29,7 +31,7 @@
 
 @media (max-width: 768px) {
   .container {
-    padding: 0 1.5rem;
+    width: 100%;
   }
 }
 
