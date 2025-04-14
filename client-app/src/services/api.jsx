@@ -225,6 +225,57 @@ export const api = {
       return { isSuccess: false, error: error.message };
     }
   },
-  };
+
+  createVehicle: async (vehicleData) => {
+    try {
+      console.log('API çağrısı yapılıyor:', `${BASE_URL}/Vehicle/CreateVehicle`);
+      console.log('Gönderilen veri:', JSON.stringify(vehicleData, null, 2));
+      
+      // Veri doğrulama
+      const requiredFields = {
+        File: 'Araç resmi',
+        Color: 'Renk',
+        Image: 'Resim URL',
+        SellerId: 'Satıcı ID',
+        PlateNumber: 'Plaka',
+        BrandAndModel: 'Marka ve Model',
+        AdditionalInformation: 'Ek Bilgiler'
+      };
+
+      const missingFields = Object.entries(requiredFields)
+        .filter(([field]) => !vehicleData[field]?.trim())
+        .map(([_, label]) => label);
+
+      if (missingFields.length > 0) {
+        throw new Error(`Eksik alanlar: ${missingFields.join(', ')}`);
+      }
+
+      const response = await axios.post(`${BASE_URL}/Vehicle/CreateVehicle`, vehicleData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+      
+      console.log('API yanıtı:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('API hatası:', error);
+      if (error.response) {
+        console.error('Hata durumu:', error.response.status);
+        console.error('Hata detayı:', error.response.data);
+        
+        if (error.response.data.errors) {
+          const errorMessages = Object.entries(error.response.data.errors)
+            .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
+            .join('\n');
+          console.error('Detaylı hata mesajları:', errorMessages);
+          throw new Error(errorMessages);
+        }
+      }
+      throw error;
+    }
+  },
+};
 
 export default api;
