@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import './Auth.css';
-import { api } from "../../services/api";  // 2 seviye yukarı çık ve services klasörüne git
-
+import { api } from "../../services/api";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -14,17 +14,34 @@ const Register = () => {
     userType: 'Normal'
   });
   const [error, setError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+
+    // Şifre alanı değiştiğinde kontrol et
+    if (e.target.name === 'password') {
+      if (e.target.value.length < 6) {
+        setPasswordError('Şifre en az 6 karakter uzunluğunda olmalıdır.');
+      } else {
+        setPasswordError('');
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setPasswordError('');
     
+    if (formData.password.length < 6) {
+      setPasswordError('Şifre en az 6 karakter uzunluğunda olmalıdır.');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('Şifreler eşleşmiyor!');
       return;
@@ -44,15 +61,61 @@ const Register = () => {
     };
 
     try {
-      const response = await api.registerUser(registerData); // API'den gelen yanıt
-      if (response) {
-        navigate('/login');  // Başarılı kayıt sonrası login sayfasına yönlendir
+      const response = await api.registerUser(registerData);
+      if (response.isSuccess) {
+        toast.success('Kayıt işlemi başarılı! Giriş yapabilirsiniz.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
       } else {
-        setError('Kayıt başarısız. Lütfen tekrar deneyin.');
+        // Hata mesajını kontrol et ve Türkçe'ye çevir
+        let errorMessage = response.errorMessages ? response.errorMessages[0] : 'Kayıt başarısız. Lütfen tekrar deneyin.';
+        if (errorMessage === "Username Already exist") {
+          errorMessage = "Bu e-posta adresi zaten kullanımda";
+        }
+        
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
       }
     } catch (err) {
-      console.log(err);
-      setError('Bir hata oluştu. Lütfen tekrar deneyin.');
+      console.error('Kayıt işlemi sırasında hata:', err);
+      if (err.response && err.response.data && err.response.data.errorMessages) {
+        let errorMessage = err.response.data.errorMessages[0];
+        if (errorMessage === "Username Already exist") {
+          errorMessage = "Bu e-posta adresi zaten kullanımda";
+        }
+        
+        toast.error(errorMessage, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      } else {
+        toast.error('Bir hata oluştu. Lütfen tekrar deneyin.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
     }
   };
 
@@ -108,8 +171,9 @@ const Register = () => {
             value={formData.password}
             onChange={handleChange}
             required
-            placeholder="Şifreniz"
+            placeholder="En az 6 karakter"
           />
+          {passwordError && <div className="error-message">{passwordError}</div>}
         </div>
 
         <div className="form-group">

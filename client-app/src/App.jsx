@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './context/AuthContext';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -37,6 +39,7 @@ const App = () => {
             <Route path="/dashboard/seller" element={<SellerPanel />} />
           </Routes>
           <Footer />
+          <ToastContainer />
         </div>
       </Router>
     </AuthProvider>

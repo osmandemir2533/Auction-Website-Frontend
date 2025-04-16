@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { toast } from 'react-toastify';
 import './Auth.css';
 import { api } from "../../services/api";
 import { jwtDecode } from 'jwt-decode'; // ✅ Eksikti, eklendi
@@ -45,24 +46,44 @@ const Login = () => {
 
         // Rol bazlı yönlendirme
         let redirectPath = '/';
-        if (role === 'admin') redirectPath = '/dashboard/admin';
-        else if (role === 'seller') redirectPath = '/dashboard/seller';
-        else if (role === 'user') redirectPath = '/dashboard/user';
+        if (role === 'Administrator') redirectPath = '/';
+        else if (role === 'Seller') redirectPath = '/';
+        else if (role === 'Normal') redirectPath = '/';
 
         localStorage.setItem('user', JSON.stringify(response.result.user));
         
-        // ✅ Başarı durumunda hata mesajı temizle
-        setError('');
+        toast.success('Giriş başarılı! Yönlendiriliyorsunuz...', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
 
         setTimeout(() => {
           navigate(redirectPath);
-        }, 1000);
+        }, 2000);
       } else {
-        setError(response.errorMessages ? response.errorMessages[0] : 'Giriş başarısız.');
+        toast.error(response.errorMessages ? response.errorMessages[0] : 'Giriş başarısız.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
         setIsLoading(false);
       }
     } catch (err) {
-      setError('Bir hata oluştu. Lütfen tekrar deneyin.');
+      toast.error('Bir hata oluştu. Lütfen tekrar deneyin.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       console.error('Login işlemi sırasında hata:', err);
       setIsLoading(false);
     }

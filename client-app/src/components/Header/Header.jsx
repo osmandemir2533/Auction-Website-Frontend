@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { toast } from 'react-toastify';
 import './Header.css';
 
 const Header = () => {
@@ -8,37 +9,51 @@ const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      
+      if (currentScrollY > lastScrollY) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
       }
+      
       setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [lastScrollY]);
 
   const handleLogout = () => {
     logout();
-    window.location.href = '/';
+    toast.info('Çıkış yapıldı. Yönlendiriliyorsunuz...', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+    setTimeout(() => {
+      navigate('/');
+    }, 2000);
   };
 
   // Kullanıcı rolüne göre yönlendirme
   const getDashboardLink = () => {
-    if (user?.role === 'Administrator') {
-      return '/dashboard/admin';
-    } else if (user?.role === 'Seller') {
-      return '/dashboard/seller';
-    } else if (user?.role === 'User') {
-      return '/dashboard/user';
+    if (user && user.role) {
+      if (user.role === 'Administrator') return '/dashboard/admin';
+      if (user.role === 'Seller') return '/dashboard/seller';
+      if (user.role === 'Normal') return '/dashboard/user';
     }
-    return '/';
+    return '/dashboard';
   };
 
   return (
