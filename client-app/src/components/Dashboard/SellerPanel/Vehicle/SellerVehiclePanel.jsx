@@ -29,13 +29,13 @@ const SellerVehiclePanel = () => {
               console.log('4️⃣ Araç kontrolü:', {
                 vehicleId: vehicle.vehicleId,
                 vehicleSellerId: vehicle.sellerId,
-                userSellerId: user.nameid,
+                userSellerId: user?.nameid,
                 tipleri: {
                   vehicleSellerId: typeof vehicle.sellerId,
-                  userSellerId: typeof user.nameid
+                  userSellerId: typeof user?.nameid
                 }
               });
-              return String(vehicle.sellerId) === String(user.nameid);
+              return String(vehicle.sellerId) === String(user?.nameid);
             })
             .map(vehicle => vehicle.vehicleId);
           
@@ -80,8 +80,9 @@ const SellerVehiclePanel = () => {
       fetchSellerVehicles();
     } else {
       console.log('⚠️ Kullanıcı veya nameid eksik');
+      setLoading(false);
     }
-  }, [user.nameid]);
+  }, [user]);
 
   const handleDelete = async (vehicleId) => {
     if (window.confirm('Bu aracı silmek istediğinizden emin misiniz?')) {

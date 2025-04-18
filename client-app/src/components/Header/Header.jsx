@@ -6,6 +6,7 @@ import './Header.css';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const { user, logout } = useAuth();
@@ -66,8 +67,11 @@ const Header = () => {
         </div>
         <nav className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <Link to="/" className="nav-link">Ana Sayfa</Link>
-          <Link to="/auctions" className="nav-link">Açık Artırmalar</Link>
+          
+          <Link to="/auctions" className="nav-link">Açık Arttırmalar</Link>
+
           <Link to="/how-it-works" className="nav-link">Nasıl Çalışır?</Link>
+          
           {user ? (
             <div className="user-profile">
               <Link to={getDashboardLink()} className="nav-link">

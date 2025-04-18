@@ -1,0 +1,120 @@
+.dress-detail {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dress-detail-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.dress-image {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.dress-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dress-info {
+  padding: 20px;
+}
+
+.dress-info h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 1.8em;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.value {
+  color: #333;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.bid-form {
+  margin-top: 30px;
+}
+
+.bid-input {
+  display: flex;
+  gap: 10px;
+}
+
+.bid-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.bid-button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.2s;
+}
+
+.bid-button:hover {
+  background-color: #45a049;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.error {
+  text-align: center;
+  padding: 40px;
+  color: #f44336;
+}
+
+@media (max-width: 768px) {
+  .dress-detail-container {
+    grid-template-columns: 1fr;
+  }
+
+  .dress-image {
+    height: 300px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+} 

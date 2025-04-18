@@ -34,9 +34,18 @@ export const api = {
     return response.data;
   },
 
-  placeBid: async (bid) => {
-    const response = await axios.post(`${BASE_URL}/PlaceBid`, bid);
-    return response.data;
+  placeBid: async (itemId, amount, itemType) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/Bid/PlaceBid`, {
+        itemId,
+        amount,
+        itemType
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Bid API hatası:', error);
+      return { isSuccess: false, error: error.message };
+    }
   },
 
   updateVehiclePrice: async (vehicleId, newPrice) => {
@@ -61,24 +70,34 @@ export const api = {
   getDresses: async () => {
     try {
       const response = await axios.get(`${BASE_URL}/Dress/GetDresses`);
-      return { isSuccess: true, result: response.data };
+      return {
+        isSuccess: response.data.isSuccess,
+        result: response.data.result || [],
+        error: response.data.errorMessages?.join(', ')
+      };
     } catch (error) {
       console.error('Dress API hatası:', error);
       return { isSuccess: false, error: error.message, result: [] };
     }
   },
 
+  getDressById: async (id) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/Dress/${id}`);
+      return {
+        isSuccess: response.data.isSuccess,
+        result: response.data.result,
+        error: response.data.errorMessages?.join(', ')
+      };
+    } catch (error) {
+      return { isSuccess: false, error: error.message };
+    }
+  },
+
   addDress: async (dressData) => {
     try {
-      const response = await fetch(`${BASE_URL}/Dress/AddDress`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dressData),
-      });
-      const data = await response.json();
-      return { isSuccess: true, result: data };
+      const response = await axios.post(`${BASE_URL}/Dress/CreateDress`, dressData);
+      return response.data;
     } catch (error) {
       return { isSuccess: false, error: error.message };
     }
@@ -86,15 +105,10 @@ export const api = {
 
   updateDress: async (id, dressData) => {
     try {
-      const response = await fetch(`${BASE_URL}/Dress/UpdateDress/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dressData),
+      const response = await axios.put(`${BASE_URL}/Dress/UpdateDress`, dressData, {
+        params: { dressId: id }
       });
-      const data = await response.json();
-      return { isSuccess: true, result: data };
+      return response.data;
     } catch (error) {
       return { isSuccess: false, error: error.message };
     }
@@ -102,48 +116,64 @@ export const api = {
 
   deleteDress: async (id) => {
     try {
-      const response = await fetch(`${BASE_URL}/Dress/DeleteDress/${id}`, {
-        method: 'DELETE',
-      });
-      const data = await response.json();
-      return { isSuccess: true, result: data };
+      const response = await axios.delete(`${BASE_URL}/Dress/Remove/Dress/${id}`);
+      return response.data;
     } catch (error) {
       return { isSuccess: false, error: error.message };
     }
   },
 
   // Musical Instrument endpoints
-  getInstruments: async () => {
+  getMusicalInstruments: async () => {
     try {
       const response = await axios.get(`${BASE_URL}/MusicalInstrument/GetInstruments`);
-      return response.data;
+      return {
+        isSuccess: response.data.isSuccess,
+        result: response.data.result || [],
+        error: response.data.errorMessages?.join(', ')
+      };
     } catch (error) {
       console.error('Musical Instrument API hatası:', error);
       return { isSuccess: false, error: error.message, result: [] };
     }
   },
 
-  addInstrument: async (instrumentData) => {
+  getMusicalInstrumentById: async (id) => {
     try {
-      const response = await axios.post(`${BASE_URL}/MusicalInstrument/AddInstrument`, instrumentData);
+      const response = await axios.get(`${BASE_URL}/MusicalInstrument/${id}`);
+      return {
+        isSuccess: response.data.isSuccess,
+        result: response.data.result,
+        error: response.data.errorMessages?.join(', ')
+      };
+    } catch (error) {
+      return { isSuccess: false, error: error.message };
+    }
+  },
+
+  addMusicalInstrument: async (instrumentData) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/MusicalInstrument/CreateInstrument`, instrumentData);
       return response.data;
     } catch (error) {
       return { isSuccess: false, error: error.message };
     }
   },
 
-  updateInstrument: async (id, instrumentData) => {
+  updateMusicalInstrument: async (id, instrumentData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/MusicalInstrument/UpdateInstrument/${id}`, instrumentData);
+      const response = await axios.put(`${BASE_URL}/MusicalInstrument/UpdateInstrument`, instrumentData, {
+        params: { instrumentId: id }
+      });
       return response.data;
     } catch (error) {
       return { isSuccess: false, error: error.message };
     }
   },
 
-  deleteInstrument: async (id) => {
+  deleteMusicalInstrument: async (id) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/MusicalInstrument/DeleteInstrument/${id}`);
+      const response = await axios.delete(`${BASE_URL}/MusicalInstrument/Remove/Instrument/${id}`);
       return response.data;
     } catch (error) {
       return { isSuccess: false, error: error.message };

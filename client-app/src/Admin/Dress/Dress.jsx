@@ -36,8 +36,8 @@ const Dress = () => {
       const response = await api.getDresses();
       console.log('API Response:', response);
       
-      if (response.isSuccess && response.result && response.result.result) {
-        setDresses(response.result.result);
+      if (response.isSuccess && response.result) {
+        setDresses(response.result);
       } else {
         setError('Giyim ürünleri yüklenirken bir hata oluştu');
       }

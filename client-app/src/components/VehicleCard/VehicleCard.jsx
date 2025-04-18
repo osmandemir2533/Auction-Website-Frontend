@@ -23,20 +23,17 @@ const VehicleCard = ({ vehicle }) => {
     image,
   } = vehicle;
 
-  // Kalan gün hesaplama (Geçmiş tarihlerde hata olmaması için koruma)
-  let daysRemaining = null;
-  if (endTime) {
-    const timeRemaining = new Date(endTime) - new Date();
-    daysRemaining = timeRemaining > 0 ? Math.floor(timeRemaining / (1000 * 60 * 60 * 24)) : 0;
-  }
+  const isAuctionActive = endTime && new Date(endTime) > new Date();
 
   return (
-    <div className="vehicle-card">
-      <img 
-        src={image || "https://via.placeholder.com/300x200?text=Resim+Yok"} 
-        alt={brandAndModel} 
-        className="vehicle-image" 
-      />
+    <Link to={`/vehicles/${vehicleId}`} className="vehicle-card">
+      <div className="vehicle-image">
+        <img 
+          src={image || "https://via.placeholder.com/300x200?text=Resim+Yok"} 
+          alt={brandAndModel}
+        />
+        {isAuctionActive && <span className="auction-badge">Açık Artırma Aktif</span>}
+      </div>
       <div className="vehicle-info">
         <h3>{brandAndModel}</h3>
         <p className="vehicle-year">Model Yılı: {manufacturingYear || "Bilinmiyor"}</p>
@@ -47,19 +44,19 @@ const VehicleCard = ({ vehicle }) => {
         <p className="vehicle-description">{additionalInformation}</p>
         
         <div className="price-info">
-          <p>Satış Fiyatı: {price.toLocaleString()} TL</p>
-          <p>Müzayede Başlangıç: {auctionPrice.toLocaleString()} TL</p>
+          <p className="price">Satış Fiyatı: {price.toLocaleString()} TL</p>
+          {isAuctionActive && (
+            <p className="auction-price">Güncel Teklif: {auctionPrice.toLocaleString()} TL</p>
+          )}
         </div>
 
-        {daysRemaining !== null && (
-          <p className="time-remaining">Kalan Süre: {daysRemaining} gün</p>
+        {endTime && (
+          <p className="time-remaining">
+            Kalan Süre: {Math.max(0, Math.floor((new Date(endTime) - new Date()) / (1000 * 60 * 60 * 24)))} gün
+          </p>
         )}
-
-        <Link to={`/vehicle/${vehicleId}`} className="bid-button">
-          Teklif Ver
-        </Link>
       </div>
-    </div>
+    </Link>
   );
 };
 

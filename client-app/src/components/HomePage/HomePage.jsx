@@ -7,9 +7,9 @@ import "./HomePage.css";
 const categories = [
   { name: "Araçlar", path: "/vehicles", image: "https://temelbilgi.com/wp-content/uploads/2021/11/2021-mazda3-incelemesi-1-850x638.jpg" },
   { name: "Elektronik", path: "/electronics", image: "https://ares.shiftdelete.net/2024/11/samsung-2.jpg" },
-  { name: "Kıyafet", path: "/clothing", image: "https://www.atlihangiyim.com/wp-content/uploads/2023/06/IMG_8515-1024x683.jpg" },
+  { name: "Kıyafetler", path: "/dresses", image: "https://www.atlihangiyim.com/wp-content/uploads/2023/06/IMG_8515-1024x683.jpg" },
   { name: "Emlak", path: "/real-estate", image: "https://st2.depositphotos.com/3108485/8897/i/450/depositphotos_88979780-stock-photo-holding-house-representing-home-ownership.jpg" },
-  { name: "Müzik Aletleri", path: "/music", image: "https://www.rekormuzik.com/UserFiles/Image/images/muzik_aleti_satin_alirken_dikkat_edilmesi_gerekenler.jpg" },
+  { name: "Müzik Aletleri", path: "/musical-instruments", image: "https://www.rekormuzik.com/UserFiles/Image/images/muzik_aleti_satin_alirken_dikkat_edilmesi_gerekenler.jpg" },
 ];
 
 const HomePage = () => {
@@ -42,7 +42,6 @@ const HomePage = () => {
             className="category-card"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.5, delay: index * 0.2 }}
           >
             <Link to={category.path} className="category-link">
