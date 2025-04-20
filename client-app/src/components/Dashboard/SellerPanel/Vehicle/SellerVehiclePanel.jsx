@@ -4,71 +4,56 @@ import { api } from '../../../../services/api';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import './SellerVehiclePanel.css';
 
+
 const SellerVehiclePanel = () => {
   const { user } = useAuth();
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingVehicle, setEditingVehicle] = useState(null);
+  const [isAdding, setIsAdding] = useState(false); // Yeni araç ekleme state
+  const [formData, setFormData] = useState({
+    brandAndModel: '',
+    manufacturingYear: '',
+    color: '',
+    engineCapacity: '',
+    millage: '',
+    plateNumber: '',
+    price: '',
+    startTime: '',
+    endTime: '',
+    isActive: true,
+    image: ''
+  });
 
   useEffect(() => {
-    console.log('🔍 useEffect başladı');
-    console.log('👤 Kullanıcı bilgileri:', user);
-    
     const fetchSellerVehicles = async () => {
       try {
-        console.log('1️⃣ Tüm araçları çekiyorum...');
         const allVehiclesResponse = await api.getVehicles();
-        console.log('2️⃣ API yanıtı:', allVehiclesResponse);
-        
         if (allVehiclesResponse.isSuccess) {
-          console.log('3️⃣ Tüm araçlar:', allVehiclesResponse.result);
-          
-          // Satıcının araçlarını filtrele
           const sellerVehicleIds = allVehiclesResponse.result
-            .filter(vehicle => {
-              console.log('4️⃣ Araç kontrolü:', {
-                vehicleId: vehicle.vehicleId,
-                vehicleSellerId: vehicle.sellerId,
-                userSellerId: user?.nameid,
-                tipleri: {
-                  vehicleSellerId: typeof vehicle.sellerId,
-                  userSellerId: typeof user?.nameid
-                }
-              });
-              return String(vehicle.sellerId) === String(user?.nameid);
-            })
+            .filter(vehicle => String(vehicle.sellerId) === String(user?.nameid))
             .map(vehicle => vehicle.vehicleId);
-          
-          console.log('5️⃣ Satıcının araç ID\'leri:', sellerVehicleIds);
-          
+
           if (sellerVehicleIds.length === 0) {
-            console.log('6️⃣ Satıcıya ait araç bulunamadı');
             setVehicles([]);
             return;
           }
-          
-          // Her bir araç için detaylı bilgiyi al
-          console.log('7️⃣ Her araç için detaylı bilgi alınıyor...');
+
           const vehicleDetails = await Promise.all(
             sellerVehicleIds.map(async (vehicleId) => {
-              console.log('8️⃣ Araç detayı alınıyor:', vehicleId);
               const vehicleResponse = await api.getVehicleById(vehicleId);
-              console.log('9️⃣ Araç detayı yanıtı:', vehicleResponse);
               return vehicleResponse.isSuccess ? vehicleResponse.result : null;
             })
           );
-          
-          // Null olmayan araçları filtrele
+
           const validVehicles = vehicleDetails.filter(vehicle => vehicle !== null);
-          console.log('🔟 Geçerli araçlar:', validVehicles);
-          
           setVehicles(validVehicles);
         } else {
-          console.log('❌ API yanıtı başarısız:', allVehiclesResponse);
           setError('Araçlar yüklenirken bir hata oluştu');
         }
       } catch (err) {
-        console.error('❌ Hata oluştu:', err);
         setError('Bir hata oluştu');
       } finally {
         setLoading(false);
@@ -76,7 +61,6 @@ const SellerVehiclePanel = () => {
     };
 
     if (user && user.nameid) {
-      console.log('🚀 fetchSellerVehicles başlatılıyor');
       fetchSellerVehicles();
     } else {
       console.log('⚠️ Kullanıcı veya nameid eksik');
@@ -84,20 +68,84 @@ const SellerVehiclePanel = () => {
     }
   }, [user]);
 
-  const handleDelete = async (vehicleId) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let response;
+      if (isEditing) {
+        response = await api.updateVehicle(editingVehicle.vehicleId, formData);
+      } else {
+        response = await api.addVehicle(formData);
+      }
+
+      if (response.isSuccess) {
+        await fetchSellerVehicles();
+        resetForm();
+      } else {
+        setError('İşlem başarısız oldu');
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleDelete = async (id) => {
     if (window.confirm('Bu aracı silmek istediğinizden emin misiniz?')) {
       try {
-        const response = await api.deleteVehicle(vehicleId);
+        const response = await api.deleteVehicle(id);
         if (response.isSuccess) {
-          setVehicles(vehicles.filter(vehicle => vehicle.vehicleId !== vehicleId));
+          setVehicles(vehicles.filter(vehicle => vehicle.vehicleId !== id));
         } else {
           setError('Araç silinemedi');
         }
       } catch (err) {
         setError('Bir hata oluştu');
-        console.error('Silme hatası:', err);
       }
     }
+  };
+
+  const handleEdit = (vehicle) => {
+    setEditingVehicle(vehicle);
+    setFormData({
+      brandAndModel: vehicle.brandAndModel,
+      manufacturingYear: vehicle.manufacturingYear,
+      color: vehicle.color,
+      engineCapacity: vehicle.engineCapacity,
+      millage: vehicle.millage,
+      plateNumber: vehicle.plateNumber,
+      price: vehicle.price,
+      startTime: vehicle.startTime,
+      endTime: vehicle.endTime,
+      isActive: vehicle.isActive,
+      image: vehicle.image
+    });
+    setIsEditing(true);
+  };
+
+  const resetForm = () => {
+    setFormData({
+      brandAndModel: '',
+      manufacturingYear: '',
+      color: '',
+      engineCapacity: '',
+      millage: '',
+      plateNumber: '',
+      price: '',
+      startTime: '',
+      endTime: '',
+      isActive: true,
+      image: ''
+    });
+    setIsEditing(false);
+    setEditingVehicle(null);
   };
 
   if (loading) return <div className="loading">Yükleniyor...</div>;
@@ -106,6 +154,31 @@ const SellerVehiclePanel = () => {
   return (
     <div className="seller-vehicle-panel">
       <h2>İlan Verdiğim Araçlar</h2>
+
+      {/* Yeni araç ekleme butonu */}
+      <button
+        className="add-button"
+        onClick={() => setIsAdding(true)}
+      >
+        Yeni Araç Ekle
+      </button>
+
+      {error && <div className="error-message">{error}</div>}
+
+      {/* Yeni araç ekleme formu */}
+      {isAdding && (
+        <SellerCreateVehicle
+          vehicle={editingVehicle}
+          onSuccess={handleSubmit}
+          onCancel={() => {
+            setIsAdding(false);
+            setEditingVehicle(null);
+            resetForm(); // Formu sıfırla
+          }}
+        />
+      )}
+
+      {/* Araçları listele */}
       <div className="vehicle-grid">
         {vehicles.length > 0 ? (
           vehicles.map(vehicle => (
@@ -125,17 +198,41 @@ const SellerVehiclePanel = () => {
                 <p>Başlangıç: {new Date(vehicle.startTime).toLocaleString()}</p>
                 <p>Bitiş: {new Date(vehicle.endTime).toLocaleString()}</p>
                 <p>Durum: {vehicle.isActive ? 'Aktif' : 'Pasif'}</p>
-                <div className="vehicle-actions">
-                  <button className="edit-button">
-                    <FaEdit />
-                  </button>
-                  <button 
-                    className="delete-button"
-                    onClick={() => handleDelete(vehicle.vehicleId)}
-                  >
-                    <FaTrash />
-                  </button>
-                </div>
+              </div>
+
+              <div className="vehicle-actions" style={{ marginTop: '20px' }}>
+                <button
+                  style={{
+                    backgroundColor: '#4CAF50',
+                    color: 'white',
+                    padding: '8px',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  onClick={() => handleEdit(vehicle)}
+                >
+                  <FaEdit />
+                </button>
+                <button
+                  style={{
+                    backgroundColor: '#f44336',
+                    color: 'white',
+                    padding: '8px',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  onClick={() => handleDelete(vehicle.vehicleId)}
+                >
+                  <FaTrash />
+                </button>
               </div>
             </div>
           ))

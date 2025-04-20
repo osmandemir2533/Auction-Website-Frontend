@@ -29,7 +29,7 @@ const MusicalInstrument = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.getInstruments();
+      const response = await api.getMusicalInstruments();
       
       if (response.isSuccess && response.result) {
         setInstruments(response.result);

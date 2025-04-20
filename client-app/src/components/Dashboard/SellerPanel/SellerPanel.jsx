@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaCar, FaTshirt, FaMusic, FaLaptop, FaHome, FaBook, FaGamepad, FaTools } from 'react-icons/fa';
 import './SellerPanel.css';
 import SellerVehiclePanel from './Vehicle/SellerVehiclePanel';
+import SellerInstrumentPanel from './Music/SellerInstrumentPanel';
 
 const SellerPanel = () => {
   const [selectedCategory, setSelectedCategory] = useState('vehicles');
@@ -16,7 +17,7 @@ const SellerPanel = () => {
   const categories = [
     { id: 'vehicles', name: 'Araçlar', icon: <FaCar />, component: <SellerVehiclePanel /> },
     { id: 'dresses', name: 'Giyim', icon: <FaTshirt />, component: <div className="coming-soon">Yakında...</div> },
-    { id: 'instruments', name: 'Müzik Aletleri', icon: <FaMusic />, component: <div className="coming-soon">Yakında...</div> },
+    { id: 'instruments', name: 'Müzik Aletleri', icon: <FaMusic />, component: <SellerInstrumentPanel /> },
     { id: 'electronics', name: 'Elektronik', icon: <FaLaptop />, component: <div className="coming-soon">Yakında...</div> },
     { id: 'home', name: 'Gayrimenkul', icon: <FaHome />, component: <div className="coming-soon">Yakında...</div> },
     { id: 'books', name: 'Kitap & Dergi', icon: <FaBook />, component: <div className="coming-soon">Yakında...</div> },

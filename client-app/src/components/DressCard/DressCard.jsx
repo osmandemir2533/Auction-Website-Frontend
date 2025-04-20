@@ -25,7 +25,7 @@ const DressCard = ({ dress }) => {
   const isAuctionActive = endTime && new Date(endTime) > new Date();
 
   return (
-    <Link to={`/dresses/${dressId}`} className="dress-card">
+    <Link to={`/dress/${dressId}`} className="dress-card">
       <div className="dress-image">
         <img 
           src={image || "https://via.placeholder.com/300x200?text=Resim+Yok"} 

@@ -54,6 +54,21 @@
   cursor: pointer;
 }
 
+.filter-section {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.filter-section:last-child {
+  margin-bottom: 0;
+}
+
+.filter-section h3 {
+  margin: 0 0 0.75rem 0;
+  color: #555;
+  font-size: 1.1rem;
+}
+
 .filter-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -62,7 +77,7 @@
   width: 100%;
 }
 
-.filter-button {
+.filter-buttons button {
   padding: 0.5rem 1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -74,18 +89,18 @@
   min-width: 120px;
 }
 
-.filter-button:hover {
+.filter-buttons button:hover {
   background-color: #f5f5f5;
   border-color: #ccc;
 }
 
-.filter-button.active {
+.filter-buttons button.active {
   background-color: #4299e1;
   color: white;
   border-color: #4299e1;
 }
 
-.dresses-grid {
+.estates-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(280px, 1fr));
   gap: 3rem;
@@ -124,7 +139,7 @@
     padding: 2rem 0.3rem;
   }
   
-  .dresses-grid {
+  .estates-grid {
     grid-template-columns: repeat(4, minmax(250px, 1fr));
     gap: 2.5rem;
     padding: 1.5rem 0.3rem;
@@ -132,7 +147,7 @@
 }
 
 @media (max-width: 1200px) {
-  .dresses-grid {
+  .estates-grid {
     grid-template-columns: repeat(3, minmax(250px, 1fr));
     gap: 2.2rem;
     padding: 1.5rem 0.3rem;
@@ -140,7 +155,7 @@
 }
 
 @media (max-width: 900px) {
-  .dresses-grid {
+  .estates-grid {
     grid-template-columns: repeat(2, minmax(250px, 1fr));
     gap: 2rem;
     padding: 1.5rem 0.3rem;
@@ -163,12 +178,12 @@
     align-items: center;
   }
 
-  .filter-button {
+  .filter-buttons button {
     width: 100%;
     max-width: 300px;
   }
 
-  .dresses-grid {
+  .estates-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
     padding: 1rem 0.3rem;

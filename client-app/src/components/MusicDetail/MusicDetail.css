@@ -1,0 +1,104 @@
+/* MusicDetail.css */
+.music-detail {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.music-detail-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.music-image {
+  position: relative;
+  height: 500px;
+  margin-bottom: 2rem;
+}
+
+.music-detail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.music-info-detail {
+  padding: 2rem;
+}
+
+.music-info-detail h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.brand {
+  color: #666;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.description {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.price-details {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.price-details p {
+  font-size: 1.3rem;
+  margin: 0.8rem 0;
+  font-weight: 600;
+}
+
+.time-remaining {
+  color: #e63946;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+}
+
+.error {
+  text-align: center;
+  color: red;
+  font-size: 18px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .music-detail {
+    padding: 1rem;
+  }
+
+  .music-image {
+    height: 300px;
+    margin-bottom: 1rem;
+  }
+
+  .music-info-detail {
+    padding: 1.5rem;
+  }
+
+  .music-info-detail h1 {
+    font-size: 2rem;
+  }
+
+  .price-details p {
+    font-size: 1.2rem;
+  }
+}

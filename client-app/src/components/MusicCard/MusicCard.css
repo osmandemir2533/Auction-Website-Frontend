@@ -1,0 +1,125 @@
+.music-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  max-width: 350px;  /* Kart genişliği */
+  margin: 10px auto;
+}
+
+.music-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.music-image-container {
+  position: relative;
+  height: 500px;  /* Resmin yüksekliği */
+  overflow: hidden;
+}
+
+.music-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Resim tam alanı kaplasın */
+}
+
+.music-info {
+  padding: 1rem;
+}
+
+.music-info h3 {
+  font-size: 1.4rem;  /* Başlık yazı boyutu */
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+  text-align: left;
+}
+
+.music-brand {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.music-description {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.price-info {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.music-price,
+.music-auction-price {
+  font-size: 0.5rem;  /* Fiyat yazı boyutu */
+  margin: 0.5rem 0;
+  font-weight: 200;
+}
+
+.time-remaining {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.button-container {
+  margin-top: 1rem;
+}
+
+.bid-button {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  text-align: center;
+  text-decoration: none;
+  background: #3498db;
+  color: white;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.bid-button:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .music-card {
+    max-width: 100%;
+    margin: 10px 0;
+  }
+
+  .music-image-container {
+    height: 180px;
+  }
+
+  .music-info h3 {
+    font-size: 1.3rem;
+  }
+
+  .music-brand {
+    font-size: 1rem;
+  }
+
+  .music-description {
+    font-size: 0.9rem;
+  }
+
+  .music-price,
+  .music-auction-price {
+    font-size: 1rem;
+  }
+
+  .bid-button {
+    font-size: 1rem;
+  }
+}
