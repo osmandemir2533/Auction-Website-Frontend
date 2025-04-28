@@ -29,9 +29,20 @@ export const api = {
     return response.data;
   },
 
-  updateVehicle: async (vehicleId, vehicleData) => {
-    const response = await axios.put(`${BASE_URL}/Vehicle/${vehicleId}`, vehicleData);
-    return response.data;
+  updateVehicle: async (vehicleId, formData) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/Vehicle/UpdateVehicle/${vehicleId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Vehicle Update API hatası:', error);
+      return { isSuccess: false, error: error.message };
+    }
   },
 
   placeBid: async (itemId, amount, itemType) => {
@@ -149,10 +160,40 @@ export const api = {
 
   addMusicalInstrument: async (instrumentData) => {
     try {
-      const response = await axios.post(`${BASE_URL}/MusicalInstrument/CreateInstrument`, instrumentData);
+      console.log('Gönderilen veri:', instrumentData);
+      const response = await axios.post(`${BASE_URL}/MusicalInstrument/CreateInstrument`, instrumentData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
+      });
+      console.log('API Yanıtı:', response.data);
       return response.data;
     } catch (error) {
-      return { isSuccess: false, error: error.message };
+      console.error('Müzik Aleti API Hatası Detayları:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          headers: error.config?.headers,
+          data: error.config?.data
+        }
+      });
+      
+      // Validation hatalarını daha detaylı göster
+      if (error.response?.data?.errors) {
+        console.error('Validation Hataları:', error.response.data.errors);
+      }
+      
+      return { 
+        isSuccess: false, 
+        error: error.response?.data?.message || error.message,
+        details: error.response?.data
+      };
     }
   },
 
@@ -176,55 +217,43 @@ export const api = {
     }
   },
 
-  // Electronic endpoints (from api1.jsx)
+  // Electronic endpoints
   getElectronics: async () => {
     try {
-      console.log('Fetching electronics from API...');
       const response = await axios.get(`${BASE_URL}/Electronic/GetElectronics`);
-      console.log('Raw API Response:', response);
-      
-      if (Array.isArray(response.data)) {
-        return {
-          isSuccess: true,
-          result: response.data
-        };
-      }
-      
-      if (response.data && response.data.result) {
-        return {
-          isSuccess: true,
-          result: response.data.result
-        };
-      }
-      
       return {
-        isSuccess: false,
-        error: 'Invalid response format',
-        result: []
+        isSuccess: response.data.isSuccess,
+        result: response.data.result || [],
+        error: response.data.errorMessages?.join(', ')
       };
     } catch (error) {
       console.error('Electronic API hatası:', error);
-      return {
-        isSuccess: false,
-        error: error.message,
-        result: []
-      };
+      return { isSuccess: false, error: error.message, result: [] };
     }
   },
 
   getElectronicById: async (id) => {
     try {
-      const response = await axios.get(`${BASE_URL}/Electronic/GetElectronic/${id}`);
-      return response.data;
+      const response = await axios.get(`${BASE_URL}/Electronic/${id}`);
+      return {
+        isSuccess: response.data.isSuccess,
+        result: response.data.result,
+        error: response.data.errorMessages?.join(', ')
+      };
     } catch (error) {
-      console.error('Electronic API hatası:', error);
       return { isSuccess: false, error: error.message };
     }
   },
 
   addElectronic: async (electronicData) => {
     try {
-      const response = await axios.post(`${BASE_URL}/Electronic/AddElectronic`, electronicData);
+      const response = await axios.post(`${BASE_URL}/Electronic/CreateElectronic`, electronicData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
+      });
       return response.data;
     } catch (error) {
       return { isSuccess: false, error: error.message };
@@ -233,7 +262,13 @@ export const api = {
 
   updateElectronic: async (id, electronicData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/Electronic/UpdateElectronic/${id}`, electronicData);
+      const response = await axios.put(`${BASE_URL}/Electronic/${id}`, electronicData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
+      });
       return response.data;
     } catch (error) {
       return { isSuccess: false, error: error.message };
@@ -242,53 +277,49 @@ export const api = {
 
   deleteElectronic: async (id) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/Electronic/DeleteElectronic/${id}`);
+      const response = await axios.delete(`${BASE_URL}/Electronic/Remove/Electronic/${id}`);
       return response.data;
     } catch (error) {
       return { isSuccess: false, error: error.message };
     }
   },
 
-  // Estate endpoints (from api1.jsx)
-  getEstates: async () => {
+  getElectronicsBySeller: async (sellerId) => {
     try {
-      console.log('Fetching estates from API...');
-      const response = await axios.get(`${BASE_URL}/Estate/GetEstates`);
-      console.log('Raw Estate API Response:', response);
-      
-      if (response.data && Array.isArray(response.data)) {
-        console.log('Estates data is array:', response.data);
+      const response = await axios.get(`${BASE_URL}/Electronic/GetElectronics`);
+      if (response.data.isSuccess) {
+        const sellerElectronics = response.data.result.filter(electronic => 
+          String(electronic.sellerId) === String(sellerId)
+        );
         return {
           isSuccess: true,
-          result: response.data
+          result: sellerElectronics,
+          error: null
         };
       }
-      
-      if (response.data && response.data.result && Array.isArray(response.data.result)) {
-        console.log('Estates data in result field:', response.data.result);
-        return {
-          isSuccess: true,
-          result: response.data.result
-        };
-      }
-      
-      console.error('Invalid estates data format:', response.data);
       return {
         isSuccess: false,
-        error: 'Invalid response format',
-        result: []
+        result: [],
+        error: response.data.errorMessages?.join(', ')
+      };
+    } catch (error) {
+      console.error('Electronic API hatası:', error);
+      return { isSuccess: false, error: error.message, result: [] };
+    }
+  },
+
+  // Estate endpoints
+  getEstates: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/Estate/GetEstates`);
+      return {
+        isSuccess: response.data.isSuccess,
+        result: response.data.result || [],
+        error: response.data.errorMessages?.join(', ')
       };
     } catch (error) {
       console.error('Estate API hatası:', error);
-      if (error.response) {
-        console.error('Error response:', error.response.data);
-        console.error('Error status:', error.response.status);
-      }
-      return {
-        isSuccess: false,
-        error: error.message,
-        result: []
-      };
+      return { isSuccess: false, error: error.message, result: [] };
     }
   },
 
@@ -304,28 +335,109 @@ export const api = {
 
   addEstate: async (estateData) => {
     try {
-      const response = await axios.post(`${BASE_URL}/Estate/AddEstate`, estateData);
+      console.log('Gönderilen veri:', estateData);
+      const response = await axios.post(`${BASE_URL}/Estate/CreateEstate`, estateData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
+      });
+      console.log('API Yanıtı:', response.data);
       return response.data;
     } catch (error) {
-      return { isSuccess: false, error: error.message };
+      console.error('Emlak API Hatası Detayları:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          headers: error.config?.headers,
+          data: error.config?.data
+        }
+      });
+      
+      if (error.response?.data?.errors) {
+        console.error('Validation Hataları:', error.response.data.errors);
+      }
+      
+      return { 
+        isSuccess: false, 
+        error: error.response?.data?.message || error.message,
+        details: error.response?.data
+      };
     }
   },
 
   updateEstate: async (id, estateData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/Estate/UpdateEstate/${id}`, estateData);
+      console.log('Güncellenecek emlak verisi:', estateData);
+      const response = await axios.put(`${BASE_URL}/Estate/UpdateEstate/${id}`, estateData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
+      });
+      console.log('API Güncelleme Yanıtı:', response.data);
       return response.data;
     } catch (error) {
-      return { isSuccess: false, error: error.message };
+      console.error('Emlak Güncelleme API Hatası:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          headers: error.config?.headers,
+          data: error.config?.data
+        }
+      });
+      
+      if (error.response?.data?.errors) {
+        console.error('Validation Hataları:', error.response.data.errors);
+      }
+      
+      return { 
+        isSuccess: false, 
+        error: error.response?.data?.message || error.message,
+        details: error.response?.data
+      };
     }
   },
 
   deleteEstate: async (id) => {
     try {
+      console.log('Silinecek emlak ID:', id);
       const response = await axios.delete(`${BASE_URL}/Estate/DeleteEstate/${id}`);
+      console.log('API Silme Yanıtı:', response.data);
       return response.data;
     } catch (error) {
-      return { isSuccess: false, error: error.message };
+      console.error('Emlak Silme API Hatası:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          headers: error.config?.headers,
+          data: error.config?.data
+        }
+      });
+      
+      if (error.response?.data?.errors) {
+        console.error('Validation Hataları:', error.response.data.errors);
+      }
+      
+      return { 
+        isSuccess: false, 
+        error: error.response?.data?.message || error.message,
+        details: error.response?.data
+      };
     }
   },
 
@@ -351,42 +463,59 @@ export const api = {
 
   createVehicle: async (formData) => {
     try {
-      // FormData içeriğini detaylı logla
-      const formDataObj = {};
-      for (let [key, value] of formData.entries()) {
-        formDataObj[key] = value;
-      }
-      console.log('API\'ye gönderilen FormData içeriği:', formDataObj);
-      
       const response = await axios.post(`${BASE_URL}/Vehicle/CreateVehicle`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Vehicle API hatası:', error);
+      return { isSuccess: false, error: error.message };
+    }
+  },
+
+  updateVehicleStatus: async (vehicleId, isActive) => {
+    try {
+      const response = await axios.patch(`${BASE_URL}/Vehicle/UpdateStatus/${vehicleId}`, {
+        isActive: isActive
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Vehicle Status API hatası:', error);
+      return { isSuccess: false, error: error.message };
+    }
+  },
+
+  getEstatesBySeller: async (sellerId) => {
+    try {
+      console.log('Satıcı ID:', sellerId);
+      const response = await axios.get(`${BASE_URL}/Estate/GetBySeller/${sellerId}`);
+      console.log('Emlak API Yanıtı:', response.data);
+      return {
+        isSuccess: response.data.isSuccess,
+        result: response.data.result || [],
+        error: response.data.errorMessages?.join(', ')
+      };
+    } catch (error) {
+      console.error('Emlak API Hatası:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          headers: error.config?.headers,
+          data: error.config?.data
         }
       });
-      
-      if (response.data) {
-        return { isSuccess: true, result: response.data };
-      } else {
-        return { isSuccess: false, error: 'Beklenmeyen bir hata oluştu' };
-      }
-    } catch (error) {
-      console.error('Vehicle API hatası:', error.response?.data);
-      
-      // Backend'den gelen validasyon hatalarını detaylı göster
-      if (error.response?.data?.errors) {
-        const validationErrors = Object.entries(error.response.data.errors)
-          .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
-          .join('\n');
-        console.error('Validasyon Hataları:', validationErrors);
-        return { 
-          isSuccess: false, 
-          error: validationErrors 
-        };
-      }
-      
       return { 
         isSuccess: false, 
-        error: error.response?.data?.title || error.message 
+        error: error.response?.data?.message || error.message,
+        details: error.response?.data
       };
     }
   },

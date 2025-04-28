@@ -47,7 +47,6 @@ const Header = () => {
     }, 2000);
   };
 
-  // Kullanıcı rolüne göre yönlendirme
   const getDashboardLink = () => {
     if (user && user.role) {
       if (user.role === 'Administrator') return '/dashboard/admin';
@@ -67,9 +66,7 @@ const Header = () => {
         </div>
         <nav className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
           <Link to="/" className="nav-link">Ana Sayfa</Link>
-          
           <Link to="/auctions" className="nav-link">Açık Arttırmalar</Link>
-
           <Link to="/how-it-works" className="nav-link">Nasıl Çalışır?</Link>
           
           {user ? (

@@ -1,0 +1,20 @@
+.seller-vehicle-container {
+  padding: 20px;
+}
+
+.seller-vehicle-header {
+  margin-bottom: 20px;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+} 

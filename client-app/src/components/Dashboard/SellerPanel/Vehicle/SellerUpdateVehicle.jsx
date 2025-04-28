@@ -1,65 +1,58 @@
-// SellerCreateVehicle.jsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../../context/AuthContext';
 import { api } from '../../../../services/api';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './SellerCreateVehicle.css';
+import './SellerUpdateVehicle.css';
 
-const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
+const SellerUpdateVehicle = ({ vehicle, onSuccess, onCancel }) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [imageToStore, setImageToStore] = useState(null);
   const [imageToDisplay, setImageToDisplay] = useState(null);
   const [formData, setFormData] = useState({
-    vehicleId: 0,
-    brandAndModel: '',
-    manufacturingYear: 0,
-    color: '',
-    engineCapacity: 0,
-    price: 0,
-    millage: 0,
-    plateNumber: '',
-    auctionPrice: 0,
-    additionalInformation: '',
-    startTime: '',
-    endTime: '',
-    isActive: true,
-    image: '',
-    sellerId: user?.nameid || '',
-    bids: null
+    brandAndModel: vehicle?.brandAndModel || '',
+    manufacturingYear: vehicle?.manufacturingYear || '',
+    color: vehicle?.color || '',
+    engineCapacity: vehicle?.engineCapacity || '',
+    millage: vehicle?.millage || '',
+    plateNumber: vehicle?.plateNumber || '',
+    price: vehicle?.price || '',
+    startTime: vehicle?.startTime || '',
+    endTime: vehicle?.endTime || '',
+    isActive: vehicle?.isActive || true,
+    image: vehicle?.image || '',
+    sellerId: user?.nameid || ''
   });
 
   useEffect(() => {
     if (vehicle) {
       setFormData({
-        vehicleId: vehicle.vehicleId || 0,
-        brandAndModel: vehicle.brandAndModel || '',
-        manufacturingYear: vehicle.manufacturingYear || 0,
-        color: vehicle.color || '',
-        engineCapacity: vehicle.engineCapacity || 0,
-        price: vehicle.price || 0,
-        millage: vehicle.millage || 0,
-        plateNumber: vehicle.plateNumber || '',
-        auctionPrice: vehicle.auctionPrice || 0,
-        additionalInformation: vehicle.additionalInformation || '',
-        startTime: vehicle.startTime ? new Date(vehicle.startTime).toISOString().slice(0, 16) : '',
-        endTime: vehicle.endTime ? new Date(vehicle.endTime).toISOString().slice(0, 16) : '',
-        isActive: vehicle.isActive || true,
-        image: vehicle.image || '',
-        sellerId: vehicle.sellerId || user?.nameid || '',
-        bids: vehicle.bids || null
+        brandAndModel: vehicle.brandAndModel,
+        manufacturingYear: vehicle.manufacturingYear,
+        color: vehicle.color,
+        engineCapacity: vehicle.engineCapacity,
+        millage: vehicle.millage,
+        plateNumber: vehicle.plateNumber,
+        price: vehicle.price,
+        startTime: vehicle.startTime,
+        endTime: vehicle.endTime,
+        isActive: vehicle.isActive,
+        image: vehicle.image,
+        sellerId: user?.nameid
       });
 
-      // URL kontrolü ve oluşturma
-      const imageUrl = vehicle.image?.startsWith('http') 
-        ? vehicle.image 
-        : vehicle.image 
-          ? `https://localhost:7282/Images/${vehicle.image}`
-          : '';
-      
-      setImageToDisplay(imageUrl);
+      // Mevcut resmi göster
+      if (vehicle.image) {
+        if (vehicle.image.startsWith('http')) {
+          setImageToDisplay(vehicle.image);
+        } else if (vehicle.image.startsWith('data:image')) {
+          setImageToDisplay(vehicle.image);
+        } else {
+          setImageToDisplay(`https://localhost:7282/Images/${vehicle.image}`);
+        }
+      }
     }
   }, [vehicle, user]);
 
@@ -111,9 +104,7 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
       formDataToSend.append("Price", formData.price.toString());
       formDataToSend.append("Millage", formData.millage.toString());
       formDataToSend.append("PlateNumber", formData.plateNumber);
-      formDataToSend.append("AdditionalInformation", formData.additionalInformation);
       formDataToSend.append("StartTime", formData.startTime);
-      formDataToSend.append("AuctionPrice", formData.auctionPrice.toString());
       formDataToSend.append("EndTime", formData.endTime);
       formDataToSend.append("IsActive", formData.isActive.toString());
       formDataToSend.append("SellerId", formData.sellerId);
@@ -187,17 +178,7 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
             formDataToSend.append("Image", vehicle.image);
             
             // Resmi File olarak da gönder
-            const response = await fetch(vehicle.image, {
-              mode: 'no-cors',
-              headers: {
-                'Access-Control-Allow-Origin': '*'
-              }
-            });
-            
-            if (!response.ok) {
-              throw new Error('Resim yüklenemedi');
-            }
-            
+            const response = await fetch(vehicle.image);
             const blob = await response.blob();
             const file = new File([blob], 'image.jpg', { type: 'image/jpeg' });
             formDataToSend.append("File", file);
@@ -208,11 +189,6 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
             return;
           }
         }
-      } else if (!vehicle) {
-        // Yeni kayıt ve resim seçilmediyse
-        setError("Lütfen bir resim seçin");
-        setLoading(false);
-        return;
       }
 
       // FormData içeriğini logla
@@ -221,36 +197,19 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
         console.log(`${key}:`, value);
       }
 
-      if (vehicle) {
-        const response = await api.updateVehicle(vehicle.vehicleId, formDataToSend);
-        if (response.isSuccess) {
-          toast.success('Araç başarıyla güncellendi!', {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
-          onSuccess();
-        } else {
-          setError(response.error);
-        }
+      const response = await api.updateVehicle(vehicle.vehicleId, formDataToSend);
+      if (response.isSuccess) {
+        toast.success('Araç başarıyla güncellendi!', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        onSuccess();
       } else {
-        const response = await api.createVehicle(formDataToSend);
-        if (response.isSuccess) {
-          toast.success('Araç başarıyla eklendi!', {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-          });
-          onSuccess();
-        } else {
-          setError(response.error);
-        }
+        setError(response.error || 'Araç güncellenirken bir hata oluştu');
       }
     } catch (error) {
       console.error('Hata detayı:', error);
@@ -269,12 +228,12 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
   };
 
   return (
-    <div className="create-vehicle-container">
-      <h2>{vehicle ? 'Araç Düzenle' : 'Yeni Araç Ekle'}</h2>
+    <div className="seller-update-vehicle">
+      <h2>Araç Güncelle</h2>
       
       {error && <div className="error-message">{error}</div>}
 
-      <form onSubmit={handleSubmit} className="vehicle-form" encType="multipart/form-data">
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="form-grid">
           <div className="form-group">
             <label>Marka ve Model</label>
@@ -286,6 +245,7 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
               required
             />
           </div>
+
           <div className="form-group">
             <label>Üretim Yılı</label>
             <input
@@ -293,11 +253,10 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
               name="manufacturingYear"
               value={formData.manufacturingYear}
               onChange={handleChange}
-              min="1900"
-              max={new Date().getFullYear()}
               required
             />
           </div>
+
           <div className="form-group">
             <label>Renk</label>
             <input
@@ -308,6 +267,7 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
               required
             />
           </div>
+
           <div className="form-group">
             <label>Motor Hacmi</label>
             <input
@@ -319,17 +279,7 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
               required
             />
           </div>
-          <div className="form-group">
-            <label>Fiyat</label>
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              min="0"
-              required
-            />
-          </div>
+
           <div className="form-group">
             <label>Kilometre</label>
             <input
@@ -337,10 +287,10 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
               name="millage"
               value={formData.millage}
               onChange={handleChange}
-              min="0"
               required
             />
           </div>
+
           <div className="form-group">
             <label>Plaka</label>
             <input
@@ -351,28 +301,20 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
               required
             />
           </div>
+
           <div className="form-group">
-            <label>Açık Artırma Fiyatı</label>
+            <label>Fiyat</label>
             <input
               type="number"
-              name="auctionPrice"
-              value={formData.auctionPrice}
-              onChange={handleChange}
-              min="0"
-              required
-            />
-          </div>
-          <div className="form-group full-width">
-            <label>Ek Bilgiler</label>
-            <textarea
-              name="additionalInformation"
-              value={formData.additionalInformation}
+              name="price"
+              value={formData.price}
               onChange={handleChange}
               required
             />
           </div>
+
           <div className="form-group">
-            <label>Başlangıç Tarihi ve Saati</label>
+            <label>Başlangıç Tarihi</label>
             <input
               type="datetime-local"
               name="startTime"
@@ -381,8 +323,9 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
               required
             />
           </div>
+
           <div className="form-group">
-            <label>Bitiş Tarihi ve Saati</label>
+            <label>Bitiş Tarihi</label>
             <input
               type="datetime-local"
               name="endTime"
@@ -391,6 +334,7 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
               required
             />
           </div>
+
           <div className="form-group">
             <label>Durum</label>
             <select
@@ -402,13 +346,13 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
               <option value={false}>Pasif</option>
             </select>
           </div>
+
           <div className="form-group full-width">
             <label>Araç Resmi</label>
             <input
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              required={!vehicle}
             />
             {imageToDisplay && (
               <img 
@@ -419,12 +363,37 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
             )}
           </div>
         </div>
+
         <div className="form-actions">
-          <button type="button" className="cancel-button" onClick={onCancel}>
+          <button 
+            type="button" 
+            onClick={onCancel} 
+            disabled={loading}
+            style={{
+              backgroundColor: '#f44336',
+              color: 'white',
+              padding: '10px 20px',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              marginRight: '10px'
+            }}
+          >
             İptal
           </button>
-          <button type="submit" className="save-button" disabled={loading}>
-            {loading ? 'Kaydediliyor...' : (vehicle ? 'Güncelle' : 'Kaydet')}
+          <button 
+            type="submit" 
+            disabled={loading}
+            style={{
+              backgroundColor: '#4CAF50',
+              color: 'white',
+              padding: '10px 20px',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            {loading ? 'Güncelleniyor...' : 'Güncelle'}
           </button>
         </div>
       </form>
@@ -432,4 +401,4 @@ const SellerCreateVehicle = ({ vehicle, onSuccess, onCancel }) => {
   );
 };
 
-export default SellerCreateVehicle;
+export default SellerUpdateVehicle; 
