@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import Banner from "../Banner/Banner";  // Yeni Banner bileşeni
+import Banner from "../Banner/Banner";
 import "./HomePage.css";
 
 const categories = [
@@ -13,16 +13,33 @@ const categories = [
 ];
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    // Arama terimine göre en uygun kategoriyi bul
+    const searchTermLower = term.toLowerCase();
+    const matchingCategory = categories.find(category => 
+      category.name.toLowerCase().includes(searchTermLower)
+    );
+
+    if (matchingCategory) {
+      navigate(matchingCategory.path);
+    }
+  };
+
   return (
     <div className="homepage">
       
       {/* Tek Banner */}
       <Banner 
-        onSearch={(term) => console.log(term)}
+        onSearch={handleSearch}
         title="Açık Artırmalar Başladı!"
         description="Hayalinizdeki ürünü en iyi fiyatla yakalayın."
         backgroundImage="https://static.vecteezy.com/ti/gratis-vektor/p1/17441708-auktionshammer-symbol-holzhammer-gesetzeskonzept-isolierteillustration-vektor.jpg"
         overlayOpacity={0.5}
+        searchPlaceholder="Kategori adı ile arama yapın..."
       />
 
       {/* Kategoriler */}

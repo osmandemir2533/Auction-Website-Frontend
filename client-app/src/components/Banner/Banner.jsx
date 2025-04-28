@@ -8,7 +8,8 @@ const Banner = ({
   backgroundImage = 'https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg',
   overlayOpacity = 0.5,
   overlayColor = 'rgba(38, 66, 137, 0.8)',  // Overlay rengi dinamik
-  onSearch
+  onSearch,
+  searchPlaceholder = "Marka, model veya yıl ile arama yapın..."
 }) => {
   return (
     <div 
@@ -29,12 +30,17 @@ const Banner = ({
             <div className="search-container">
               <form onSubmit={(e) => {
                 e.preventDefault();
-                onSearch(e.target.search.value);
+                const searchTerm = e.target.search.value.trim();
+                if (searchTerm) {
+                  onSearch(searchTerm);
+                } else {
+                  onSearch(''); // Boş arama terimi ile tüm sonuçları göster
+                }
               }}>
                 <input
                   type="text"
                   name="search"
-                  placeholder="Marka, model veya yıl ile arama yapın..."
+                  placeholder={searchPlaceholder}
                 />
                 <button type="submit">
                   <i className="fas fa-search"></i> Ara
@@ -47,6 +53,5 @@ const Banner = ({
     </div>
   );
 };
-
 
 export default Banner;

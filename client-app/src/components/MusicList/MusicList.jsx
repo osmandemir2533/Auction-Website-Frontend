@@ -10,6 +10,7 @@ const MusicList = () => {
   const [sortBy, setSortBy] = useState('price-asc');
   const [filteredInstruments, setFilteredInstruments] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchInstruments = async () => {
@@ -34,38 +35,69 @@ const MusicList = () => {
     fetchInstruments();
   }, []);
 
-  const handleSort = (e) => {
-    const value = e.target.value;
-    setSortBy(value);
-    let sorted = [...filteredInstruments];
+  useEffect(() => {
+    let filtered = [...instruments];
 
-    switch (value) {
+    // Search filter
+    if (searchTerm) {
+      console.log("Arama terimi:", searchTerm);
+      filtered = filtered.filter(instrument => {
+        const searchTermLower = searchTerm.toLowerCase();
+        
+        // İsim kontrolü
+        const nameMatch = (instrument.name || '').toLowerCase().includes(searchTermLower);
+        
+        // Marka kontrolü
+        const brandMatch = (instrument.brand || '').toLowerCase().includes(searchTermLower);
+        
+        // Açıklama kontrolü
+        const descMatch = (instrument.description || '').toLowerCase().includes(searchTermLower);
+        
+        console.log("Enstrüman:", instrument.name, "Eşleşme:", { 
+          nameMatch, 
+          brandMatch, 
+          descMatch
+        });
+        
+        return nameMatch || brandMatch || descMatch;
+      });
+    }
+
+    // Brand filter
+    if (activeFilter !== 'all') {
+      filtered = filtered.filter(instrument => 
+        instrument.brand.toLowerCase().includes(activeFilter.toLowerCase())
+      );
+    }
+
+    // Sort
+    switch (sortBy) {
       case 'price-asc':
-        sorted.sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case 'price-desc':
-        sorted.sort((a, b) => b.price - a.price);
+        filtered.sort((a, b) => b.price - a.price);
         break;
       case 'name-asc':
-        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
       default:
         break;
     }
 
-    setFilteredInstruments(sorted);
+    setFilteredInstruments(filtered);
+  }, [instruments, searchTerm, activeFilter, sortBy]);
+
+  const handleSort = (e) => {
+    setSortBy(e.target.value);
   };
 
   const handleFilter = (brand) => {
     setActiveFilter(brand);
-    if (brand === 'all') {
-      setFilteredInstruments(instruments);
-    } else {
-      const filtered = instruments.filter(instrument => 
-        instrument.brand.toLowerCase().includes(brand.toLowerCase())
-      );
-      setFilteredInstruments(filtered);
-    }
+  };
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
   };
 
   if (loading) {
@@ -75,156 +107,60 @@ const MusicList = () => {
   return (
     <div className="page-wrapper">
       <Banner 
-        onSearch={(term) => console.log(term)} 
-        title="Yeni Müzik Enstrümanları!"
+        onSearch={handleSearch}
+        title="Müzik Enstrümanları"
         description="Müzik dünyasına adım atın, enstrümanınızı bulun."
         backgroundImage="https://www.hepsiburada.com/hayatburada/wp-content/uploads/2023/12/enstruman-tavsiyeleri.jpg"
         overlayOpacity={0.5}
+        searchPlaceholder="Enstrüman adı, marka veya özellik ile arama yapın..."
       />
       
       <div className="content-wrapper">
-        <div className="filters">
-          <div className="filter-header">
-            <h2>Enstrümanlar ({filteredInstruments.length})</h2>
-            <select className="sort-select" value={sortBy} onChange={handleSort}>
-              <option value="price-asc">Fiyat (Düşükten Yükseğe)</option>
-              <option value="price-desc">Fiyat (Yüksekten Düşüğe)</option>
-              <option value="name-asc">Ad (A'dan Z'ye)</option>
-            </select>
-          </div>
-          <div className="filter-buttons">
-            <button 
-              className={`filter-button ${activeFilter === 'all' ? 'active' : ''}`}
-              onClick={() => handleFilter('all')}
-            >
-              Tümü
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Yamaha' ? 'active' : ''}`}
-              onClick={() => handleFilter('Yamaha')}
-            >
-              Yamaha
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Fender' ? 'active' : ''}`}
-              onClick={() => handleFilter('Fender')}
-            >
-              Fender
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Gibson' ? 'active' : ''}`}
-              onClick={() => handleFilter('Gibson')}
-            >
-              Gibson
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Roland' ? 'active' : ''}`}
-              onClick={() => handleFilter('Roland')}
-            >
-              Roland
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Pearl' ? 'active' : ''}`}
-              onClick={() => handleFilter('Pearl')}
-            >
-              Pearl
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Bose' ? 'active' : ''}`}
-              onClick={() => handleFilter('Bose')}
-            >
-              Bose
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Casio' ? 'active' : ''}`}
-              onClick={() => handleFilter('Casio')}
-            >
-              Casio
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Ibanez' ? 'active' : ''}`}
-              onClick={() => handleFilter('Ibanez')}
-            >
-              Ibanez
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Korg' ? 'active' : ''}`}
-              onClick={() => handleFilter('Korg')}
-            >
-              Korg
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Ludwig' ? 'active' : ''}`}
-              onClick={() => handleFilter('Ludwig')}
-            >
-              Ludwig
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Shure' ? 'active' : ''}`}
-              onClick={() => handleFilter('Shure')}
-            >
-              Shure
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Sennheiser' ? 'active' : ''}`}
-              onClick={() => handleFilter('Sennheiser')}
-            >
-              Sennheiser
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Mackie' ? 'active' : ''}`}
-              onClick={() => handleFilter('Mackie')}
-            >
-              Mackie
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Tama' ? 'active' : ''}`}
-              onClick={() => handleFilter('Tama')}
-            >
-              Tama
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Gretsch' ? 'active' : ''}`}
-              onClick={() => handleFilter('Gretsch')}
-            >
-              Gretsch
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Vox' ? 'active' : ''}`}
-              onClick={() => handleFilter('Vox')}
-            >
-              Vox
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Martin' ? 'active' : ''}`}
-              onClick={() => handleFilter('Martin')}
-            >
-              Martin
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Peavey' ? 'active' : ''}`}
-              onClick={() => handleFilter('Peavey')}
-            >
-              Peavey
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'Line 6' ? 'active' : ''}`}
-              onClick={() => handleFilter('Line 6')}
-            >
-              Line 6
-            </button>
-          </div>
+        <div className="filter-header">
+          <h2>Enstrümanlar ({filteredInstruments.length})</h2>
+          <select className="sort-select" value={sortBy} onChange={handleSort}>
+            <option value="price-asc">Fiyat (Düşükten Yükseğe)</option>
+            <option value="price-desc">Fiyat (Yüksekten Düşüğe)</option>
+            <option value="name-asc">İsim (A-Z)</option>
+          </select>
+        </div>
+        
+        <div className="filter-buttons">
+          <button 
+            className={`filter-button ${activeFilter === 'all' ? 'active' : ''}`}
+            onClick={() => handleFilter('all')}
+          >
+            Tümü
+          </button>
+          <button 
+            className={`filter-button ${activeFilter === 'yamaha' ? 'active' : ''}`}
+            onClick={() => handleFilter('yamaha')}
+          >
+            Yamaha
+          </button>
+          <button 
+            className={`filter-button ${activeFilter === 'fender' ? 'active' : ''}`}
+            onClick={() => handleFilter('fender')}
+          >
+            Fender
+          </button>
+          <button 
+            className={`filter-button ${activeFilter === 'gibson' ? 'active' : ''}`}
+            onClick={() => handleFilter('gibson')}
+          >
+            Gibson
+          </button>
         </div>
 
         {filteredInstruments.length > 0 ? (
           <div className="instruments-grid">
             {filteredInstruments.map(instrument => (
-              <MusicCard key={instrument.musicalInstrumentId} instrument={instrument} />
+              <MusicCard key={instrument.instrumentId} instrument={instrument} />
             ))}
           </div>
         ) : (
           <div className="no-results">
-            Seçilen kriterlere uygun enstrüman bulunamadı.
+            {searchTerm ? 'Arama kriterlerine uygun enstrüman bulunamadı.' : 'Henüz hiç enstrüman ilanı bulunmamaktadır.'}
           </div>
         )}
       </div>

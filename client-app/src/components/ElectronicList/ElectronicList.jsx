@@ -11,6 +11,7 @@ const ElectronicList = () => {
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState('price-asc');
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const fetchElectronics = useCallback(async () => {
     try {
@@ -52,15 +53,48 @@ const ElectronicList = () => {
     setActiveFilter(brand);
   }, []);
 
+  const handleSearch = useCallback((term) => {
+    setSearchTerm(term);
+  }, []);
+
   const filteredAndSortedElectronics = useMemo(() => {
     let result = [...electronics];
     
-    // Filtreleme
+    // Search filter
+    if (searchTerm) {
+      console.log("Arama terimi:", searchTerm);
+      result = result.filter(electronic => {
+        const searchTermLower = searchTerm.toLowerCase();
+        
+        // Marka kontrolü
+        const brandMatch = (electronic.brand || '').toLowerCase().includes(searchTermLower);
+        
+        // Model kontrolü
+        const modelMatch = (electronic.model || '').toLowerCase().includes(searchTermLower);
+        
+        // Üretim Yılı kontrolü
+        const yearMatch = electronic.manufacturingYear.toString().includes(searchTerm);
+        
+        // Ek bilgi kontrolü
+        const infoMatch = (electronic.additionalInformation || '').toLowerCase().includes(searchTermLower);
+        
+        console.log("Elektronik:", electronic.brand, "Eşleşme:", { 
+          brandMatch, 
+          modelMatch, 
+          yearMatch,
+          infoMatch
+        });
+        
+        return brandMatch || modelMatch || yearMatch || infoMatch;
+      });
+    }
+    
+    // Brand filter
     if (activeFilter !== 'all') {
       result = result.filter(electronic => electronic.brand === activeFilter);
     }
     
-    // Sıralama
+    // Sort
     result.sort((a, b) => {
       if (sortBy === 'price-asc') {
         return (a.currentPrice || a.startingPrice || 0) - (b.currentPrice || b.startingPrice || 0);
@@ -75,7 +109,7 @@ const ElectronicList = () => {
     });
     
     return result;
-  }, [electronics, activeFilter, sortBy]);
+  }, [electronics, searchTerm, activeFilter, sortBy]);
 
   const uniqueBrands = useMemo(() => 
     [...new Set(electronics.map(e => e.brand))].filter(Boolean),
@@ -93,9 +127,12 @@ const ElectronicList = () => {
   return (
     <div className="page-wrapper">
       <Banner
+        onSearch={handleSearch}
         title="Elektronik Ürünler"
         description="En yeni elektronik ürünleri en iyi fiyatlarla yakalayın"
         backgroundImage="/images/electronics-banner.jpg"
+        overlayOpacity={0.5}
+        searchPlaceholder="Marka, model veya özellik ile arama yapın..."
       />
       <div className="content-wrapper">
         <div className="filters">
@@ -132,7 +169,9 @@ const ElectronicList = () => {
         </div>
 
         {filteredAndSortedElectronics.length === 0 ? (
-          <div className="no-results">Sonuç bulunamadı</div>
+          <div className="no-results">
+            {searchTerm ? 'Arama kriterlerine uygun ürün bulunamadı.' : 'Henüz hiç elektronik ürün ilanı bulunmamaktadır.'}
+          </div>
         ) : (
           <div className="electronics-grid">
             {filteredAndSortedElectronics.map(electronic => (

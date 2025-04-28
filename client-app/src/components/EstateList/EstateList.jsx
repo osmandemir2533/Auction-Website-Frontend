@@ -13,10 +13,67 @@ const EstateList = () => {
   const [filteredEstates, setFilteredEstates] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     fetchEstates();
   }, []);
+
+  useEffect(() => {
+    let filtered = [...estates];
+
+    // Search filter
+    if (searchTerm) {
+      console.log("Arama terimi:", searchTerm);
+      filtered = filtered.filter(estate => {
+        const searchTermLower = searchTerm.toLowerCase();
+        
+        // Başlık kontrolü
+        const titleMatch = (estate.title || '').toLowerCase().includes(searchTermLower);
+        
+        // Açıklama kontrolü
+        const descMatch = (estate.description || '').toLowerCase().includes(searchTermLower);
+        
+        // Adres kontrolü
+        const addressMatch = (estate.address || '').toLowerCase().includes(searchTermLower);
+        
+        console.log("Emlak:", estate.title, "Eşleşme:", { 
+          titleMatch, 
+          descMatch, 
+          addressMatch
+        });
+        
+        return titleMatch || descMatch || addressMatch;
+      });
+    }
+
+    // Status filter
+    if (activeFilter !== 'all') {
+      filtered = filtered.filter(estate => estate.status === activeFilter);
+    }
+
+    // Type filter
+    if (typeFilter !== 'all') {
+      filtered = filtered.filter(estate => estate.type === typeFilter);
+    }
+
+    // Sort
+    switch (sortBy) {
+      case 'price-asc':
+        filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+        break;
+      case 'price-desc':
+        filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
+        break;
+      case 'size-desc':
+        filtered.sort((a, b) => (b.squareMeters || 0) - (a.squareMeters || 0));
+        break;
+      default:
+        break;
+    }
+
+    setFilteredEstates(filtered);
+  }, [estates, searchTerm, activeFilter, typeFilter, sortBy]);
 
   const fetchEstates = async () => {
     try {
@@ -53,55 +110,19 @@ const EstateList = () => {
   };
 
   const handleSort = (e) => {
-    const value = e.target.value;
-    setSortBy(value);
-    let sorted = [...filteredEstates];
-
-    switch (value) {
-      case 'price-asc':
-        sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
-        break;
-      case 'price-desc':
-        sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
-        break;
-      case 'size-desc':
-        sorted.sort((a, b) => (b.squareMeters || 0) - (a.squareMeters || 0));
-        break;
-      default:
-        break;
-    }
-
-    setFilteredEstates(sorted);
+    setSortBy(e.target.value);
   };
 
-  const handleFilter = (type) => {
-    setActiveFilter(type);
-    applyFilters(type, typeFilter);
+  const handleFilter = (status) => {
+    setActiveFilter(status);
   };
 
   const handleTypeFilter = (type) => {
     setTypeFilter(type);
-    applyFilters(activeFilter, type);
   };
 
-  const applyFilters = (activeStatus, estateType) => {
-    let filtered = [...estates];
-    
-    // Apply active/inactive filter
-    if (activeStatus !== 'all') {
-      filtered = filtered.filter(estate => estate.isActive === (activeStatus === 'active'));
-    }
-    
-    // Apply estate type filter
-    if (estateType !== 'all') {
-      filtered = filtered.filter(estate => {
-        const estateTypeLower = estate.type?.toLowerCase();
-        const filterTypeLower = estateType.toLowerCase();
-        return estateTypeLower === filterTypeLower;
-      });
-    }
-    
-    setFilteredEstates(filtered);
+  const handleSearch = (term) => {
+    setSearchTerm(term);
   };
 
   if (loading) {
@@ -115,11 +136,12 @@ const EstateList = () => {
   return (
     <div className="page-wrapper">
       <Banner 
-        onSearch={(term) => console.log(term)}
+        onSearch={handleSearch}
         title="Emlak Açık Artırmaları"
         description="Hayalinizdeki evi en iyi fiyatla yakalayın."
         backgroundImage="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg"
         overlayOpacity={0.5}
+        searchPlaceholder="Adres, emlak tipi veya özellik ile arama yapın..."
       />
       
       <div className="content-wrapper">
@@ -204,11 +226,7 @@ const EstateList = () => {
           </div>
         ) : (
           <div className="no-results">
-            {estates.length === 0 ? (
-              'Henüz hiç emlak ilanı bulunmamaktadır.'
-            ) : (
-              'Seçtiğiniz filtrelere uygun emlak bulunamadı. Lütfen farklı filtreler deneyin.'
-            )}
+            {searchTerm ? 'Arama kriterlerine uygun emlak bulunamadı.' : 'Henüz hiç emlak ilanı bulunmamaktadır.'}
           </div>
         )}
       </div>

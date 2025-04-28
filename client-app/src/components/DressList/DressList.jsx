@@ -10,14 +10,39 @@ const DressList = () => {
   const [sortBy, setSortBy] = useState('price-asc');
   const [filteredDresses, setFilteredDresses] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchDresses = async () => {
       try {
         const response = await api.getDresses();
+        console.log("API'den gelen ham veri:", response);
+        
         if (response.isSuccess && Array.isArray(response.result)) {
-          setDresses(response.result);
-          setFilteredDresses(response.result);
+          // Veri yapısını kontrol et
+          const formattedDresses = response.result.map(dress => {
+            console.log("İşlenen elbise verisi:", dress);
+            return {
+              dressId: dress.dressId,
+              brand: dress.brand || '',
+              type: dress.type || '',
+              size: dress.size || '',
+              color: dress.color || '',
+              material: dress.material || '',
+              price: dress.price || 0,
+              additionalInformation: dress.additionalInformation || '',
+              auctionPrice: dress.auctionPrice || 0,
+              startTime: dress.startTime,
+              endTime: dress.endTime,
+              isActive: dress.isActive,
+              image: dress.image || '',
+              sellerId: dress.sellerId
+            };
+          });
+          
+          console.log("Düzenlenmiş elbise verisi:", formattedDresses);
+          setDresses(formattedDresses);
+          setFilteredDresses(formattedDresses);
         } else {
           console.error("Beklenmeyen veri formatı:", response);
         }
@@ -31,38 +56,83 @@ const DressList = () => {
     fetchDresses();
   }, []);
 
-  const handleSort = (e) => {
-    const value = e.target.value;
-    setSortBy(value);
-    let sorted = [...filteredDresses];
+  useEffect(() => {
+    let filtered = [...dresses];
 
-    switch (value) {
+    // Search filter
+    if (searchTerm) {
+      console.log("Arama terimi:", searchTerm);
+      filtered = filtered.filter(dress => {
+        const searchTermLower = searchTerm.toLowerCase();
+        
+        // Marka kontrolü
+        const brandMatch = (dress.brand || '').toLowerCase().includes(searchTermLower);
+        
+        // Tür kontrolü
+        const typeMatch = (dress.type || '').toLowerCase().includes(searchTermLower);
+        
+        // Materyal kontrolü
+        const materialMatch = (dress.material || '').toLowerCase().includes(searchTermLower);
+        
+        // Renk kontrolü
+        const colorMatch = (dress.color || '').toLowerCase().includes(searchTermLower);
+        
+        // Ek bilgi kontrolü
+        const infoMatch = (dress.additionalInformation || '').toLowerCase().includes(searchTermLower);
+        
+        console.log("Elbise:", dress.brand, "Eşleşme:", { 
+          brandMatch, 
+          typeMatch, 
+          materialMatch,
+          colorMatch,
+          infoMatch
+        });
+        
+        return brandMatch || typeMatch || materialMatch || colorMatch || infoMatch;
+      });
+    }
+
+    // Brand filter
+    if (activeFilter !== 'all') {
+      console.log("Aktif filtre:", activeFilter);
+      filtered = filtered.filter(dress => {
+        const brandMatch = (dress.brand || '').toLowerCase().includes(activeFilter.toLowerCase());
+        console.log("Elbise:", dress.brand, "Marka eşleşmesi:", brandMatch);
+        return brandMatch;
+      });
+    }
+
+    // Sort
+    switch (sortBy) {
       case 'price-asc':
-        sorted.sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
         break;
       case 'price-desc':
-        sorted.sort((a, b) => b.price - a.price);
+        filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
         break;
       case 'brand':
-        sorted.sort((a, b) => a.brand.localeCompare(b.brand));
+        filtered.sort((a, b) => (a.brand || '').localeCompare(b.brand || ''));
         break;
       default:
         break;
     }
 
-    setFilteredDresses(sorted);
+    console.log("Filtrelenmiş elbiseler:", filtered);
+    setFilteredDresses(filtered);
+  }, [dresses, searchTerm, activeFilter, sortBy]);
+
+  const handleSort = (e) => {
+    setSortBy(e.target.value);
   };
 
   const handleFilter = (brand) => {
+    console.log("Filtre değişti:", brand);
     setActiveFilter(brand);
-    if (brand === 'all') {
-      setFilteredDresses(dresses);
-    } else {
-      const filtered = dresses.filter(dress => 
-        dress.brand.toLowerCase().includes(brand.toLowerCase())
-      );
-      setFilteredDresses(filtered);
-    }
+  };
+
+  const handleSearch = (term) => {
+    console.log("Arama terimi değişti:", term);
+    setSearchTerm(term);
   };
 
   if (loading) {
@@ -72,11 +142,12 @@ const DressList = () => {
   return (
     <div className="page-wrapper">
       <Banner 
-        onSearch={(term) => console.log(term)} 
+        onSearch={handleSearch}
         title="Elbise Açık Artırmaları"
         description="En şık elbiseler burada!"
         backgroundImage="https://images.pexels.com/photos/994523/pexels-photo-994523.jpeg"
         overlayOpacity={0.5}
+        searchPlaceholder="Marka, tür veya materyal ile arama yapın..."
       />
       
       <div className="content-wrapper">
@@ -114,19 +185,19 @@ const DressList = () => {
             Mango
           </button>
         </div>
+
+        {filteredDresses.length > 0 ? (
+          <div className="dresses-grid">
+            {filteredDresses.map(dress => (
+              <DressCard key={dress.dressId} dress={dress} />
+            ))}
+          </div>
+        ) : (
+          <div className="no-results">
+            {searchTerm ? 'Arama kriterlerine uygun elbise bulunamadı.' : 'Henüz hiç elbise ilanı bulunmamaktadır.'}
+          </div>
+        )}
       </div>
-      
-      {filteredDresses.length > 0 ? (
-        <div className="dresses-grid">
-          {filteredDresses.map(dress => (
-            <DressCard key={dress.dressId} dress={dress} />
-          ))}
-        </div>
-      ) : (
-        <div className="no-results">
-          Seçilen kriterlere uygun elbise bulunamadı.
-        </div>
-      )}
     </div>
   );
 };
