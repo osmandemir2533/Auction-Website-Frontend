@@ -19,7 +19,7 @@ const DressCard = ({ dress }) => {
     additionalInformation = "Ek bilgi bulunmuyor",
     endTime,
     startTime,
-    image,
+    imageUrl,
   } = dress;
 
   const isAuctionActive = endTime && new Date(endTime) > new Date();
@@ -28,8 +28,12 @@ const DressCard = ({ dress }) => {
     <Link to={`/dress/${dressId}`} className="dress-card">
       <div className="dress-image">
         <img 
-          src={image || "https://via.placeholder.com/300x200?text=Resim+Yok"} 
-          alt={`${brand} ${type}`}
+          src={imageUrl} 
+          alt={`${brand} ${type}`} 
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/images/placeholder.jpg';
+          }}
         />
         {isAuctionActive && <span className="auction-badge">Açık Artırma Aktif</span>}
       </div>

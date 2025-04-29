@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import VehicleCard from '../VehicleCard/VehicleCard';
 import api from '../../services/api';
 import './VehicleList.css';
@@ -11,29 +11,52 @@ const VehicleList = () => {
   const [filteredVehicles, setFilteredVehicles] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [error, setError] = useState(null);
+
+  const fetchVehicles = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await api.getVehicles();
+      
+      if (response.isSuccess && response.result) {
+        const formattedVehicles = response.result.map(vehicle => {
+          let imageUrl = '';
+          if (vehicle.image) {
+            if (vehicle.image.startsWith('http')) {
+              imageUrl = vehicle.image;
+            } else if (vehicle.image.startsWith('data:image')) {
+              imageUrl = vehicle.image;
+            } else {
+              imageUrl = `https://localhost:7282/Images/${vehicle.image}`;
+            }
+          }
+          
+          return {
+            ...vehicle,
+            imageUrl: imageUrl || '/images/placeholder.jpg',
+            status: vehicle.status || 'Inactive',
+            endDate: vehicle.endDate || null
+          };
+        });
+        
+        setVehicles(formattedVehicles);
+        setFilteredVehicles(formattedVehicles);
+      } else {
+        setError('Araçlar yüklenirken bir hata oluştu');
+        setVehicles([]);
+      }
+    } catch (err) {
+      setError('Araçlar yüklenirken bir hata oluştu');
+      console.error('Error fetching vehicles:', err);
+      setVehicles([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
-        const data = await api.getVehicles();
-        console.log("API'den Gelen Veri:", data);
-
-        if (data.isSuccess && Array.isArray(data.result)) {
-          setVehicles(data.result);
-          setFilteredVehicles(data.result);
-        } else {
-          console.error("Beklenmeyen veri formatı:", data);
-        }
-
-        setLoading(false);
-      } catch (error) {
-        console.error('Araçlar yüklenirken hata oluştu:', error);
-        setLoading(false);
-      }
-    };
-
     fetchVehicles();
-  }, []);
+  }, [fetchVehicles]);
 
   useEffect(() => {
     let filtered = [...vehicles];

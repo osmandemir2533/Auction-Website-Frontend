@@ -36,11 +36,11 @@ const EstateCard = ({ estate }) => {
     <div className="estate-card">
       <div className="estate-image">
         <img 
-          src={image || "https://via.placeholder.com/300x200?text=Resim+Yok"} 
+          src={image} 
           alt={title}
           onError={(e) => {
             e.target.onerror = null;
-            e.target.src = "https://via.placeholder.com/300x200?text=Resim+Yok";
+            e.target.src = '/images/placeholder.jpg';
           }}
         />
       </div>

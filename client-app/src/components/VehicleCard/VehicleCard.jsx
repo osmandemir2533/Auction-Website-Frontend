@@ -20,7 +20,7 @@ const VehicleCard = ({ vehicle }) => {
     additionalInformation = "Ek bilgi bulunmuyor",
     endTime,
     startTime,
-    image,
+    imageUrl,
   } = vehicle;
 
   // Kalan gün hesaplama (Geçmiş tarihlerde hata olmaması için koruma)
@@ -32,11 +32,16 @@ const VehicleCard = ({ vehicle }) => {
 
   return (
     <div className="vehicle-card">
-      <img 
-        src={image || "https://via.placeholder.com/300x200?text=Resim+Yok"} 
-        alt={brandAndModel} 
-        className="vehicle-image" 
-      />
+      <div className="vehicle-image">
+        <img 
+          src={imageUrl} 
+          alt={brandAndModel} 
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/images/placeholder.jpg';
+          }}
+        />
+      </div>
       <div className="vehicle-info">
         <h3>{brandAndModel}</h3>
         <p className="vehicle-year">Model Yılı: {manufacturingYear || "Bilinmiyor"}</p>

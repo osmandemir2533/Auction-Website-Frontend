@@ -84,8 +84,25 @@ const EstateList = () => {
       if (response && response.isSuccess) {
         console.log('Estates data:', response.result);
         if (Array.isArray(response.result)) {
-          setEstates(response.result);
-          setFilteredEstates(response.result);
+          const formattedEstates = response.result.map(estate => {
+            let imageUrl = '';
+            if (estate.image) {
+              if (estate.image.startsWith('http')) {
+                imageUrl = estate.image;
+              } else if (estate.image.startsWith('data:image')) {
+                imageUrl = estate.image;
+              } else {
+                imageUrl = `https://localhost:7282/Images/${estate.image}`;
+              }
+            }
+            
+            return {
+              ...estate,
+              image: imageUrl || '/images/placeholder.jpg'
+            };
+          });
+          setEstates(formattedEstates);
+          setFilteredEstates(formattedEstates);
           setError(null);
         } else {
           console.error('Invalid estates data format:', response.result);

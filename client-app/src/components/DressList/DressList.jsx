@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import DressCard from '../DressCard/DressCard';
 import { api } from '../../services/api';
 import './DressList.css';
@@ -11,50 +11,51 @@ const DressList = () => {
   const [filteredDresses, setFilteredDresses] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [error, setError] = useState(null);
+
+  const fetchDresses = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await api.getDresses();
+      
+      if (response.isSuccess && response.result) {
+        const formattedDresses = response.result.map(dress => {
+          let imageUrl = '';
+          if (dress.image) {
+            if (dress.image.startsWith('http')) {
+              imageUrl = dress.image;
+            } else if (dress.image.startsWith('data:image')) {
+              imageUrl = dress.image;
+            } else {
+              imageUrl = `https://localhost:7282/Images/${dress.image}`;
+            }
+          }
+          
+          return {
+            ...dress,
+            imageUrl: imageUrl || '/images/placeholder.jpg',
+            status: dress.status || 'Inactive',
+            endDate: dress.endDate || null
+          };
+        });
+        
+        setDresses(formattedDresses);
+      } else {
+        setError('Giyim ürünleri yüklenirken bir hata oluştu');
+        setDresses([]);
+      }
+    } catch (err) {
+      setError('Giyim ürünleri yüklenirken bir hata oluştu');
+      console.error('Error fetching dresses:', err);
+      setDresses([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchDresses = async () => {
-      try {
-        const response = await api.getDresses();
-        console.log("API'den gelen ham veri:", response);
-        
-        if (response.isSuccess && Array.isArray(response.result)) {
-          // Veri yapısını kontrol et
-          const formattedDresses = response.result.map(dress => {
-            console.log("İşlenen elbise verisi:", dress);
-            return {
-              dressId: dress.dressId,
-              brand: dress.brand || '',
-              type: dress.type || '',
-              size: dress.size || '',
-              color: dress.color || '',
-              material: dress.material || '',
-              price: dress.price || 0,
-              additionalInformation: dress.additionalInformation || '',
-              auctionPrice: dress.auctionPrice || 0,
-              startTime: dress.startTime,
-              endTime: dress.endTime,
-              isActive: dress.isActive,
-              image: dress.image || '',
-              sellerId: dress.sellerId
-            };
-          });
-          
-          console.log("Düzenlenmiş elbise verisi:", formattedDresses);
-          setDresses(formattedDresses);
-          setFilteredDresses(formattedDresses);
-        } else {
-          console.error("Beklenmeyen veri formatı:", response);
-        }
-      } catch (error) {
-        console.error('Elbiseler yüklenirken hata oluştu:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDresses();
-  }, []);
+  }, [fetchDresses]);
 
   useEffect(() => {
     let filtered = [...dresses];
