@@ -220,26 +220,52 @@ export const api = {
   // Electronic endpoints
   getElectronics: async () => {
     try {
+      console.log('Fetching electronics from API...');
       const response = await axios.get(`${BASE_URL}/Electronic/GetElectronics`);
-      return {
-        isSuccess: response.data.isSuccess,
-        result: response.data.result || [],
-        error: response.data.errorMessages?.join(', ')
-      };
+      console.log('Raw API Response:', response);
+      
+      if (response.data && response.data.result) {
+        return {
+          isSuccess: true,
+          result: response.data.result
+        };
+      } else if (Array.isArray(response.data)) {
+        return {
+          isSuccess: true,
+          result: response.data
+        };
+      } else {
+        console.error('Unexpected API response format:', response.data);
+        return {
+          isSuccess: false,
+          result: [],
+          error: 'Unexpected API response format'
+        };
+      }
     } catch (error) {
       console.error('Electronic API hatası:', error);
-      return { isSuccess: false, error: error.message, result: [] };
+      return { isSuccess: false, result: [], error: error.message };
     }
   },
+
 
   getElectronicById: async (id) => {
     try {
       const response = await axios.get(`${BASE_URL}/Electronic/${id}`);
+
       return {
         isSuccess: response.data.isSuccess,
         result: response.data.result,
         error: response.data.errorMessages?.join(', ')
       };
+
+      if (response.data.isSuccess) {
+        return response.data;
+      } else {
+        console.error('Electronic API hatası:', response.data.errorMessages);
+        return { isSuccess: false, error: response.data.errorMessages?.join(', ') };
+      }
+
     } catch (error) {
       return { isSuccess: false, error: error.message };
     }
