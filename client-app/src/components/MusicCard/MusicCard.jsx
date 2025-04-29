@@ -31,9 +31,13 @@ const MusicCard = ({ instrument }) => {
       {/* Resim alanı */}
       <div className="music-image-container">
         <img
-          src={image || "https://via.placeholder.com/300x200?text=Resim+Yok"}
+          src={image}
           alt={name}
           className="music-image"
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/images/placeholder.jpg';
+          }}
         />
       </div>
       {/* Müzik aleti bilgileri */}

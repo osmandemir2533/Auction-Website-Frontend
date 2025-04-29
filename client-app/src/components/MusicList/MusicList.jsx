@@ -19,8 +19,25 @@ const MusicList = () => {
         console.log("API'den Gelen Veri:", data);
 
         if (data.isSuccess && Array.isArray(data.result)) {
-          setInstruments(data.result);
-          setFilteredInstruments(data.result);
+          const formattedInstruments = data.result.map(instrument => {
+            let imageUrl = '';
+            if (instrument.image) {
+              if (instrument.image.startsWith('http')) {
+                imageUrl = instrument.image;
+              } else if (instrument.image.startsWith('data:image')) {
+                imageUrl = instrument.image;
+              } else {
+                imageUrl = `https://localhost:7282/Images/${instrument.image}`;
+              }
+            }
+            
+            return {
+              ...instrument,
+              image: imageUrl || '/images/placeholder.jpg'
+            };
+          });
+          setInstruments(formattedInstruments);
+          setFilteredInstruments(formattedInstruments);
         } else {
           console.error("Beklenmeyen veri formatı:", data);
         }
