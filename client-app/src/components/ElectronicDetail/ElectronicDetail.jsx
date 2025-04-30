@@ -69,7 +69,13 @@ const ElectronicDetail = () => {
         <div className="electronic-detail-content">
           <div className="electronic-images">
             <img 
-              src={image || "https://via.placeholder.com/600x400?text=Resim+Yok"} 
+              src={image?.startsWith('http') 
+                ? image 
+                : image?.startsWith('data:image')
+                  ? image
+                  : image 
+                    ? `https://localhost:7282/Images/${image}`
+                    : "https://via.placeholder.com/600x400?text=Resim+Yok"} 
               alt={`${brand} ${modelismi}`} 
             />
           </div>

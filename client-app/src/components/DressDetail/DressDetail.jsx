@@ -68,7 +68,16 @@ const DressDetail = () => {
     <div className="dress-detail">
       <div className="dress-detail-container">
         <div className="dress-image">
-          <img src={dress.image} alt={dress.brand} />
+          <img 
+            src={dress.image?.startsWith('http') 
+              ? dress.image 
+              : dress.image?.startsWith('data:image')
+                ? dress.image
+                : dress.image 
+                  ? `https://localhost:7282/Images/${dress.image}`
+                  : "https://via.placeholder.com/600x400?text=Resim+Yok"} 
+            alt={dress.brand} 
+          />
         </div>
         <div className="dress-info">
           <h2>{dress.brand} - {dress.type}</h2>

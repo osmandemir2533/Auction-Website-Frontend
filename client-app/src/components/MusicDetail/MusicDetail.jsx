@@ -58,7 +58,13 @@ const MusicDetail = () => {
           {/* Görsel Üstte */}
           <div className="music-image">
             <img 
-              src={image || "https://via.placeholder.com/600x400?text=Resim+Yok"} 
+              src={image?.startsWith('http') 
+                ? image 
+                : image?.startsWith('data:image')
+                  ? image
+                  : image 
+                    ? `https://localhost:7282/Images/${image}`
+                    : "https://via.placeholder.com/600x400?text=Resim+Yok"} 
               alt={name} 
               className="music-detail-image" 
             />
