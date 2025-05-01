@@ -76,16 +76,22 @@ const SellerUpdateEstate = ({ estate, onClose, onUpdate }) => {
       const formDataToSend = new FormData();
       Object.keys(formData).forEach(key => {
         if (key === 'image' && image) {
-          formDataToSend.append('Image', image);
+          formDataToSend.append('File', image);
         } else {
           formDataToSend.append(key.charAt(0).toUpperCase() + key.slice(1), formData[key]);
         }
       });
 
-      const response = await api.post('/estate/update', formDataToSend);
-      toast.success('Emlak başarıyla güncellendi!');
-      onUpdate(response);
-      onClose();
+      const response = await api.updateEstate(formData.estateId, formDataToSend);
+      
+      if (response.isSuccess) {
+        toast.success('Emlak başarıyla güncellendi!');
+        onUpdate(response.result);
+        onClose();
+      } else {
+        setError(response.error || 'Emlak güncellenirken bir hata oluştu.');
+        toast.error(response.error || 'Emlak güncellenirken bir hata oluştu.');
+      }
     } catch (err) {
       setError(err.message || 'Emlak güncellenirken bir hata oluştu.');
       toast.error(err.message || 'Emlak güncellenirken bir hata oluştu.');

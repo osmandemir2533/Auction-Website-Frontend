@@ -31,17 +31,53 @@ export const api = {
 
   updateVehicle: async (vehicleId, formData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/Vehicle/UpdateVehicle/${vehicleId}`, formData, {
+      // FormData içeriğini detaylı logla
+      const formDataObj = {};
+      for (let [key, value] of formData.entries()) {
+        formDataObj[key] = value;
+      }
+      console.log('API\'ye gönderilen güncelleme FormData içeriği:', formDataObj);
+      
+      // FormData'yı yeni bir FormData nesnesine kopyala
+      const newFormData = new FormData();
+      for (let [key, value] of formData.entries()) {
+        if (key === 'File' && value instanceof File) {
+          newFormData.append('file', value);
+        } else {
+          newFormData.append(key, value);
+        }
+      }
+      
+      const response = await axios.put(`${BASE_URL}/Vehicle/UpdateVehicle?vehicleId=${vehicleId}`, newFormData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-        },
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity
+        }
       });
-      return response.data;
+      
+      if (response.data) {
+        return { isSuccess: true, result: response.data };
+      } else {
+        return { isSuccess: false, error: 'Beklenmeyen bir hata oluştu' };
+      }
     } catch (error) {
-      console.error('Vehicle Update API hatası:', error);
-      return { isSuccess: false, error: error.message };
+      console.error('Vehicle API hatası:', error.response?.data);
+      
+      // Backend'den gelen validasyon hatalarını detaylı göster
+      if (error.response?.data?.errors) {
+        const validationErrors = Object.entries(error.response.data.errors)
+          .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
+          .join('\n');
+        console.error('Validasyon Hataları:', validationErrors);
+        return { 
+          isSuccess: false, 
+          error: validationErrors 
+        };
+      }
+      
+      return { 
+        isSuccess: false, 
+        error: error.response?.data?.title || error.message 
+      };
     }
   },
 
@@ -113,16 +149,57 @@ export const api = {
     }
   },
 
-  updateDress: async (id, dressData) => {
+  updateDress: async (dressId, formData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/Dress/UpdateDress`, dressData, {
-        params: { dressId: id }
+      // FormData içeriğini detaylı logla
+      const formDataObj = {};
+      for (let [key, value] of formData.entries()) {
+        formDataObj[key] = value;
+      }
+      console.log('API\'ye gönderilen güncelleme FormData içeriği:', formDataObj);
+  
+      // FormData'yı yeni bir FormData nesnesine kopyala
+      const newFormData = new FormData();
+      for (let [key, value] of formData.entries()) {
+        if (key === 'File' && value instanceof File) {
+          newFormData.append('file', value);
+        } else {
+          newFormData.append(key, value);
+        }
+      }
+  
+      const response = await axios.put(`${BASE_URL}/Dress/UpdateDress?dressId=${dressId}`, newFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
       });
-      return response.data;
+  
+      if (response.data) {
+        return { isSuccess: true, result: response.data };
+      } else {
+        return { isSuccess: false, error: 'Beklenmeyen bir hata oluştu' };
+      }
     } catch (error) {
-      return { isSuccess: false, error: error.message };
+      console.error('Dress API hatası:', error.response?.data);
+  
+      if (error.response?.data?.errors) {
+        const validationErrors = Object.entries(error.response.data.errors)
+          .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
+          .join('\n');
+        console.error('Validasyon Hataları:', validationErrors);
+        return {
+          isSuccess: false,
+          error: validationErrors
+        };
+      }
+  
+      return {
+        isSuccess: false,
+        error: error.response?.data?.title || error.message
+      };
     }
   },
+  
 
   deleteDress: async (id) => {
     try {
@@ -399,18 +476,35 @@ export const api = {
     }
   },
 
-  updateEstate: async (id, estateData) => {
+  updateEstate: async (estateId, formData) => {
     try {
-      console.log('Güncellenecek emlak verisi:', estateData);
-      const response = await axios.put(`${BASE_URL}/Estate/UpdateEstate/${id}`, estateData, {
+      // FormData içeriğini logla
+      const formDataObj = {};
+      for (let [key, value] of formData.entries()) {
+        formDataObj[key] = value;
+      }
+      console.log('API\'ye gönderilen emlak güncelleme FormData içeriği:', formDataObj);
+   
+      // Yeni bir FormData nesnesi oluştur ve verileri kopyala
+      const newFormData = new FormData();
+      for (let [key, value] of formData.entries()) {
+        if (key === 'File' && value instanceof File) {
+          newFormData.append('file', value);
+        } else {
+          newFormData.append(key, value);
+        }
+      }
+   
+      const response = await axios.put(`${BASE_URL}/Estate/UpdateEstate?estateId=${estateId}`, newFormData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
         maxContentLength: Infinity,
         maxBodyLength: Infinity
       });
+   
       console.log('API Güncelleme Yanıtı:', response.data);
-      return response.data;
+      return { isSuccess: true, result: response.data };
     } catch (error) {
       console.error('Emlak Güncelleme API Hatası:', {
         status: error.response?.status,
@@ -424,13 +518,21 @@ export const api = {
           data: error.config?.data
         }
       });
-      
+   
       if (error.response?.data?.errors) {
-        console.error('Validation Hataları:', error.response.data.errors);
+        const validationErrors = Object.entries(error.response.data.errors)
+          .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
+          .join('\n');
+        console.error('Validasyon Hataları:', validationErrors);
+        return {
+          isSuccess: false,
+          error: validationErrors,
+          details: error.response.data
+        };
       }
-      
-      return { 
-        isSuccess: false, 
+   
+      return {
+        isSuccess: false,
         error: error.response?.data?.message || error.message,
         details: error.response?.data
       };
