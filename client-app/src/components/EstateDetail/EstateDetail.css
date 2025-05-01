@@ -74,9 +74,21 @@
 
 .time-remaining {
   color: #e74c3c;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 1rem 0;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.auction-dates {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.auction-dates p {
+  margin: 5px 0;
+  color: #2c3e50;
+  font-size: 0.95em;
 }
 
 .features-section {

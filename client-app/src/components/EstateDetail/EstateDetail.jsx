@@ -119,6 +119,11 @@ const EstateDetail = () => {
               <p className="time-remaining">Kalan Süre: {daysRemaining} gün</p>
             )}
 
+            <div className="auction-dates">
+              <p>Başlangıç Tarihi: {new Date(startTime).toLocaleString()}</p>
+              <p>Bitiş Tarihi: {new Date(endTime).toLocaleString()}</p>
+            </div>
+
             <BidForm estateId={id} currentPrice={price} />
           </div>
         </div>
