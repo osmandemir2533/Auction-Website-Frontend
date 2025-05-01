@@ -10,7 +10,6 @@ const ElectronicList = () => {
   const [sortBy, setSortBy] = useState('price-asc');
   const [filteredElectronics, setFilteredElectronics] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchElectronics = async () => {
@@ -34,60 +33,6 @@ const ElectronicList = () => {
 
     fetchElectronics();
   }, []);
-
-  useEffect(() => {
-    let filtered = [...electronics];
-
-    // Search filter
-    if (searchTerm) {
-      console.log("Arama terimi:", searchTerm);
-      filtered = filtered.filter(electronic => {
-        const searchTermLower = searchTerm.toLowerCase();
-        
-        // İsim kontrolü
-        const nameMatch = (electronic.name || '').toLowerCase().includes(searchTermLower);
-        
-        // Marka kontrolü
-        const brandMatch = (electronic.brand || '').toLowerCase().includes(searchTermLower);
-        
-        // Açıklama kontrolü
-        const descMatch = (electronic.description || '').toLowerCase().includes(searchTermLower);
-        
-        console.log("Elektronik:", electronic.brand, "Eşleşme:", { 
-          nameMatch, 
-          brandMatch, 
-          descMatch
-        });
-        
-        return nameMatch || brandMatch || descMatch;
-      });
-    }
-
-    // Brand filter
-    if (activeFilter !== 'all') {
-      filtered = filtered.filter(electronic => electronic.brand === activeFilter);
-    }
-
-    // Sort
-    switch (sortBy) {
-      case 'price-asc':
-        filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
-        break;
-      case 'price-desc':
-        filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
-        break;
-      case 'year-asc':
-        filtered.sort((a, b) => (a.manufacturingYear || 0) - (b.manufacturingYear || 0));
-        break;
-      case 'year-desc':
-        filtered.sort((a, b) => (b.manufacturingYear || 0) - (a.manufacturingYear || 0));
-        break;
-      default:
-        break;
-    }
-
-    setFilteredElectronics(filtered);
-  }, [electronics, searchTerm, activeFilter, sortBy]);
 
   const handleSort = (e) => {
     const value = e.target.value;
@@ -130,8 +75,8 @@ const ElectronicList = () => {
   return (
     <div className="page-wrapper">
       <Banner 
-        onSearch={(term) => setSearchTerm(term)} 
-        title="Elektronik Ürün Müzayedesi"
+        onSearch={(term) => console.log(term)} 
+        title="Elektronik Ürün Açık Artırmaları"
         description="En yeni elektronik ürünleri uygun fiyatlarla keşfedin."
         backgroundImage="https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg"
         overlayOpacity={0.5}

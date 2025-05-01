@@ -41,12 +41,8 @@ const ElectronicDetail = () => {
 
   const {
     brand = "Bilinmeyen",
-    modelismi = "Model",
+    model = "Model",
     manufacturingYear,
-    condition = "Durum Bilinmiyor",
-    category,
-    warranty,
-    serialNumber = "Seri No Yok",
     price = 0,
     auctionPrice = 0,
     additionalInformation = "Ek bilgi bulunmuyor",
@@ -69,23 +65,13 @@ const ElectronicDetail = () => {
         <div className="electronic-detail-content">
           <div className="electronic-images">
             <img 
-              src={image?.startsWith('http') 
-                ? image 
-                : image?.startsWith('data:image')
-                  ? image
-                  : image 
-                    ? `https://localhost:7282/Images/${image}`
-                    : "https://via.placeholder.com/600x400?text=Resim+Yok"} 
-              alt={`${brand} ${modelismi}`} 
+              src={image || "https://via.placeholder.com/600x400?text=Resim+Yok"} 
+              alt={`${brand} ${model}`} 
             />
           </div>
           <div className="electronic-info-detail">
-            <h1>{`${brand} ${modelismi}`}</h1>
+            <h1>{`${brand} ${model}`}</h1>
             <p className="year">Üretim Yılı: {manufacturingYear || "Bilinmiyor"}</p>
-            <p className="condition">Durum: {condition}</p>
-            <p className="category">Kategori: {category}</p>
-            <p className="warranty">Garanti: {warranty ? "Var" : "Yok"}</p>
-            <p className="serial">Seri No: {serialNumber}</p>
 
             {Object.keys(technicalSpecs).length > 0 && (
               <div className="technical-specs">
@@ -103,9 +89,33 @@ const ElectronicDetail = () => {
               <p>Müzayede Başlangıç: {auctionPrice.toLocaleString()} TL</p>
             </div>
 
-            {daysRemaining !== null && (
-              <p className="time-remaining">Kalan Süre: {daysRemaining} gün</p>
-            )}
+            <div className="time-details">
+              {startTime && (
+                <p className="start-time">
+                  Başlangıç: {new Date(startTime).toLocaleString('tr-TR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </p>
+              )}
+              {endTime && (
+                <p className="end-time">
+                  Bitiş: {new Date(endTime).toLocaleString('tr-TR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </p>
+              )}
+              {daysRemaining !== null && (
+                <p className="time-remaining">Kalan Süre: {daysRemaining} gün</p>
+              )}
+            </div>
 
             <BidForm electronicId={id} currentPrice={price} />
           </div>

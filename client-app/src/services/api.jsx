@@ -253,11 +253,13 @@ export const api = {
     try {
       const response = await axios.get(`${BASE_URL}/Electronic/${id}`);
 
+
       return {
         isSuccess: response.data.isSuccess,
         result: response.data.result,
         error: response.data.errorMessages?.join(', ')
       };
+
 
       if (response.data.isSuccess) {
         return response.data;
