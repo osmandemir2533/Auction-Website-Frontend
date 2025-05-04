@@ -1,3 +1,9 @@
+.music-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .music-card {
   background: white;
   border-radius: 12px;
@@ -9,7 +15,7 @@
   margin: 10px auto;
 }
 
-.music-card:hover {
+.music-card-link:hover .music-card {
   transform: translateY(-5px);
   box-shadow: 0 8px 15px rgba(0,0,0,0.1);
 }

@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../../context/AuthContext';
 import { api } from '../../../../services/api';
 import { FaTrash, FaEdit } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import SellerCreateVehicle from './SellerCreateVehicle';
 import './SellerVehicle.css';
 
 const SellerVehicle = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -137,14 +139,7 @@ const SellerVehicle = () => {
         gap: '20px'
       }}>
         {vehicles.map(vehicle => (
-          <div key={vehicle.vehicleId} style={{
-            background: 'white',
-            borderRadius: '8px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            overflow: 'hidden',
-            display: 'flex',
-            flexDirection: 'column'
-          }}>
+          <div key={vehicle.vehicleId} className="vehicle-card" onClick={() => navigate(`/vehicle/${vehicle.vehicleId}`)}>
             <div style={{
               width: '100%',
               height: '200px',
@@ -194,7 +189,7 @@ const SellerVehicle = () => {
                   alignItems: 'center',
                   gap: '5px'
                 }}
-                onClick={() => handleEdit(vehicle)}
+                onClick={(e) => { e.stopPropagation(); handleEdit(vehicle); }}
               >
                 <FaEdit />
                 Düzenle
@@ -211,7 +206,7 @@ const SellerVehicle = () => {
                   alignItems: 'center',
                   gap: '5px'
                 }}
-                onClick={() => handleDelete(vehicle.vehicleId)}
+                onClick={(e) => { e.stopPropagation(); handleDelete(vehicle.vehicleId); }}
               >
                 <FaTrash />
                 Sil

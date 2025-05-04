@@ -148,3 +148,23 @@
     padding: 0.8rem; /* Butonun padding'ini azaltma */
   }
 }
+
+.dress-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.dress-card-link:hover {
+  text-decoration: none;
+}
+
+.dress-card-link:visited {
+  text-decoration: none;
+}
+
+.dress-card-link h3,
+.dress-card-link p,
+.dress-card-link span {
+  text-decoration: none !important;
+}

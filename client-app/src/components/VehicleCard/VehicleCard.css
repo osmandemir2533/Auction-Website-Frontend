@@ -98,6 +98,26 @@
   color: #666;
 }
 
+.vehicle-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.vehicle-card-link:hover {
+  text-decoration: none;
+}
+
+.vehicle-card-link:visited {
+  text-decoration: none;
+}
+
+.vehicle-card-link h3,
+.vehicle-card-link p,
+.vehicle-card-link span {
+  text-decoration: none !important;
+}
+
 @media (max-width: 768px) {
   .vehicle-image {
     height: 220px;

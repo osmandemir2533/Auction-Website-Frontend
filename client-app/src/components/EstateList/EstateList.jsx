@@ -12,8 +12,28 @@ const EstateList = () => {
   const [sortBy, setSortBy] = useState('price-asc');
   const [filteredEstates, setFilteredEstates] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showAllFilters, setShowAllFilters] = useState(false);
+
+  const estateTypes = [
+    'Öğrenciye Uygun 1+1',
+    'Doğa İçinde Ev',
+    'Boğaz Manzaralı Dubleks',
+    'Uygun Fiyatlı Daire',
+    'Merkezi Konumda Stüdyo',
+    'Bahçeli Tripleks',
+    'Yeni Projede 2+1',
+    'Dağ Manzaralı Yazlık',
+    'Prestijli Ofis Katı',
+    'Denize Sıfır Villa',
+    'Sakin Sokakta Daire',
+    'Konut İmarlı Arsa',
+    'Lüks Rezidans Dairesi',
+    'Şehir Merkezinde Ofis',
+    'Satılık Loft Daire',
+    'Kiralık Depo Alanı',
+    'Yatırım İçin Arsa',
+  ];
 
   useEffect(() => {
     fetchEstates();
@@ -21,41 +41,29 @@ const EstateList = () => {
 
   useEffect(() => {
     let filtered = [...estates];
+    console.log('Filtreleme öncesi emlaklar:', filtered);
 
     // Search filter
     if (searchTerm) {
-      console.log("Arama terimi:", searchTerm);
       filtered = filtered.filter(estate => {
         const searchTermLower = searchTerm.toLowerCase();
-        
-        // Başlık kontrolü
         const titleMatch = (estate.title || '').toLowerCase().includes(searchTermLower);
-        
-        // Açıklama kontrolü
         const descMatch = (estate.description || '').toLowerCase().includes(searchTermLower);
-        
-        // Adres kontrolü
         const addressMatch = (estate.address || '').toLowerCase().includes(searchTermLower);
-        
-        console.log("Emlak:", estate.title, "Eşleşme:", { 
-          titleMatch, 
-          descMatch, 
-          addressMatch
-        });
-        
         return titleMatch || descMatch || addressMatch;
       });
     }
 
-    // Status filter
+    // Title filter
     if (activeFilter !== 'all') {
-      filtered = filtered.filter(estate => estate.status === activeFilter);
+      console.log('Aktif filtre:', activeFilter);
+      filtered = filtered.filter(estate => {
+        console.log('Emlak başlığı:', estate.title);
+        return estate.title.toLowerCase().includes(activeFilter.toLowerCase());
+      });
     }
 
-    // Type filter
-    if (typeFilter !== 'all') {
-      filtered = filtered.filter(estate => estate.type === typeFilter);
-    }
+    console.log('Filtreleme sonrası emlaklar:', filtered);
 
     // Sort
     switch (sortBy) {
@@ -73,7 +81,7 @@ const EstateList = () => {
     }
 
     setFilteredEstates(filtered);
-  }, [estates, searchTerm, activeFilter, typeFilter, sortBy]);
+  }, [estates, searchTerm, activeFilter, sortBy]);
 
   const fetchEstates = async () => {
     try {
@@ -82,7 +90,6 @@ const EstateList = () => {
       console.log('API Response:', response);
       
       if (response && response.isSuccess) {
-        console.log('Estates data:', response.result);
         if (Array.isArray(response.result)) {
           const formattedEstates = response.result.map(estate => {
             let imageUrl = '';
@@ -101,24 +108,23 @@ const EstateList = () => {
               image: imageUrl || '/images/placeholder.jpg'
             };
           });
+          console.log('Formatlanmış emlaklar:', formattedEstates);
           setEstates(formattedEstates);
           setFilteredEstates(formattedEstates);
           setError(null);
         } else {
-          console.error('Invalid estates data format:', response.result);
-          setError('Emlak verileri geçersiz formatta. Lütfen daha sonra tekrar deneyin.');
+          setError('Emlak verileri geçersiz formatta.');
           setEstates([]);
           setFilteredEstates([]);
         }
       } else {
-        console.error('API Error:', response?.error || 'Bilinmeyen hata');
-        setError(response?.error || 'Emlak verileri alınamadı. Lütfen daha sonra tekrar deneyin.');
+        setError('Emlak verileri alınamadı.');
         setEstates([]);
         setFilteredEstates([]);
       }
     } catch (err) {
       console.error('Error fetching estates:', err);
-      setError('Emlak verileri alınamadı. Lütfen daha sonra tekrar deneyin.');
+      setError('Emlak verileri alınamadı.');
       setEstates([]);
       setFilteredEstates([]);
     } finally {
@@ -130,12 +136,9 @@ const EstateList = () => {
     setSortBy(e.target.value);
   };
 
-  const handleFilter = (status) => {
-    setActiveFilter(status);
-  };
-
-  const handleTypeFilter = (type) => {
-    setTypeFilter(type);
+  const handleFilter = (type) => {
+    console.log('Filtre seçildi:', type);
+    setActiveFilter(type);
   };
 
   const handleSearch = (term) => {
@@ -154,11 +157,12 @@ const EstateList = () => {
     <div className="page-wrapper">
       <Banner 
         onSearch={handleSearch}
-        title="Emlak Açık Artırmaları"
+        title="Emlak"
         description="Hayalinizdeki evi en iyi fiyatla yakalayın."
         backgroundImage="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg"
         overlayOpacity={0.5}
         searchPlaceholder="Adres, emlak tipi veya özellik ile arama yapın..."
+        category="estate"
       />
       
       <div className="content-wrapper">
@@ -173,73 +177,56 @@ const EstateList = () => {
           </div>
           
           <div className="filter-section">
-            <h3>Durum</h3>
+            <h3>Emlak Tipi</h3>
             <div className="filter-buttons">
               <button
-                className={activeFilter === 'all' ? 'active' : ''}
+                className={`filter-button ${activeFilter === 'all' ? 'active' : ''}`}
                 onClick={() => handleFilter('all')}
               >
                 Tümü
               </button>
-              <button
-                className={activeFilter === 'active' ? 'active' : ''}
-                onClick={() => handleFilter('active')}
-              >
-                Aktif
-              </button>
-              <button
-                className={activeFilter === 'inactive' ? 'active' : ''}
-                onClick={() => handleFilter('inactive')}
-              >
-                Pasif
-              </button>
-            </div>
-          </div>
-
-          <div className="filter-section">
-            <h3>Emlak Tipi</h3>
-            <div className="filter-buttons">
-              <button
-                className={typeFilter === 'all' ? 'active' : ''}
-                onClick={() => handleTypeFilter('all')}
-              >
-                Tümü
-              </button>
-              <button
-                className={typeFilter === 'villa' ? 'active' : ''}
-                onClick={() => handleTypeFilter('villa')}
-              >
-                Villa
-              </button>
-              <button
-                className={typeFilter === 'apartment' ? 'active' : ''}
-                onClick={() => handleTypeFilter('apartment')}
-              >
-                Daire
-              </button>
-              <button
-                className={typeFilter === 'land' ? 'active' : ''}
-                onClick={() => handleTypeFilter('land')}
-              >
-                Arsa
-              </button>
-              <button
-                className={typeFilter === 'commercial' ? 'active' : ''}
-                onClick={() => handleTypeFilter('commercial')}
-              >
-                Ticari
-              </button>
+              {(showAllFilters ? estateTypes : estateTypes.slice(0, 4)).map(type => (
+                <button
+                  key={type}
+                  className={`filter-button ${activeFilter === type ? 'active' : ''}`}
+                  onClick={() => handleFilter(type)}
+                >
+                  {type}
+                </button>
+              ))}
+              {estateTypes.length > 4 && (
+                <button
+                  className="filter-button show-more-button"
+                  onClick={() => setShowAllFilters(!showAllFilters)}
+                >
+                  {showAllFilters ? 'Daha Az Göster' : 'Daha Fazla Göster'}
+                  <i className={`fas fa-chevron-${showAllFilters ? 'up' : 'down'}`}></i>
+                </button>
+              )}
             </div>
           </div>
         </div>
         
         {filteredEstates.length > 0 ? (
-          <div className="estates-grid">
-            {filteredEstates.map(estate => (
-              <Link to={`/estate/${estate.estateId}`} key={estate.estateId}>
-                <EstateCard estate={estate} />
-              </Link>
-            ))}
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <div
+              className="estates-grid"
+              style={{
+                maxWidth: '1200px',
+                width: '100%',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '2rem',
+                padding: '0 0 2rem 0',
+                boxSizing: 'border-box'
+              }}
+            >
+              {filteredEstates.map(estate => (
+                <Link to={`/estate/${estate.estateId}`} key={estate.estateId}>
+                  <EstateCard estate={estate} />
+                </Link>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="no-results">
@@ -251,4 +238,4 @@ const EstateList = () => {
   );
 };
 
-export default EstateList; 
+export default EstateList;

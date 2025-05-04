@@ -3,6 +3,27 @@ import MusicCard from '../MusicCard/MusicCard';
 import api from '../../services/api';
 import './MusicList.css';
 import Banner from '../Banner/Banner';
+import { Link } from 'react-router-dom';
+
+const brandList = [
+  'Korg',
+  'Shure',
+  'Sennheiser',
+  'Mackie',
+  'Tama',
+  'Roland',
+  'Gretsch',
+  'Vox',
+  'Martin',
+  'Peavey',
+  'Line 6',
+  'Pearl',
+  'Yamaha',
+  'Fender',
+  'Bose',
+  'Casio',
+  'Ibanez',
+];
 
 const MusicList = () => {
   const [instruments, setInstruments] = useState([]);
@@ -11,13 +32,12 @@ const MusicList = () => {
   const [filteredInstruments, setFilteredInstruments] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showAllFilters, setShowAllFilters] = useState(false);
 
   useEffect(() => {
     const fetchInstruments = async () => {
       try {
         const data = await api.getMusicalInstruments();
-        console.log("API'den Gelen Veri:", data);
-
         if (data.isSuccess && Array.isArray(data.result)) {
           const formattedInstruments = data.result.map(instrument => {
             let imageUrl = '';
@@ -30,7 +50,6 @@ const MusicList = () => {
                 imageUrl = `https://localhost:7282/Images/${instrument.image}`;
               }
             }
-            
             return {
               ...instrument,
               image: imageUrl || '/images/placeholder.jpg'
@@ -39,54 +58,35 @@ const MusicList = () => {
           setInstruments(formattedInstruments);
           setFilteredInstruments(formattedInstruments);
         } else {
-          console.error("Beklenmeyen veri formatı:", data);
+          setInstruments([]);
+          setFilteredInstruments([]);
         }
-
         setLoading(false);
       } catch (error) {
-        console.error('Enstrümanlar yüklenirken hata oluştu:', error);
+        setInstruments([]);
+        setFilteredInstruments([]);
         setLoading(false);
       }
     };
-
     fetchInstruments();
   }, []);
 
   useEffect(() => {
     let filtered = [...instruments];
-
     // Search filter
     if (searchTerm) {
-      console.log("Arama terimi:", searchTerm);
+      const searchTermLower = searchTerm.toLowerCase();
       filtered = filtered.filter(instrument => {
-        const searchTermLower = searchTerm.toLowerCase();
-        
-        // İsim kontrolü
         const nameMatch = (instrument.name || '').toLowerCase().includes(searchTermLower);
-        
-        // Marka kontrolü
         const brandMatch = (instrument.brand || '').toLowerCase().includes(searchTermLower);
-        
-        // Açıklama kontrolü
         const descMatch = (instrument.description || '').toLowerCase().includes(searchTermLower);
-        
-        console.log("Enstrüman:", instrument.name, "Eşleşme:", { 
-          nameMatch, 
-          brandMatch, 
-          descMatch
-        });
-        
         return nameMatch || brandMatch || descMatch;
       });
     }
-
     // Brand filter
     if (activeFilter !== 'all') {
-      filtered = filtered.filter(instrument => 
-        instrument.brand.toLowerCase().includes(activeFilter.toLowerCase())
-      );
+      filtered = filtered.filter(instrument => (instrument.brand || '').toLowerCase() === activeFilter.toLowerCase());
     }
-
     // Sort
     switch (sortBy) {
       case 'price-asc':
@@ -101,7 +101,6 @@ const MusicList = () => {
       default:
         break;
     }
-
     setFilteredInstruments(filtered);
   }, [instruments, searchTerm, activeFilter, sortBy]);
 
@@ -141,7 +140,6 @@ const MusicList = () => {
             <option value="name-asc">İsim (A-Z)</option>
           </select>
         </div>
-        
         <div className="filter-buttons">
           <button 
             className={`filter-button ${activeFilter === 'all' ? 'active' : ''}`}
@@ -149,31 +147,46 @@ const MusicList = () => {
           >
             Tümü
           </button>
-          <button 
-            className={`filter-button ${activeFilter === 'yamaha' ? 'active' : ''}`}
-            onClick={() => handleFilter('yamaha')}
-          >
-            Yamaha
-          </button>
-          <button 
-            className={`filter-button ${activeFilter === 'fender' ? 'active' : ''}`}
-            onClick={() => handleFilter('fender')}
-          >
-            Fender
-          </button>
-          <button 
-            className={`filter-button ${activeFilter === 'gibson' ? 'active' : ''}`}
-            onClick={() => handleFilter('gibson')}
-          >
-            Gibson
-          </button>
+          {(showAllFilters ? brandList : brandList.slice(0, 4)).map(brand => (
+            <button
+              key={brand}
+              className={`filter-button ${activeFilter === brand ? 'active' : ''}`}
+              onClick={() => handleFilter(brand)}
+            >
+              {brand}
+            </button>
+          ))}
+          {brandList.length > 4 && (
+            <button 
+              className={`show-more-button ${showAllFilters ? 'expanded' : ''}`}
+              onClick={() => setShowAllFilters(!showAllFilters)}
+            >
+              {showAllFilters ? 'Daha Az Göster' : 'Daha Fazla Göster'}
+              <i className={`fas fa-chevron-${showAllFilters ? 'up' : 'down'}`}></i>
+            </button>
+          )}
         </div>
 
         {filteredInstruments.length > 0 ? (
-          <div className="instruments-grid">
-            {filteredInstruments.map(instrument => (
-              <MusicCard key={instrument.instrumentId} instrument={instrument} />
-            ))}
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <div
+              className="instruments-grid"
+              style={{
+                maxWidth: '1400px',
+                width: '100%',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '2rem',
+                padding: '0 0 2rem 0',
+                boxSizing: 'border-box'
+              }}
+            >
+              {filteredInstruments.map(instrument => (
+                <Link to={`/music/${instrument.instrumentId}`} key={instrument.instrumentId}>
+                  <MusicCard instrument={instrument} />
+                </Link>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="no-results">

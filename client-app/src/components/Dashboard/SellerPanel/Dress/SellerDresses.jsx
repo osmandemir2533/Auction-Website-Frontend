@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../../context/AuthContext';
 import { api } from '../../../../services/api';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import SellerCreateDress from './SellerCreateDress';
 import './SellerDresses.css';
 
 const SellerDresses = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [dresses, setDresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -114,7 +116,7 @@ const SellerDresses = () => {
 
       <div className="dress-list">
         {dresses.map(dress => (
-          <div key={dress.dressId} className="dress-card">
+          <div key={dress.dressId} className="dress-card" onClick={() => navigate(`/dress/${dress.dressId}`)}>
             <div className="dress-image">
               <img src={dress.image} alt={dress.brand} />
             </div>
@@ -133,13 +135,13 @@ const SellerDresses = () => {
             <div className="dress-actions">
               <button 
                 className="edit-button"
-                onClick={() => handleEdit(dress)}
+                onClick={(e) => { e.stopPropagation(); handleEdit(dress); }}
               >
                 <FaEdit />
               </button>
               <button 
                 className="delete-button"
-                onClick={() => handleDelete(dress.dressId)}
+                onClick={(e) => { e.stopPropagation(); handleDelete(dress.dressId); }}
               >
                 <FaTrash />
               </button>

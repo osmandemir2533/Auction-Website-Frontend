@@ -60,23 +60,30 @@
 
 .social-links {
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 1.2rem;
+  margin-top: 1.2rem;
 }
 
 .social-links a {
   color: rgba(255, 255, 255, 0.8);
   font-size: 1.2rem;
   transition: all 0.2s ease;
-  padding: 0.5rem;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
 }
 
 .social-links a:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
+}
+
+.social-links a svg {
+  width: 28px;
+  height: 28px;
+  fill: #fff;
+  transition: fill 0.2s;
+}
+
+.social-links a:hover svg {
+  fill: #0a66c2; /* LinkedIn mavisi veya istediğin renk */
 }
 
 .footer-bottom {

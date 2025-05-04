@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrash, FaEdit, FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 import { api } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 import './Estate.css';
 
 const Estate = () => {
+  const navigate = useNavigate();
   const [estates, setEstates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -257,7 +259,7 @@ const Estate = () => {
 
       <div className="estate-list">
         {estates && estates.map(estate => (
-          <div key={estate.estateId} className="estate-card">
+          <div key={estate.estateId} className="estate-card" onClick={() => navigate(`/estate/${estate.estateId}`)}>
             <div className="estate-image">
               <img src={estate.image} alt={estate.title} />
             </div>
@@ -276,13 +278,19 @@ const Estate = () => {
             <div className="estate-actions">
               <button 
                 className="edit-button"
-                onClick={() => handleEdit(estate)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEdit(estate);
+                }}
               >
                 <FaEdit />
               </button>
               <button 
                 className="delete-button"
-                onClick={() => handleDelete(estate.estateId)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(estate.estateId);
+                }}
               >
                 <FaTrash />
               </button>

@@ -3,6 +3,17 @@ import DressCard from '../DressCard/DressCard';
 import { api } from '../../services/api';
 import './DressList.css';
 import Banner from '../Banner/Banner';
+import { Link } from 'react-router-dom';
+
+const dressTypes = [
+  'Elbise',
+  'Ceket',
+  'Kot Ceket',
+  'Etek',
+  'Pantolon',
+  'Gömlek',
+  'Mont',
+];
 
 const DressList = () => {
   const [dresses, setDresses] = useState([]);
@@ -12,6 +23,7 @@ const DressList = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
+  const [showAllFilters, setShowAllFilters] = useState(false);
 
   const fetchDresses = useCallback(async () => {
     try {
@@ -38,7 +50,6 @@ const DressList = () => {
             endDate: dress.endDate || null
           };
         });
-        
         setDresses(formattedDresses);
       } else {
         setError('Giyim ürünleri yüklenirken bir hata oluştu');
@@ -62,44 +73,24 @@ const DressList = () => {
 
     // Search filter
     if (searchTerm) {
-      console.log("Arama terimi:", searchTerm);
+      const searchTermLower = searchTerm.toLowerCase();
       filtered = filtered.filter(dress => {
-        const searchTermLower = searchTerm.toLowerCase();
-        
-        // Marka kontrolü
-        const brandMatch = (dress.brand || '').toLowerCase().includes(searchTermLower);
-        
         // Tür kontrolü
         const typeMatch = (dress.type || '').toLowerCase().includes(searchTermLower);
-        
         // Materyal kontrolü
         const materialMatch = (dress.material || '').toLowerCase().includes(searchTermLower);
-        
         // Renk kontrolü
         const colorMatch = (dress.color || '').toLowerCase().includes(searchTermLower);
-        
         // Ek bilgi kontrolü
         const infoMatch = (dress.additionalInformation || '').toLowerCase().includes(searchTermLower);
-        
-        console.log("Elbise:", dress.brand, "Eşleşme:", { 
-          brandMatch, 
-          typeMatch, 
-          materialMatch,
-          colorMatch,
-          infoMatch
-        });
-        
-        return brandMatch || typeMatch || materialMatch || colorMatch || infoMatch;
+        return typeMatch || materialMatch || colorMatch || infoMatch;
       });
     }
 
-    // Brand filter
+    // Type filter
     if (activeFilter !== 'all') {
-      console.log("Aktif filtre:", activeFilter);
       filtered = filtered.filter(dress => {
-        const brandMatch = (dress.brand || '').toLowerCase().includes(activeFilter.toLowerCase());
-        console.log("Elbise:", dress.brand, "Marka eşleşmesi:", brandMatch);
-        return brandMatch;
+        return (dress.type || '').toLowerCase() === activeFilter.toLowerCase();
       });
     }
 
@@ -111,14 +102,10 @@ const DressList = () => {
       case 'price-desc':
         filtered.sort((a, b) => (b.price || 0) - (a.price || 0));
         break;
-      case 'brand':
-        filtered.sort((a, b) => (a.brand || '').localeCompare(b.brand || ''));
-        break;
       default:
         break;
     }
 
-    console.log("Filtrelenmiş elbiseler:", filtered);
     setFilteredDresses(filtered);
   }, [dresses, searchTerm, activeFilter, sortBy]);
 
@@ -126,13 +113,11 @@ const DressList = () => {
     setSortBy(e.target.value);
   };
 
-  const handleFilter = (brand) => {
-    console.log("Filtre değişti:", brand);
-    setActiveFilter(brand);
+  const handleFilter = (type) => {
+    setActiveFilter(type);
   };
 
   const handleSearch = (term) => {
-    console.log("Arama terimi değişti:", term);
     setSearchTerm(term);
   };
 
@@ -144,11 +129,11 @@ const DressList = () => {
     <div className="page-wrapper">
       <Banner 
         onSearch={handleSearch}
-        title="Elbise Açık Artırmaları"
-        description="En şık elbiseler burada!"
+        title="Kıyafetler"
+        description="En şık kıyafetler burada!"
         backgroundImage="https://images.pexels.com/photos/994523/pexels-photo-994523.jpeg"
         overlayOpacity={0.5}
-        searchPlaceholder="Marka, tür veya materyal ile arama yapın..."
+        searchPlaceholder="Tür, materyal veya renk ile arama yapın..."
       />
       
       <div className="content-wrapper">
@@ -157,7 +142,6 @@ const DressList = () => {
           <select className="sort-select" value={sortBy} onChange={handleSort}>
             <option value="price-asc">Fiyat (Düşükten Yükseğe)</option>
             <option value="price-desc">Fiyat (Yüksekten Düşüğe)</option>
-            <option value="brand">Marka (A-Z)</option>
           </select>
         </div>
         <div className="filter-buttons">
@@ -167,31 +151,46 @@ const DressList = () => {
           >
             Tümü
           </button>
-          <button 
-            className={`filter-button ${activeFilter === 'zara' ? 'active' : ''}`}
-            onClick={() => handleFilter('zara')}
-          >
-            Zara
-          </button>
-          <button 
-            className={`filter-button ${activeFilter === 'hm' ? 'active' : ''}`}
-            onClick={() => handleFilter('h&m')}
-          >
-            H&M
-          </button>
-          <button 
-            className={`filter-button ${activeFilter === 'mango' ? 'active' : ''}`}
-            onClick={() => handleFilter('mango')}
-          >
-            Mango
-          </button>
+          {(showAllFilters ? dressTypes : dressTypes.slice(0, 4)).map(type => (
+            <button
+              key={type}
+              className={`filter-button ${activeFilter === type ? 'active' : ''}`}
+              onClick={() => handleFilter(type)}
+            >
+              {type}
+            </button>
+          ))}
+          {dressTypes.length > 4 && (
+            <button 
+              className={`show-more-button ${showAllFilters ? 'expanded' : ''}`}
+              onClick={() => setShowAllFilters(!showAllFilters)}
+            >
+              {showAllFilters ? 'Daha Az Göster' : 'Daha Fazla Göster'}
+              <i className={`fas fa-chevron-${showAllFilters ? 'up' : 'down'}`}></i>
+            </button>
+          )}
         </div>
 
         {filteredDresses.length > 0 ? (
-          <div className="dresses-grid">
-            {filteredDresses.map(dress => (
-              <DressCard key={dress.dressId} dress={dress} />
-            ))}
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <div
+              className="dresses-grid"
+              style={{
+                maxWidth: '1400px',
+                width: '100%',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '2rem',
+                padding: '0 0 2rem 0',
+                boxSizing: 'border-box'
+              }}
+            >
+              {filteredDresses.map(dress => (
+                <Link to={`/dress/${dress.dressId}`} key={dress.dressId}>
+                  <DressCard dress={dress} />
+                </Link>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="no-results">
@@ -203,4 +202,4 @@ const DressList = () => {
   );
 };
 
-export default DressList; 
+export default DressList;

@@ -11,6 +11,7 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import './App.css';
 import HomePage from './components/HomePage/HomePage';
+import Auctions from './emptypage/auctions';
 
 import DashboardRouter from './components/Dashboard/DashboardRouter';
 import AdminPanel from './Admin/AdminPanel';
@@ -51,7 +52,7 @@ const App = () => {
             <Route path="/estate/:id" element={<EstateDetail />} />
             <Route path="/electronic" element={<ElectronicList />} />
             <Route path="/electronic/:id" element={<ElectronicDetail />} />
-            <Route path="/auctions" element={<MusicList />} />
+            <Route path="/auctions" element={<Auctions />} />
           </Routes>
           <Footer />
           <ToastContainer />

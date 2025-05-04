@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../../context/AuthContext';
 import { api } from '../../../../services/api';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import SellerCreateElectronic from './SellerCreateElectronic';
 import SellerUpdateElectronic from './SellerUpdateElectronic';
 import './SellerElectronics.css';
 
 const SellerElectronics = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [electronics, setElectronics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -119,7 +121,7 @@ const SellerElectronics = () => {
 
       <div className="electronics-list">
         {electronics.map(electronic => (
-          <div key={electronic.electronicId} className="electronic-card">
+          <div key={electronic.electronicId} className="electronic-card" onClick={() => navigate(`/electronic/${electronic.electronicId}`)}>
             <div className="electronic-image">
               <img src={electronic.image} alt={`${electronic.brand} ${electronic.model}`} />
             </div>
@@ -136,13 +138,13 @@ const SellerElectronics = () => {
             <div className="electronic-actions">
               <button 
                 className="edit-button"
-                onClick={() => handleEdit(electronic)}
+                onClick={(e) => { e.stopPropagation(); handleEdit(electronic); }}
               >
                 <FaEdit />
               </button>
               <button 
                 className="delete-button"
-                onClick={() => handleDelete(electronic.electronicId)}
+                onClick={(e) => { e.stopPropagation(); handleDelete(electronic.electronicId); }}
               >
                 <FaTrash />
               </button>

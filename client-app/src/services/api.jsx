@@ -542,7 +542,7 @@ export const api = {
   deleteEstate: async (id) => {
     try {
       console.log('Silinecek emlak ID:', id);
-      const response = await axios.delete(`${BASE_URL}/Estate/DeleteEstate/${id}`);
+      const response = await axios.delete(`${BASE_URL}/Estate/Remove/Estate/${id}`);
       console.log('API Silme Yanıtı:', response.data);
       return response.data;
     } catch (error) {

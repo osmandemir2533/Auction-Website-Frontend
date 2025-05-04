@@ -65,9 +65,17 @@ const EstateCard = ({ estate }) => {
           </span>
         </div>
 
-        <button className="bid-button">
-          Teklif Ver
-        </button>
+        <div className="button-container">
+          <div 
+            className="bid-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.location.href = `/estate/${estate.estateId}`;
+            }}
+          >
+            Teklif Ver
+          </div>
+        </div>
       </div>
     </div>
   );

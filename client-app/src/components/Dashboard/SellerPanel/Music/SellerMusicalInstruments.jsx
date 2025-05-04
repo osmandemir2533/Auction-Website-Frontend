@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { FaTrash, FaEdit } from 'react-icons/fa';
 import { api } from '../../../../services/api';
 import { useAuth } from '../../../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import SellerCreateMusicalInstrument from './SellerCreateMusicalInstrument';
 import './SellerMusicalInstruments.css';
 
 const SellerMusicalInstruments = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [instruments, setInstruments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -115,7 +117,7 @@ const SellerMusicalInstruments = () => {
 
       <div className="instruments-list">
         {instruments.map(instrument => (
-          <div key={instrument.musicalInstrumentId} className="instrument-card">
+          <div key={instrument.musicalInstrumentId} className="instrument-card" onClick={() => navigate(`/music/${instrument.musicalInstrumentId}`)}>
             <div className="instrument-image">
               <img src={instrument.image} alt={instrument.name} />
             </div>
@@ -132,13 +134,13 @@ const SellerMusicalInstruments = () => {
             <div className="instrument-actions">
               <button 
                 className="edit-button"
-                onClick={() => handleEdit(instrument)}
+                onClick={(e) => { e.stopPropagation(); handleEdit(instrument); }}
               >
                 <FaEdit />
               </button>
               <button 
                 className="delete-button"
-                onClick={() => handleDelete(instrument.musicalInstrumentId)}
+                onClick={(e) => { e.stopPropagation(); handleDelete(instrument.musicalInstrumentId); }}
               >
                 <FaTrash />
               </button>

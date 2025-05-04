@@ -15,10 +15,7 @@ const AdminPanel = () => {
     { id: 'dresses', name: 'Giyim', icon: <FaTshirt />, component: <Dress /> },
     { id: 'instruments', name: 'Müzik Aletleri', icon: <FaMusic />, component: <MusicalInstrument /> },
     { id: 'electronics', name: 'Elektronik', icon: <FaLaptop />, component: <Electronic /> },
-    { id: 'home', name: 'Gayrimenkul', icon: <FaHome />, component: <Estate /> },
-    { id: 'books', name: 'Kitap & Dergi', icon: <FaBook />, component: <div className="coming-soon">Yakında...</div> },
-    { id: 'games', name: 'Oyun & Hobi', icon: <FaGamepad />, component: <div className="coming-soon">Yakında...</div> },
-    { id: 'tools', name: 'Yapı Market', icon: <FaTools />, component: <div className="coming-soon">Yakında...</div> }
+    { id: 'home', name: 'Gayrimenkul', icon: <FaHome />, component: <Estate /> }
   ];
 
   return (

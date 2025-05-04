@@ -2,15 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
+import { FaCar, FaMusic, FaLaptop, FaHome, FaTshirt, FaQuestionCircle } from 'react-icons/fa';
 import './Header.css';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const categories = [
+    { name: "Araçlar", path: "/vehicle", icon: <FaCar />, className: "vehicle-link" },
+    { name: "Müzik Aletleri", path: "/music", icon: <FaMusic />, className: "music-link" },
+    { name: "Elektronik", path: "/electronic", icon: <FaLaptop />, className: "electronic-link" },
+    { name: "Emlak", path: "/estate", icon: <FaHome />, className: "estate-link" },
+    { name: "Kıyafetler", path: "/dress", icon: <FaTshirt />, className: "dress-link" }
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,9 +73,21 @@ const Header = () => {
           </Link>
         </div>
         <nav className={`nav-menu ${isMenuOpen ? 'active' : ''}`}>
-          <Link to="/" className="nav-link">Ana Sayfa</Link>
-          <Link to="/auctions" className="nav-link">Açık Arttırmalar</Link>
-          <Link to="/how-it-works" className="nav-link">Nasıl Çalışır?</Link>
+          {categories.map((category, index) => (
+            <Link 
+              key={index} 
+              to={category.path} 
+              className={`nav-link category-link ${category.className}`}
+            >
+              <span className="category-icon">{category.icon}</span>
+              <span className="category-text">{category.name}</span>
+            </Link>
+          ))}
+          
+          <Link to="/how-it-works" className="nav-link how-it-works-link">
+            <span className="how-it-works-icon"><FaQuestionCircle /></span>
+            <span className="how-it-works-text">Nasıl Çalışır?</span>
+          </Link>
           
           {user ? (
             <div className="user-profile">

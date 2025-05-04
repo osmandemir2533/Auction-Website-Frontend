@@ -77,3 +77,14 @@
   text-align: center;
   color: #e74c3c;
 }
+
+.electronic-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.electronic-card-link:hover .electronic-card {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}

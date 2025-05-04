@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../../context/AuthContext';
 import { api } from '../../../../services/api';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import SellerCreateEstate from './SellerCreateEstate';
 import './SellerEstates.css';
 
 const SellerEstates = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [estates, setEstates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -114,7 +116,7 @@ const SellerEstates = () => {
 
       <div className="estate-list">
         {estates.map(estate => (
-          <div key={estate.estateId} className="estate-card">
+          <div key={estate.estateId} className="estate-card" onClick={() => navigate(`/estate/${estate.estateId}`)}>
             <div className="estate-image">
               <img src={estate.image} alt={estate.title} />
             </div>
@@ -133,13 +135,13 @@ const SellerEstates = () => {
             <div className="estate-actions">
               <button 
                 className="edit-button"
-                onClick={() => handleEdit(estate)}
+                onClick={(e) => { e.stopPropagation(); handleEdit(estate); }}
               >
                 <FaEdit />
               </button>
               <button 
                 className="delete-button"
-                onClick={() => handleDelete(estate.estateId)}
+                onClick={(e) => { e.stopPropagation(); handleDelete(estate.estateId); }}
               >
                 <FaTrash />
               </button>

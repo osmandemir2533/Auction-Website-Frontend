@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrash, FaEdit, FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 import { api } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 import './Dress.css';
 
 const Dress = () => {
+  const navigate = useNavigate();
   const [dresses, setDresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -275,7 +277,7 @@ const Dress = () => {
 
       <div className="dress-list">
         {dresses && dresses.map(dress => (
-          <div key={dress.dressId} className="dress-card">
+          <div key={dress.dressId} className="dress-card" onClick={() => navigate(`/dress/${dress.dressId}`)}>
             <div className="dress-image">
               <img src={dress.image} alt={dress.brand} />
             </div>
@@ -294,13 +296,19 @@ const Dress = () => {
             <div className="dress-actions">
               <button 
                 className="edit-button"
-                onClick={() => handleEdit(dress)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEdit(dress);
+                }}
               >
                 <FaEdit />
               </button>
               <button 
                 className="delete-button"
-                onClick={() => handleDelete(dress.dressId)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(dress.dressId);
+                }}
               >
                 <FaTrash />
               </button>

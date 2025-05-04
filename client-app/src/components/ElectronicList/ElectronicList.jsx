@@ -3,6 +3,24 @@ import ElectronicCard from '../ElectronicCard/ElectronicCard';
 import api from '../../services/api';
 import './ElectronicList.css';
 import Banner from '../Banner/Banner';
+import { Link } from 'react-router-dom';
+
+const brandList = [
+  'Apple',
+  'Samsung',
+  'Sony',
+  'Microsoft',
+  'Dell',
+  'HP',
+  'Lenovo',
+  'Canon',
+  'Bose',
+  'GoPro',
+  'Asus',
+  'Garmin',
+  'Razer',
+  'LG',
+];
 
 const ElectronicList = () => {
   const [electronics, setElectronics] = useState([]);
@@ -10,62 +28,73 @@ const ElectronicList = () => {
   const [sortBy, setSortBy] = useState('price-asc');
   const [filteredElectronics, setFilteredElectronics] = useState([]);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showAllFilters, setShowAllFilters] = useState(false);
 
   useEffect(() => {
     const fetchElectronics = async () => {
       try {
         const data = await api.getElectronics();
-        console.log("API'den Gelen Veri:", data);
-
         if (data.isSuccess && Array.isArray(data.result)) {
           setElectronics(data.result);
           setFilteredElectronics(data.result);
         } else {
-          console.error("Beklenmeyen veri formatı:", data);
+          setElectronics([]);
+          setFilteredElectronics([]);
         }
-
         setLoading(false);
       } catch (error) {
-        console.error('Elektronik ürünler yüklenirken hata oluştu:', error);
+        setElectronics([]);
+        setFilteredElectronics([]);
         setLoading(false);
       }
     };
-
     fetchElectronics();
   }, []);
 
-  const handleSort = (e) => {
-    const value = e.target.value;
-    setSortBy(value);
-    let sorted = [...filteredElectronics];
-
-    switch (value) {
+  useEffect(() => {
+    let filtered = [...electronics];
+    // Search filter
+    if (searchTerm) {
+      const searchTermLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(electronic => {
+        const brandMatch = (electronic.brand || '').toLowerCase().includes(searchTermLower);
+        const modelMatch = (electronic.model || '').toLowerCase().includes(searchTermLower);
+        const descMatch = (electronic.additionalInformation || '').toLowerCase().includes(searchTermLower);
+        return brandMatch || modelMatch || descMatch;
+      });
+    }
+    // Brand filter
+    if (activeFilter !== 'all') {
+      filtered = filtered.filter(electronic => (electronic.brand || '').toLowerCase() === activeFilter.toLowerCase());
+    }
+    // Sort
+    switch (sortBy) {
       case 'price-asc':
-        sorted.sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case 'price-desc':
-        sorted.sort((a, b) => b.price - a.price);
+        filtered.sort((a, b) => b.price - a.price);
         break;
       case 'year-desc':
-        sorted.sort((a, b) => b.manufacturingYear - a.manufacturingYear);
+        filtered.sort((a, b) => b.manufacturingYear - a.manufacturingYear);
         break;
       default:
         break;
     }
+    setFilteredElectronics(filtered);
+  }, [electronics, searchTerm, activeFilter, sortBy]);
 
-    setFilteredElectronics(sorted);
+  const handleSort = (e) => {
+    setSortBy(e.target.value);
   };
 
-  const handleFilter = (category) => {
-    setActiveFilter(category);
-    if (category === 'all') {
-      setFilteredElectronics(electronics);
-    } else {
-      const filtered = electronics.filter(electronic => 
-        electronic.category.toLowerCase() === category.toLowerCase()
-      );
-      setFilteredElectronics(filtered);
-    }
+  const handleFilter = (brand) => {
+    setActiveFilter(brand);
+  };
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
   };
 
   if (loading) {
@@ -75,11 +104,13 @@ const ElectronicList = () => {
   return (
     <div className="page-wrapper">
       <Banner 
-        onSearch={(term) => console.log(term)} 
-        title="Elektronik Ürün Açık Artırmaları"
+        onSearch={handleSearch}
+        title="Elektronik Ürünler"
         description="En yeni elektronik ürünleri uygun fiyatlarla keşfedin."
         backgroundImage="https://images.pexels.com/photos/1714208/pexels-photo-1714208.jpeg"
         overlayOpacity={0.5}
+        searchPlaceholder="Marka, model veya özellik ile arama yapın..."
+        category="electronic"
       />
       
       <div className="content-wrapper">
@@ -99,48 +130,51 @@ const ElectronicList = () => {
             >
               Tümü
             </button>
-            <button 
-              className={`filter-button ${activeFilter === 'telefon' ? 'active' : ''}`}
-              onClick={() => handleFilter('telefon')}
-            >
-              Telefon
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'laptop' ? 'active' : ''}`}
-              onClick={() => handleFilter('laptop')}
-            >
-              Laptop
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'tablet' ? 'active' : ''}`}
-              onClick={() => handleFilter('tablet')}
-            >
-              Tablet
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'televizyon' ? 'active' : ''}`}
-              onClick={() => handleFilter('televizyon')}
-            >
-              Televizyon
-            </button>
-            <button 
-              className={`filter-button ${activeFilter === 'konsol' ? 'active' : ''}`}
-              onClick={() => handleFilter('konsol')}
-            >
-              Oyun Konsolu
-            </button>
+            {(showAllFilters ? brandList : brandList.slice(0, 4)).map(brand => (
+              <button
+                key={brand}
+                className={`filter-button ${activeFilter === brand ? 'active' : ''}`}
+                onClick={() => handleFilter(brand)}
+              >
+                {brand}
+              </button>
+            ))}
+            {brandList.length > 4 && (
+              <button 
+                className={`show-more-button ${showAllFilters ? 'expanded' : ''}`}
+                onClick={() => setShowAllFilters(!showAllFilters)}
+              >
+                {showAllFilters ? 'Daha Az Göster' : 'Daha Fazla Göster'}
+                <i className={`fas fa-chevron-${showAllFilters ? 'up' : 'down'}`}></i>
+              </button>
+            )}
           </div>
         </div>
         
         {filteredElectronics.length > 0 ? (
-          <div className="electronics-grid">
-            {filteredElectronics.map(electronic => (
-              <ElectronicCard key={electronic.electronicId} electronic={electronic} />
-            ))}
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <div
+              className="electronics-grid"
+              style={{
+                maxWidth: '1400px',
+                width: '100%',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '2rem',
+                padding: '0 0 2rem 0',
+                boxSizing: 'border-box'
+              }}
+            >
+              {filteredElectronics.map(electronic => (
+                <Link to={`/electronic/${electronic.electronicId}`} key={electronic.electronicId}>
+                  <ElectronicCard electronic={electronic} />
+                </Link>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="no-results">
-            Seçilen kriterlere uygun ürün bulunamadı.
+            {searchTerm ? 'Arama kriterlerine uygun ürün bulunamadı.' : 'Henüz hiç elektronik ürün ilanı bulunmamaktadır.'}
           </div>
         )}
       </div>

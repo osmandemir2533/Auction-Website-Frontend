@@ -3,6 +3,25 @@ import VehicleCard from '../VehicleCard/VehicleCard';
 import api from '../../services/api';
 import './VehicleList.css';
 import Banner from '../Banner/Banner';
+import { Link } from 'react-router-dom';
+
+const brandList = [
+  'McLaren 720S',
+  'Koenigsegg Jesko',
+  'Ferrari SF90 Stradale',
+  'Pagani Huayra',
+  'Lexus LC 500',
+  'Ford Mustang Shelby GT500',
+  'Porsche Cayman GT4',
+  'TOGG T10X',
+  'Honda Civic',
+  'Tesla Model S',
+  'Audi R8',
+  'Mercedes-AMG GT',
+  'Nissan GT-R',
+  'Bugatti Chiron',
+  'Ferrari',
+];
 
 const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -12,6 +31,7 @@ const VehicleList = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
+  const [showAllFilters, setShowAllFilters] = useState(false);
 
   const fetchVehicles = useCallback(async () => {
     try {
@@ -38,7 +58,6 @@ const VehicleList = () => {
             endDate: vehicle.endDate || null
           };
         });
-        
         setVehicles(formattedVehicles);
         setFilteredVehicles(formattedVehicles);
       } else {
@@ -47,7 +66,6 @@ const VehicleList = () => {
       }
     } catch (err) {
       setError('Araçlar yüklenirken bir hata oluştu');
-      console.error('Error fetching vehicles:', err);
       setVehicles([]);
     } finally {
       setLoading(false);
@@ -63,38 +81,23 @@ const VehicleList = () => {
 
     // Search filter
     if (searchTerm) {
-      console.log("Arama terimi:", searchTerm);
+      const searchTermLower = searchTerm.toLowerCase();
       filtered = filtered.filter(vehicle => {
-        const searchTermLower = searchTerm.toLowerCase();
-        
         // Marka ve Model kontrolü
         const brandModelMatch = (vehicle.brandAndModel || '').toLowerCase().includes(searchTermLower);
-        
         // Üretim Yılı kontrolü
-        const yearMatch = vehicle.manufacturingYear.toString().includes(searchTerm);
-        
+        const yearMatch = (vehicle.manufacturingYear || '').toString().includes(searchTerm);
         // Renk kontrolü
         const colorMatch = (vehicle.color || '').toLowerCase().includes(searchTermLower);
-        
         // Ek bilgi kontrolü
         const infoMatch = (vehicle.additionalInformation || '').toLowerCase().includes(searchTermLower);
-        
-        console.log("Araç:", vehicle.brandAndModel, "Eşleşme:", { 
-          brandModelMatch, 
-          yearMatch, 
-          colorMatch,
-          infoMatch
-        });
-        
         return brandModelMatch || yearMatch || colorMatch || infoMatch;
       });
     }
 
     // Brand filter
     if (activeFilter !== 'all') {
-      filtered = filtered.filter(vehicle => 
-        vehicle.brandAndModel.toLowerCase().includes(activeFilter.toLowerCase())
-      );
+      filtered = filtered.filter(vehicle => (vehicle.brandAndModel || '').toLowerCase() === activeFilter.toLowerCase());
     }
 
     // Sort
@@ -135,7 +138,7 @@ const VehicleList = () => {
     <div className="page-wrapper">
       <Banner 
         onSearch={handleSearch}
-        title="Araç Açık Artırmaları"
+        title="Araçlar"
         description="Hayalinizdeki aracı en iyi fiyatla yakalayın."
         backgroundImage="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg"
         overlayOpacity={0.5}
@@ -159,30 +162,32 @@ const VehicleList = () => {
           >
             Tümü
           </button>
-          <button 
-            className={`filter-button ${activeFilter === 'bmw' ? 'active' : ''}`}
-            onClick={() => handleFilter('bmw')}
-          >
-            BMW
-          </button>
-          <button 
-            className={`filter-button ${activeFilter === 'mercedes' ? 'active' : ''}`}
-            onClick={() => handleFilter('mercedes')}
-          >
-            Mercedes
-          </button>
-          <button 
-            className={`filter-button ${activeFilter === 'audi' ? 'active' : ''}`}
-            onClick={() => handleFilter('audi')}
-          >
-            Audi
-          </button>
+          {(showAllFilters ? brandList : brandList.slice(0, 4)).map(brand => (
+            <button
+              key={brand}
+              className={`filter-button ${activeFilter === brand ? 'active' : ''}`}
+              onClick={() => handleFilter(brand)}
+            >
+              {brand}
+            </button>
+          ))}
+          {brandList.length > 4 && (
+            <button 
+              className={`show-more-button ${showAllFilters ? 'expanded' : ''}`}
+              onClick={() => setShowAllFilters(!showAllFilters)}
+            >
+              {showAllFilters ? 'Daha Az Göster' : 'Daha Fazla Göster'}
+              <i className={`fas fa-chevron-${showAllFilters ? 'up' : 'down'}`}></i>
+            </button>
+          )}
         </div>
 
         {filteredVehicles.length > 0 ? (
           <div className="vehicles-grid">
             {filteredVehicles.map(vehicle => (
-              <VehicleCard key={vehicle.vehicleId} vehicle={vehicle} />
+              <Link to={`/vehicle/${vehicle.vehicleId}`} key={vehicle.vehicleId}>
+                <VehicleCard vehicle={vehicle} />
+              </Link>
             ))}
           </div>
         ) : (
