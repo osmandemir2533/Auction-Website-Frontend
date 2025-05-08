@@ -12,21 +12,19 @@ import Register from './components/Auth/Register';
 import './App.css';
 import HomePage from './components/HomePage/HomePage';
 import Auctions from './emptypage/auctions';
-
 import DashboardRouter from './components/Dashboard/DashboardRouter';
 import AdminPanel from './Admin/AdminPanel';
 import SellerPanel from './components/Dashboard/SellerPanel/SellerPanel';
 import HowItWorks from './emptypage/howitworks';
 import DressList from './components/DressList/DressList';
 import DressDetail from './components/DressDetail/DressDetail';
-import MusicList from './components/MusicList/MusicList';  // Müzik Listesi
-import MusicDetail from './components/MusicDetail/MusicDetail';  // Müzik Detayı
+import MusicList from './components/MusicList/MusicList';
+import MusicDetail from './components/MusicDetail/MusicDetail';
 import EstateList from './components/EstateList/EstateList';
 import EstateDetail from './components/EstateDetail/EstateDetail';
 import ElectronicList from './components/ElectronicList/ElectronicList';
 import ElectronicDetail from './components/ElectronicDetail/ElectronicDetail';
-
-
+import NotFound404 from './emptypage/NotFound404';
 
 const App = () => {
   return (
@@ -46,13 +44,16 @@ const App = () => {
             <Route path="/dashboard" element={<DashboardRouter />} />
             <Route path="/dashboard/admin" element={<AdminPanel />} />
             <Route path="/dashboard/seller" element={<SellerPanel />} />
-            <Route path="/music/:id" element={<MusicDetail />} />
             <Route path="/music" element={<MusicList />} />
+            <Route path="/music/:id" element={<MusicDetail />} />
             <Route path="/estate" element={<EstateList />} />
             <Route path="/estate/:id" element={<EstateDetail />} />
             <Route path="/electronic" element={<ElectronicList />} />
             <Route path="/electronic/:id" element={<ElectronicDetail />} />
             <Route path="/auctions" element={<Auctions />} />
+            
+            {/* ✅ 404 Route - EN SONDA YER ALMALI */}
+            <Route path="*" element={<NotFound404 />} />
           </Routes>
           <Footer />
           <ToastContainer />
