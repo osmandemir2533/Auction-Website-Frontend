@@ -90,7 +90,7 @@ const MusicDetail = () => {
               <p>Bitiş Tarihi: {new Date(endTime).toLocaleString()}</p>
             </div>
 
-            <BidForm instrumentId={id} />
+            <BidForm itemId={id} currentPrice={price} itemType="Music" />
           </div>
         </div>
       </div>

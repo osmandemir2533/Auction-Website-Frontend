@@ -117,7 +117,7 @@ const ElectronicDetail = () => {
               )}
             </div>
 
-            <BidForm electronicId={id} currentPrice={price} />
+            <BidForm itemId={id} currentPrice={price} itemType="Electronic" />
           </div>
         </div>
       </div>
