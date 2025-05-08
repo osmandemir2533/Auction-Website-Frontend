@@ -25,6 +25,7 @@ import EstateDetail from './components/EstateDetail/EstateDetail';
 import ElectronicList from './components/ElectronicList/ElectronicList';
 import ElectronicDetail from './components/ElectronicDetail/ElectronicDetail';
 import NotFound404 from './emptypage/NotFound404';
+import AccessDenied from './HOC/AccessDenied';
 
 const App = () => {
   return (
@@ -51,6 +52,7 @@ const App = () => {
             <Route path="/electronic" element={<ElectronicList />} />
             <Route path="/electronic/:id" element={<ElectronicDetail />} />
             <Route path="/auctions" element={<Auctions />} />
+            <Route path="/accessDenied" element={<AccessDenied />} />
             
             {/* ✅ 404 Route - EN SONDA YER ALMALI */}
             <Route path="*" element={<NotFound404 />} />

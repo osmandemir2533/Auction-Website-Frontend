@@ -6,6 +6,7 @@ import MusicalInstrument from './MusicalInstrument/MusicalInstrument';
 import Electronic from './Electronic/Electronic';
 import './AdminPanel.css';
 import Estate from './Estate/Estate';
+import withAdminAuth from '../HOC/withAdminAuth';
 
 const AdminPanel = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -49,4 +50,4 @@ const AdminPanel = () => {
   );
 };
 
-export default AdminPanel;
+export default withAdminAuth(AdminPanel);
