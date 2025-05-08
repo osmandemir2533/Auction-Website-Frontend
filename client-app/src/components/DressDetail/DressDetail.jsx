@@ -101,7 +101,7 @@ const DressDetail = () => {
             <p>Bitiş Tarihi: {new Date(endTime).toLocaleString()}</p>
           </div>
 
-          <BidForm itemId={id} currentPrice={price} itemType="Dress" />
+          <BidForm itemId={id} currentPrice={price} itemType="Dress" auctionPrice={auctionPrice} />
         </div>
       </div>
     </div>

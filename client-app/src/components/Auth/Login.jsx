@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import './Auth.css';
 import { api } from "../../services/api";
-import { jwtDecode } from 'jwt-decode'; // ✅ Eksikti, eklendi
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -44,12 +44,6 @@ const Login = () => {
         const decoded = jwtDecode(token);
         const role = decoded.role;
 
-        // Rol bazlı yönlendirme
-        let redirectPath = '/';
-        if (role === 'Administrator') redirectPath = '/';
-        else if (role === 'Seller') redirectPath = '/';
-        else if (role === 'Normal') redirectPath = '/';
-
         localStorage.setItem('user', JSON.stringify(response.result.user));
         
         toast.success('Giriş başarılı! Yönlendiriliyorsunuz...', {
@@ -60,6 +54,12 @@ const Login = () => {
           pauseOnHover: true,
           draggable: true,
         });
+
+        // Rol bazlı yönlendirme
+        let redirectPath = '/';
+        if (role === 'Administrator') redirectPath = '/';
+        else if (role === 'Seller') redirectPath = '/';
+        else if (role === 'Normal') redirectPath = '/';
 
         setTimeout(() => {
           navigate(redirectPath);

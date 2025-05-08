@@ -1,13 +1,35 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import './BidForm.css';
 
-const BidForm = ({ itemId, currentPrice, itemType }) => {
+const BidForm = ({ itemId, currentPrice, itemType, auctionPrice }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [bidAmount, setBidAmount] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isParticipating, setIsParticipating] = useState(false);
+
+  const handleParticipate = async () => {
+    if (!user) {
+      setError('Açık artırmaya katılmak için giriş yapmalısınız');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+      return;
+    }
+
+    try {
+      // Burada auction price ödemesi için gerekli API çağrısı yapılacak
+      // await api.payAuctionPrice(itemId, auctionPrice, itemType);
+      setIsParticipating(true);
+      setSuccess('Açık artırmaya başarıyla katıldınız!');
+    } catch (error) {
+      setError('Açık artırmaya katılırken bir hata oluştu');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,6 +38,11 @@ const BidForm = ({ itemId, currentPrice, itemType }) => {
 
     if (!user) {
       setError('Teklif vermek için giriş yapmalısınız');
+      return;
+    }
+
+    if (!isParticipating) {
+      setError('Önce açık artırmaya katılmalısınız');
       return;
     }
 
@@ -66,24 +93,36 @@ const BidForm = ({ itemId, currentPrice, itemType }) => {
 
   return (
     <div className="bid-form">
-      <h3>Teklif Ver</h3>
+      <h3>Açık Artırmaya Katıl</h3>
       {error && <div className="error-message">{error}</div>}
       {success && <div className="success-message">{success}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Teklif Tutarı (TL)</label>
-          <input
-            type="number"
-            value={bidAmount}
-            onChange={(e) => setBidAmount(e.target.value)}
-            min={currentPrice + 1}
-            required
-          />
+      
+      {!isParticipating ? (
+        <div className="participation-section">
+          <p className="auction-price-info">
+            Açık artırmaya katılım ücreti: {currentPrice.toLocaleString()} TL
+          </p>
+          <button onClick={handleParticipate} className="participate-button">
+            Açık Artırmaya Katıl
+          </button>
         </div>
-        <button type="submit" className="submit-bid">
-          Teklif Ver
-        </button>
-      </form>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Teklif Tutarı (TL)</label>
+            <input
+              type="number"
+              value={bidAmount}
+              onChange={(e) => setBidAmount(e.target.value)}
+              min={currentPrice + 1}
+              required
+            />
+          </div>
+          <button type="submit" className="submit-bid">
+            Teklif Ver
+          </button>
+        </form>
+      )}
     </div>
   );
 };

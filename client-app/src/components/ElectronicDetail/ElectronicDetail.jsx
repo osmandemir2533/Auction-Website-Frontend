@@ -117,7 +117,12 @@ const ElectronicDetail = () => {
               )}
             </div>
 
-            <BidForm itemId={id} currentPrice={price} itemType="Electronic" />
+            <div className="auction-dates">
+              <p>Başlangıç Tarihi: {new Date(startTime).toLocaleString()}</p>
+              <p>Bitiş Tarihi: {new Date(endTime).toLocaleString()}</p>
+            </div>
+
+            <BidForm itemId={id} currentPrice={price} itemType="Electronic" auctionPrice={auctionPrice} />
           </div>
         </div>
       </div>
