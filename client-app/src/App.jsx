@@ -26,6 +26,8 @@ import ElectronicList from './components/ElectronicList/ElectronicList';
 import ElectronicDetail from './components/ElectronicDetail/ElectronicDetail';
 import NotFound404 from './emptypage/NotFound404';
 import AccessDenied from './HOC/AccessDenied';
+import Payment from './components/Payment/Payment';
+import BidCheckout from './components/Bid/BidCheckout';
 
 const App = () => {
   return (
@@ -53,6 +55,8 @@ const App = () => {
             <Route path="/electronic/:id" element={<ElectronicDetail />} />
             <Route path="/auctions" element={<Auctions />} />
             <Route path="/accessDenied" element={<AccessDenied />} />
+            <Route path="/vehicle/bidcheckout/:vehicleId" element={<BidCheckout />} />
+            <Route path="/Payment" element={<Payment />} />
             
             {/* ✅ 404 Route - EN SONDA YER ALMALI */}
             <Route path="*" element={<NotFound404 />} />
