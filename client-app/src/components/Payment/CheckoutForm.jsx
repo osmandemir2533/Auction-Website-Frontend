@@ -41,6 +41,13 @@ function CheckoutForm({ apiResult, onSuccess, onError }) {
 
       if (paymentIntent.status === 'succeeded') {
         // Ödeme başarılı, ödeme geçmişini kaydet
+        console.log('Ödeme geçmişi kaydediliyor:', {
+          clientSecret: apiResult.clientSecret,
+          stripePaymentIntentId: apiResult.stripePaymentIntentId,
+          userId: apiResult.userId,
+          vehicleId: apiResult.vehicleId
+        });
+
         const historyResult = await vehicleApi.createPaymentHistory({
           clientSecret: apiResult.clientSecret,
           stripePaymentIntentId: apiResult.stripePaymentIntentId,
@@ -48,11 +55,14 @@ function CheckoutForm({ apiResult, onSuccess, onError }) {
           vehicleId: apiResult.vehicleId
         });
 
-        if (historyResult.success) {
+        console.log('Ödeme geçmişi sonucu:', historyResult);
+
+        if (historyResult.isSuccess) {
           onSuccess();
         } else {
-          setError(historyResult.message || "Ödeme geçmişi kaydedilemedi.");
-          onError(new Error(historyResult.message));
+          const errorMessage = historyResult.errorMessages?.[0] || "Ödeme geçmişi kaydedilemedi.";
+          setError(errorMessage);
+          onError(new Error(errorMessage));
         }
       }
     } catch (err) {

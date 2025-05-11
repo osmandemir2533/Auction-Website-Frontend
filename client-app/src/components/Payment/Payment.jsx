@@ -24,7 +24,7 @@ function Payment() {
           return;
         }
 
-        const { clientSecret, stripePaymentIntentId, userId, vehicleId, amount } = location.state.apiResult;
+        const { clientSecret, stripePaymentIntentId, userId, vehicleId } = location.state.apiResult;
         
         if (!clientSecret || !stripePaymentIntentId) {
           showErrorToast("Geçersiz ödeme bilgileri.");
@@ -36,8 +36,7 @@ function Payment() {
           clientSecret,
           stripePaymentIntentId,
           userId,
-          vehicleId,
-          amount
+          vehicleId
         });
       } catch (error) {
         console.error('Ödeme bilgileri kontrol edilirken hata:', error);

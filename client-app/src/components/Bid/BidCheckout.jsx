@@ -31,7 +31,7 @@ function BidCheckout() {
         
         setVehicle(vehicleData.result);
         setFormData({
-          name: userData.name || '',
+          name: userData.fullName || '',
           email: userData.email || '',
           phoneNumber: userData.phoneNumber || ''
         });

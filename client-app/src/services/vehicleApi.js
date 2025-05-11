@@ -109,16 +109,40 @@ const vehicleApi = {
 
   createPaymentHistory: async (data) => {
     try {
-      const response = await axios.post(`${API_URL}/PaymentHistory/AddHistory`, {
+      // Token'dan userId'yi al
+      const token = localStorage.getItem('token');
+      const userData = JSON.parse(atob(token.split('.')[1]));
+      const userId = userData.nameid;
+
+      const requestData = {
         clientSecret: data.clientSecret,
         stripePaymentIntentId: data.stripePaymentIntentId,
-        userId: data.userId,
+        userId: userId,
         vehicleId: data.vehicleId
-      });
-      return response.data;
+      };
+
+      console.log('Gönderilen veri:', requestData);
+
+      const response = await axios.post(`${API_URL}/PaymentHistory/AddHistory`, requestData);
+      
+      // Backend'den gelen yanıtı kontrol et
+      if (response.data.isSuccess) {
+        return response.data;
+      } else {
+        throw new Error(response.data.errorMessages?.[0] || 'Ödeme geçmişi kaydedilemedi');
+      }
     } catch (error) {
-      console.error('Ödeme geçmişi oluşturulurken hata:', error);
-      return { success: false, message: error.response?.data?.message || "Ödeme geçmişi oluşturulamadı." };
+      console.error('Ödeme geçmişi oluşturulurken hata:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
+
+      return { 
+        isSuccess: false,
+        errorMessages: [error.response?.data?.errorMessages?.[0] || "Ödeme geçmişi oluşturulamadı."],
+        result: null
+      };
     }
   }
 };
