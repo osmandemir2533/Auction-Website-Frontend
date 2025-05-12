@@ -58,7 +58,7 @@ function BidsDetail({ vehicleId }) {
       window.location.href = '/login';
       return;
     }
-    window.location.href = `/vehicle/bidcheckout/${vehicleId}`;
+    window.location.href = `/vehicle/bidcheckout/${vehicleId}?amount=${vehicle?.auctionPrice}`;
   };
 
   if (loading) {

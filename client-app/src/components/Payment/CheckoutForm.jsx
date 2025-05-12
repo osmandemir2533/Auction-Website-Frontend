@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { CardNumberElement, CardExpiryElement, CardCvcElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import vehicleApi from '../../services/vehicleApi';
 import Loader from '../../Helpers/Loader';
 import './checkoutForm.css';
@@ -25,7 +25,7 @@ function CheckoutForm({ apiResult, onSuccess, onError }) {
         apiResult.clientSecret,
         {
           payment_method: {
-            card: elements.getElement(CardElement),
+            card: elements.getElement(CardNumberElement),
             billing_details: {
               // Kullanıcı bilgileri eklenebilir
             }
@@ -100,7 +100,20 @@ function CheckoutForm({ apiResult, onSuccess, onError }) {
       <div className="mb-4">
         <label className="form-label" style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>Kart Bilgileri</label>
         <div className="custom-card-element-wrapper">
-          <CardElement options={cardElementOptions} />
+          <div className="stripe-card-fields">
+            <label className="stripe-label">Kart Numarası</label>
+            <CardNumberElement className="stripe-input" options={cardElementOptions} />
+            <div className="stripe-row">
+              <div style={{ flex: 1 }}>
+                <label className="stripe-label">Son Kullanma Tarihi</label>
+                <CardExpiryElement className="stripe-input" options={cardElementOptions} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label className="stripe-label">CVC</label>
+                <CardCvcElement className="stripe-input" options={cardElementOptions} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       {error && (

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
-import { showErrorToast } from '../../Helpers/Toaster';
+import { showErrorToast, showSuccessToast } from '../../Helpers/Toaster';
 import Loader from '../../Helpers/Loader';
 
 // Stripe public key'inizi buraya ekleyin
@@ -24,7 +24,7 @@ function Payment() {
           return;
         }
 
-        const { clientSecret, stripePaymentIntentId, userId, vehicleId } = location.state.apiResult;
+        const { clientSecret, stripePaymentIntentId, userId, vehicleId, amount } = location.state.apiResult;
         
         if (!clientSecret || !stripePaymentIntentId) {
           showErrorToast("Geçersiz ödeme bilgileri.");
@@ -36,7 +36,8 @@ function Payment() {
           clientSecret,
           stripePaymentIntentId,
           userId,
-          vehicleId
+          vehicleId,
+          amount
         });
       } catch (error) {
         console.error('Ödeme bilgileri kontrol edilirken hata:', error);
@@ -81,24 +82,26 @@ function Payment() {
               <p className="text-center mb-4">
                 Toplam Tutar: ${apiResult.amount / 100}
               </p>
-              <Elements 
-                stripe={stripePromise} 
-                options={{
-                  clientSecret: apiResult.clientSecret,
-                  appearance
-                }}
-              >
-                <CheckoutForm 
-                  apiResult={apiResult}
-                  onSuccess={() => {
-                    showErrorToast("Ödeme başarıyla tamamlandı!");
-                    navigate('/');
+              <div className="modern-card-box mb-4">
+                <Elements 
+                  stripe={stripePromise} 
+                  options={{
+                    clientSecret: apiResult.clientSecret,
+                    appearance
                   }}
-                  onError={(error) => {
-                    showErrorToast(error.message || "Ödeme işlemi başarısız oldu.");
-                  }}
-                />
-              </Elements>
+                >
+                  <CheckoutForm 
+                    apiResult={apiResult}
+                    onSuccess={() => {
+                      showSuccessToast("Ödeme başarıyla tamamlandı!");
+                      navigate('/');
+                    }}
+                    onError={(error) => {
+                      showErrorToast(error.message || "Ödeme işlemi başarısız oldu.");
+                    }}
+                  />
+                </Elements>
+              </div>
             </div>
           </div>
         </div>
