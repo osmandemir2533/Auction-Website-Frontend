@@ -18,7 +18,18 @@ function BidsDetail({ vehicleId }) {
           vehicleApi.getVehicleById(vehicleId)
         ]);
 
-        setBids(bidsData.result);
+        // Her teklif için kullanıcı bilgilerini al
+        const bidsWithUserDetails = await Promise.all(
+          bidsData.result.map(async (bid) => {
+            const userData = await vehicleApi.getUserById(bid.userId);
+            return {
+              ...bid,
+              userDetails: userData.result
+            };
+          })
+        );
+
+        setBids(bidsWithUserDetails);
         setVehicle(vehicleData.result);
 
         // Kullanıcı giriş yapmışsa teklif durumunu kontrol et
@@ -83,6 +94,11 @@ function BidsDetail({ vehicleId }) {
                 <span className="bid-number">{index + 1}</span>
                 <span className="bid-date">
                   {new Date(bid.bidDate).toLocaleString()}
+                  {bid.userDetails && (
+                    <span className="bid-user">
+                      {bid.userDetails.fullName} ({bid.userDetails.email})
+                    </span>
+                  )}
                 </span>
                 <span className="bid-amount">${bid.bidAmount}</span>
               </div>

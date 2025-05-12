@@ -9,6 +9,12 @@ const vehicleApi = {
     return response.data;
   },
 
+  // Kullanıcı işlemleri
+  getUserById: async (id) => {
+    const response = await axios.get(`${API_URL}/User/${id}`);
+    return response.data;
+  },
+
   // Teklif işlemleri
   getBidsByVehicle: async (vehicleId) => {
     const response = await axios.get(`${API_URL}/Bid/GetBidsByVehicle/${vehicleId}`);
