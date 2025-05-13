@@ -66,7 +66,6 @@ function VehicleDetail() {
 
           <div className="price-details">
             <p>Satış Fiyatı: {vehicle.price?.toLocaleString()} TL</p>
-            <p>Müzayede Başlangıç: {vehicle.auctionPrice?.toLocaleString()} TL</p>
             <p>En Yüksek Teklif: {highBid?.toLocaleString()} TL</p>
           </div>
 

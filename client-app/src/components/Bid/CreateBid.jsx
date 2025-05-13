@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import vehicleApi from '../../services/vehicleApi';
 import { showSuccessToast, showErrorToast } from '../../Helpers/Toaster';
+import { useNavigate } from 'react-router-dom';
 
-function CreateBid({ vehicleId }) {
+function CreateBid({ vehicleId, onNewBid }) {
   const [bidAmount, setBidAmount] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleCreateBid = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
       if (!token) {
-        window.location.href = '/login';
+        navigate('/login');
         return;
       }
 
@@ -29,8 +31,14 @@ function CreateBid({ vehicleId }) {
       if (response.isSuccess) {
         showSuccessToast('Teklifiniz başarıyla oluşturuldu');
         setBidAmount('');
-        // Sayfayı yenile
-        window.location.reload();
+        
+        // Yeni teklifi parent bileşene ilet
+        if (onNewBid) {
+          onNewBid({
+            ...response.result,
+            userDetails: userData
+          });
+        }
       } else {
         showErrorToast(response.errorMessages[0]);
       }

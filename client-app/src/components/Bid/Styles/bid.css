@@ -88,4 +88,44 @@
   color: #333;
   font-size: 0.9em;
   font-weight: 600;
+}
+
+.bid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.sort-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sort-label {
+  color: #495057;
+  font-weight: 500;
+  margin: 0;
+}
+
+.sort-select {
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: white;
+  color: #495057;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.sort-select:hover {
+  border-color: #80bdff;
+}
+
+.sort-select:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
 } 
