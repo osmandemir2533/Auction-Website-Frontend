@@ -55,6 +55,47 @@ Bu kapsamlı proje, 8 kişilik bir ekip tarafından geliştirilmiştir:
 
 Kullanıcılar, araç, elektronik, müzik aletleri, emlak ve giyim kategorilerinde ürünler ekleyebilir ve bu ürünlere açık artırma usulüyle teklif verebilir. SignalR sayesinde teklifler anlık olarak tüm kullanıcılarla senkronize edilir. Ödeme işlemleri Stripe üzerinden güvenli bir şekilde gerçekleştirilir.
 
+## 🚀 Kurulum
+
+### Frontend Kurulumu
+
+```bash
+# Bağımlılıkları yükle
+npm install
+
+# Geliştirme sunucusunu başlat
+npm run dev
+```
+
+## 📦 Klasör Yapısı
+
+```
+ client-app/
+├── public/                 # Statik dosyalar (favicon, vs.)
+├── src/
+│   ├── Admin/              # Yöneticiye özel sayfalar/bileşenler
+│   ├── assets/             # Görseller ve statik varlıklar
+│   ├── components/         # Genel arayüz bileşenleri
+│   ├── context/            # React Context API tanımları
+│   ├── emptypage/          # Boş şablon veya placeholder sayfalar
+│   ├── Helpers/            # Yardımcı fonksiyonlar / araçlar
+│   ├── HOC/                # Higher-Order Components
+│   ├── Interfaces/         # TypeScript arayüz tanımları
+│   └── services/           # API istekleri, dış servis entegrasyonları
+│
+├── App.jsx                 # Ana uygulama bileşeni
+├── App.css                 # Global CSS stilleri
+├── index.jsx               # Giriş dosyası (React DOM render)
+├── index.css               # Genel stiller
+├── index.html              # HTML şablonu
+├── vite.config.js          # Vite yapılandırması
+├── eslint.config.js        # Lint kuralları
+├── package.json            # Proje bağımlılıkları ve betikler
+├── package-lock.json       # Sabitlenmiş bağımlılıklar
+├── README.md               # Proje açıklaması
+└── .gitignore              # Git tarafından yok sayılan dosyalar
+```
+
 ### 🎯 Temel Özellikler
 
 | Özellik                                | Açıklama                                                              |
@@ -102,12 +143,16 @@ Kullanıcılar, araç, elektronik, müzik aletleri, emlak ve giyim kategorilerin
 
 ### Ödeme ve Teklif Süreci
 ![Ön Ödeme Hazırlık](https://i.imgur.com/27QmTKK.png)
-![Stripe Ödeme](https://i.imgur.com/ywzP2q3.png)
+<img src="https://i.imgur.com/ywzP2q3.png" width="400" />
 ![Teklifler](https://i.imgur.com/g6nD0VF.png)
 
 ### Yönetim Panelleri
 ![Admin Panel](https://i.imgur.com/V9LpXBi.png)
 ![Satıcı Panel](https://i.imgur.com/xslyRmY.png)
+
+### Proje Commit Süreci
+<img src="https://i.imgur.com/pL9Rllm.png" width="400" />
+
 
 ## 💳 Ödeme Sistemi
 
@@ -122,11 +167,19 @@ Proje, üç aşamalı bir ödeme ve teklif sürecine sahiptir:
    - Güvenli ödeme altyapısı
    - Kredi kartı işlemleri
    - Ödeme onayı
+> ### Stripe Test Kartı
+> - Kart No: 4242 4242 4242 4242
+> - Son Kullanım: 12/25
+> - CVC: 123
 
 3. **Teklif Verme**
    - Ödeme sonrası teklif butonu aktifleşir
    - Gerçek zamanlı teklif güncellemeleri
    - SignalR ile anlık bildirimler
+> ### SignalR Testi
+> - İki farklı tarayıcı sekmesinde aynı ürün detay sayfasını açın
+> - Bir sekmeden teklif verin
+> - Diğer sekmede anlık güncellemeyi gözlemleyin
 
 ## ⚡ Gerçek Zamanlı İletişim
 
@@ -189,66 +242,14 @@ SignalR kullanılarak gerçekleştirilen özellikler:
   - İletişim bilgilerini güncelleme
   - Bildirim tercihleri
 
-## 🚀 Kurulum
+---
 
-### Backend Kurulumu
+## 📬 İletişim
 
-1. **Veritabanı Hazırlığı**
-   ```bash
-   # Veritabanı bağlantı ayarları
-   ConnectionStrings: {
-     "DefaultConnection": "Server=YOUR_SERVER;Database=MyGalaxyAuctionDB;Trusted_Connection=True;"
-   }
-   ```
+Benimle her zaman iletişime geçebilirsiniz:
 
-2. **Migration İşlemleri**
-   ```bash
-   Add-Migration InitialCreate
-   Update-Database
-   ```
-
-### Frontend Kurulumu
-
-```bash
-# Bağımlılıkları yükle
-npm install
-
-# Geliştirme sunucusunu başlat
-npm run dev
-```
-
-## 🧪 Test Bilgileri
-
-### SignalR Testi
-- İki farklı tarayıcı sekmesinde aynı ürün detay sayfasını açın
-- Bir sekmeden teklif verin
-- Diğer sekmede anlık güncellemeyi gözlemleyin
-
-### Stripe Test Kartı
-- Kart No: 4242 4242 4242 4242
-- Son Kullanım: 12/25
-- CVC: 123
-
-## 📦 Klasör Yapısı
-
-```
-client-app/
-├── public/                 # Statik dosyalar
-├── src/
-│   ├── Admin/             # Yönetici paneli
-│   ├── assets/            # Görseller ve statik varlıklar
-│   ├── components/        # UI bileşenleri
-│   ├── context/           # React Context tanımları
-│   ├── emptypage/         # Boş şablon sayfalar
-│   ├── Helpers/           # Yardımcı fonksiyonlar
-│   ├── HOC/               # Higher-Order Components
-│   ├── Interfaces/        # TypeScript arayüzleri
-│   └── services/          # API ve servis entegrasyonları
-```
-
-## 📜 Lisans
-
-Stripe test kartı: 4242 4242 4242 4242 - Son kullanım: 12/25 - CVC: 123
+[![Web Sitem](https://img.shields.io/badge/Web%20Site-1976d2?style=for-the-badge&logo=google-chrome&logoColor=white)](https://osmandemir2533.github.io/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0a66c2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/osmandemir2533/)
 
 ---
 
