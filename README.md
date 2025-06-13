@@ -14,14 +14,12 @@ Bu proje, modern web teknolojileri kullanılarak geliştirilmiş, gerçek zamanl
 ## 📋 İçindekiler
 
 - [Proje Hakkında](#-proje-hakkında)
-- [Özellikler](#-özellikler)
+- [Özellikler](#-temel-özellikler)
 - [Teknik Detaylar](#-teknik-detaylar)
 - [Kurulum](#-kurulum)
 - [Kullanıcı Arayüzü](#-kullanıcı-arayüzü)
 - [Ödeme Sistemi](#-ödeme-sistemi)
-- [Gerçek Zamanlı İletişim](#-gerçek-zamanlı-iletişim)
 - [Yönetici Paneli](#-yönetici-paneli)
-- [Test Bilgileri](#-test-bilgileri)
 
 ---
 
@@ -143,7 +141,7 @@ npm run dev
 
 ### Ödeme ve Teklif Süreci
 ![Ön Ödeme Hazırlık](https://i.imgur.com/27QmTKK.png)
-<img src="https://i.imgur.com/ywzP2q3.png" width="400" />
+<img src="https://i.imgur.com/c2JbdMb.png" width="400" />
 ![Teklifler](https://i.imgur.com/g6nD0VF.png)
 
 ### Yönetim Panelleri
@@ -167,11 +165,7 @@ Proje, üç aşamalı bir ödeme ve teklif sürecine sahiptir:
    - Güvenli ödeme altyapısı
    - Kredi kartı işlemleri
    - Ödeme onayı
-> ### Stripe Test Kartı
-> - Kart No: 4242 4242 4242 4242
-> - Son Kullanım: 12/25
-> - CVC: 123
-
+  
 3. **Teklif Verme**
    - Ödeme sonrası teklif butonu aktifleşir
    - Gerçek zamanlı teklif güncellemeleri
@@ -193,55 +187,26 @@ SignalR kullanılarak gerçekleştirilen özellikler:
 ## 🧑‍💻 Yönetici Paneli
 
 ### Admin Panel Özellikleri
-- **Kullanıcı Yönetimi**
-  - Kullanıcı listesi görüntüleme
-  - Kullanıcı yetkilendirme
-  - Kullanıcı bilgilerini düzenleme
-  - Kullanıcı engelleme/aktifleştirme
 
 - **Ürün Yönetimi**
   - Tüm ürünleri görüntüleme
-  - Ürün onaylama/reddetme
   - Ürün düzenleme
   - Ürün silme
 
-- **İstatistikler ve Raporlar**
-  - Toplam satış istatistikleri
-  - Kategori bazlı satış raporları
-  - Kullanıcı aktivite raporları
-  - Gelir raporları
-
 - **Sistem Ayarları**
-  - Site ayarları
   - Ödeme ayarları
-  - Bildirim ayarları
-  - Güvenlik ayarları
 
 ### Satıcı (Seller) Panel Özellikleri
 - **Ürün Yönetimi**
   - Yeni ürün ekleme
   - Mevcut ürünleri düzenleme
   - Ürün silme
-  - Ürün durumu takibi
 
 - **Teklif Takibi**
   - Aktif teklifleri görüntüleme
   - Teklif geçmişi
-  - Teklif istatistikleri
   - Kazanan teklifleri görüntüleme
-
-- **Satış Raporları**
-  - Satış geçmişi
-  - Gelir raporları
-  - Kategori bazlı satış analizi
-  - Performans metrikleri
-
-- **Profil Yönetimi**
-  - Profil bilgilerini güncelleme
-  - Şifre değiştirme
-  - İletişim bilgilerini güncelleme
-  - Bildirim tercihleri
-
+ 
 ---
 
 ## 📬 İletişim
