@@ -140,13 +140,16 @@ npm run dev
 ![Vehicle Sayfası 2](https://i.imgur.com/mzt2hCq.png)
 
 ### Ödeme ve Teklif Süreci
-![Ön Ödeme Hazırlık](https://i.imgur.com/27QmTKK.png)
+<img src="https://i.imgur.com/27QmTKK.png" width="400" />
 <img src="https://i.imgur.com/c2JbdMb.png" width="400" />
-![Teklifler](https://i.imgur.com/g6nD0VF.png)
 
 ### Yönetim Panelleri
 ![Admin Panel](https://i.imgur.com/V9LpXBi.png)
 ![Satıcı Panel](https://i.imgur.com/xslyRmY.png)
+
+### Uyarı/Bildirim Mesajı (React-Toastify)
+<img src="https://i.imgur.com/dki0RfE.png" width="400" />
+![Toast](https://i.imgur.com/dki0RfE.png)
 
 ### Proje Commit Süreci
 <img src="https://i.imgur.com/pL9Rllm.png" width="400" />
