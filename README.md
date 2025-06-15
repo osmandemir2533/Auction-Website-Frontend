@@ -149,7 +149,6 @@ npm run dev
 
 ### Uyarı/Bildirim Mesajı (React-Toastify)
 <img src="https://i.imgur.com/dki0RfE.png" width="400" />
-![Toast](https://i.imgur.com/dki0RfE.png)
 
 ### Proje Commit Süreci
 <img src="https://i.imgur.com/pL9Rllm.png" width="400" />
