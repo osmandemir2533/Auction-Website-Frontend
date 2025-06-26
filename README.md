@@ -3,7 +3,7 @@
 [![GitHub](https://img.shields.io/badge/GitHub-Backend-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/osmandemir2533/Auction-Website-Backend)
 [![GitHub](https://img.shields.io/badge/GitHub-Frontend-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/osmandemir2533/Auction-Website-Frontend)
 
-> **Önemli Not:** Bu proje, backend ve frontend olmak üzere iki ana bölümden oluşmaktadır. Projeyi çalıştırmak için öncelikle backend kurulumunu tamamlamanız gerekmektedir. Backend kurulumu tamamlandıktan sonra frontend kurulumuna geçebilirsiniz.
+> **Önemli Not:** Bu proje, backend ve frontend olmak üzere iki ana bölümden oluşmaktadır. Projeyi çalıştırmak için öncelikle backend kurulumunu tamamlamanız gerekmektedir. Backend kurulumu tamamlandıktan sonra frontend kurulumuna geçebilirsiniz. 
 >
 > Backend kurulumu için: [Backend Repo](https://github.com/osmandemir2533/Auction-Website-Backend)
 
